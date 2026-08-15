@@ -1,0 +1,22 @@
+/* ============================================================
+   CivicBuzz — Custom Stylesheet
+   Most styling is handled by Tailwind CSS utility classes directly
+   in the HTML. This file only holds the small handful of things
+   that are easier to set once, globally, than to repeat as
+   Tailwind classes on every page.
+   ============================================================ */
+
+/* Fallback font stack in case the Google Fonts <link> fails to load
+   (Tailwind's `font-sans` is already configured to use Open Sans first
+   in each page's <script> config, so this is just a safety net). */
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+/* A visible focus outline for keyboard users tabbing through links
+   and buttons — important for accessibility on a public-service site. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #1D63FF;
+  outline-offset: 2px;
+}
