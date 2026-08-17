@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CivicBuzz — Track complaints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  
+    <span class="brand-tag">CivicBuzz</span>
+</nav>
+
+<div class="scene">
+  <div class="road">
+    <div class="lane-marking"></div>
+    <div class="pothole"></div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="eyebrow">Your submissions</div>
+  <h1>Track your complaints</h1>
+  <p>See where each report stands, sorted from most to least urgent.</p>
+  <div class="section-tabs" aria-label="Track complaint sections">
+    <a href="#complaints">Complaints</a>
+    <a href="#priority-overview">Priority overview</a>
+    <a href="#map-overview">Map overview</a>
+  </div>
+</header>
+
+<main class="panels">
+
+  <section class="glass complaints-panel" id="complaints">
+    <div class="panel-head">
+      <div>
+        <h2>Complaints</h2>
+        <div class="panel-sub">Sorted by priority · 5 total</div>
+      </div>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="high">High</button>
+      <button class="filter-chip" data-filter="medium">Medium</button>
+      <button class="filter-chip" data-filter="low">Low</button>
+    </div>
+
+    <div class="complaint-list" id="complaintList" tabindex="0" aria-label="Scrollable complaint cards">
+
+      <article class="complaint-card" data-priority="high">
+        <header class="complaint-head">
+          <div class="complaint-titles">
+            <div class="complaint-meta-top">
+              <span class="chip chip-priority-high">High priority</span>
+              <span class="chip chip-category">Road &middot; pothole</span>
+            </div>
+            <h3 class="complaint-title">Large pothole near college gate</h3>
+            <div class="complaint-meta mono">#CB-0142 &middot; Reported 3 days ago &middot; Ward 7</div>
+          </div>
+          <div class="complaint-status">
+            <span class="chip chip-status-progress">In progress</span>
+            <button class="timeline-toggle" data-target="t1">View timeline</button>
+          </div>
+        </header>
+
+        <div class="tracker">
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Reported</div></div>
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Acknowledged</div></div>
+          <div class="track-step is-current"><div class="track-dot"></div><div class="track-label">In progress</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">Resolved</div></div>
+        </div>
+
+        <div class="timeline-detail" id="t1" hidden>
+          <div class="timeline-row"><span class="mono">Aug 12</span> Reported with photo evidence.</div>
+          <div class="timeline-row"><span class="mono">Aug 13</span> Acknowledged, routed to Roads &amp; potholes dept.</div>
+          <div class="timeline-row"><span class="mono">Aug 15</span> Crew dispatched, work in progress.</div>
+        </div>
+      </article>
+
+      <article class="complaint-card" data-priority="high">
+        <header class="complaint-head">
+          <div class="complaint-titles">
+            <div class="complaint-meta-top">
+              <span class="chip chip-priority-high">High priority</span>
+              <span class="chip chip-category">Water &middot; leak</span>
+            </div>
+            <h3 class="complaint-title">Broken pipe flooding sidewalk</h3>
+            <div class="complaint-meta mono">#CB-0139 &middot; Reported 1 day ago &middot; Ward 3</div>
+          </div>
+          <div class="complaint-status">
+            <span class="chip chip-status-reported">Reported</span>
+            <button class="timeline-toggle" data-target="t2">View timeline</button>
+          </div>
+        </header>
+
+        <div class="tracker">
+          <div class="track-step is-current"><div class="track-dot"></div><div class="track-label">Reported</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">Acknowledged</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">In progress</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">Resolved</div></div>
+        </div>
+
+        <div class="timeline-detail" id="t2" hidden>
+          <div class="timeline-row"><span class="mono">Aug 15</span> Reported with photo evidence. Awaiting department review.</div>
+        </div>
+      </article>
+
+      <article class="complaint-card" data-priority="medium">
+        <header class="complaint-head">
+          <div class="complaint-titles">
+            <div class="complaint-meta-top">
+              <span class="chip chip-priority-medium">Medium priority</span>
+              <span class="chip chip-category">Sanitation &middot; garbage</span>
+            </div>
+            <h3 class="complaint-title">Overflowing bin at market corner</h3>
+            <div class="complaint-meta mono">#CB-0131 &middot; Reported 6 days ago &middot; Ward 7</div>
+          </div>
+          <div class="complaint-status">
+            <span class="chip chip-status-acknowledged">Acknowledged</span>
+            <button class="timeline-toggle" data-target="t3">View timeline</button>
+          </div>
+        </header>
+
+        <div class="tracker">
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Reported</div></div>
+          <div class="track-step is-current"><div class="track-dot"></div><div class="track-label">Acknowledged</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">In progress</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">Resolved</div></div>
+        </div>
+
+        <div class="timeline-detail" id="t3" hidden>
+          <div class="timeline-row"><span class="mono">Aug 10</span> Reported by citizen.</div>
+          <div class="timeline-row"><span class="mono">Aug 11</span> Acknowledged, routed to Sanitation &amp; waste dept.</div>
+        </div>
+      </article>
+
+      <article class="complaint-card" data-priority="medium">
+        <header class="complaint-head">
+          <div class="complaint-titles">
+            <div class="complaint-meta-top">
+              <span class="chip chip-priority-medium">Medium priority</span>
+              <span class="chip chip-category">Lighting &middot; streetlight</span>
+            </div>
+            <h3 class="complaint-title">Streetlight out on Elm St</h3>
+            <div class="complaint-meta mono">#CB-0118 &middot; Reported 12 days ago &middot; Ward 2</div>
+          </div>
+          <div class="complaint-status">
+            <span class="chip chip-status-resolved">Resolved</span>
+            <button class="timeline-toggle" data-target="t4">View timeline</button>
+          </div>
+        </header>
+
+        <div class="tracker">
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Reported</div></div>
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Acknowledged</div></div>
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">In progress</div></div>
+          <div class="track-step is-current"><div class="track-dot"></div><div class="track-label">Resolved</div></div>
+        </div>
+
+        <div class="timeline-detail" id="t4" hidden>
+          <div class="timeline-row"><span class="mono">Aug 4</span> Reported by citizen.</div>
+          <div class="timeline-row"><span class="mono">Aug 5</span> Acknowledged, routed to Street lighting dept.</div>
+          <div class="timeline-row"><span class="mono">Aug 8</span> Bulb replaced by crew.</div>
+          <div class="timeline-row"><span class="mono">Aug 9</span> Marked resolved, awaiting citizen confirmation.</div>
+        </div>
+      </article>
+
+      <article class="complaint-card" data-priority="low">
+        <header class="complaint-head">
+          <div class="complaint-titles">
+            <div class="complaint-meta-top">
+              <span class="chip chip-priority-low">Low priority</span>
+              <span class="chip chip-category">Parks &middot; bench</span>
+            </div>
+            <h3 class="complaint-title">Cracked bench in riverside park</h3>
+            <div class="complaint-meta mono">#CB-0109 &middot; Reported 18 days ago &middot; Ward 5</div>
+          </div>
+          <div class="complaint-status">
+            <span class="chip chip-status-acknowledged">Acknowledged</span>
+            <button class="timeline-toggle" data-target="t5">View timeline</button>
+          </div>
+        </header>
+
+        <div class="tracker">
+          <div class="track-step is-complete"><div class="track-dot"></div><div class="track-label">Reported</div></div>
+          <div class="track-step is-current"><div class="track-dot"></div><div class="track-label">Acknowledged</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">In progress</div></div>
+          <div class="track-step is-upcoming"><div class="track-dot"></div><div class="track-label">Resolved</div></div>
+        </div>
+
+        <div class="timeline-detail" id="t5" hidden>
+          <div class="timeline-row"><span class="mono">Jul 29</span> Reported by citizen.</div>
+          <div class="timeline-row"><span class="mono">Aug 1</span> Acknowledged, routed to Parks &amp; public spaces dept.</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="glass ai-panel" id="priority-overview">
+    <div class="panel-head">
+      <div>
+        <h2>Priority overview</h2>
+        <div class="panel-sub">How the list above is ranked</div>
+      </div>
+      <span class="ai-badge">Auto-sorted</span>
+    </div>
+
+    <div class="ai-analysis">
+      <div class="ai-row">
+        <span class="ai-row-label">High priority</span>
+        <span class="chip chip-priority-high">2 open</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label">Medium priority</span>
+        <span class="chip chip-priority-medium">2 open</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label">Low priority</span>
+        <span class="chip chip-priority-low">1 open</span>
+      </div>
+      <div class="ai-row" style="border-bottom: none; flex-direction: column; align-items: stretch;">
+        <span class="ai-row-label" style="margin-bottom: 6px;">Resolved this month</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width: 20%;"></div></div>
+      </div>
+    </div>
+
+    <div class="ai-note">
+      Ranking combines severity, how many citizens confirmed the same issue, and how long it's been open — the same signals used for department routing.
+    </div>
+  </section>
+
+
+  <section class="glass map-panel" id="map-overview">
+    <div class="panel-head">
+      <div>
+        <h2>Map overview</h2>
+        <div class="panel-sub">Complaint hotspots and verified locations</div>
+      </div>
+      <span class="map-status"><span class="status-dot"></span>Live overview</span>
+    </div>
+
+    <div class="map-card" role="img" aria-label="Stylized city map showing complaint hotspots and verified locations">
+      <div class="map-grid"></div>
+      <div class="map-road road-a"></div>
+      <div class="map-road road-b"></div>
+      <div class="map-road road-c"></div>
+      <div class="map-water"></div>
+
+      <div class="hotspot hotspot-1"><span></span></div>
+      <div class="hotspot hotspot-2"><span></span></div>
+      <div class="hotspot hotspot-3"><span></span></div>
+
+      <button class="map-pin pin-1" title="Verified: College Gate pothole">
+        <span class="pin-shape">●</span>
+      </button>
+      <button class="map-pin pin-2" title="Verified: Market Corner sanitation">
+        <span class="pin-shape">●</span>
+      </button>
+      <button class="map-pin pin-3" title="Verified: Elm Street lighting">
+        <span class="pin-shape">●</span>
+      </button>
+      <button class="map-pin pin-4" title="Verified: Riverside Park bench">
+        <span class="pin-shape">●</span>
+      </button>
+
+      <div class="map-label label-1">College Gate</div>
+      <div class="map-label label-2">Market Corner</div>
+      <div class="map-label label-3">Elm St</div>
+      <div class="map-label label-4">Riverside Park</div>
+    </div>
+
+    <div class="map-legend">
+      <div><span class="legend-pin"></span> Verified location</div>
+      <div><span class="legend-hotspot"></span> Complaint hotspot</div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>
