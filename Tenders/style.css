@@ -1,0 +1,734 @@
+/* =========================================================
+   CivicBuzz Tenders
+   Fixed white theme + compact responsive layout
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --page: #ffffff;
+  --panel: #ffffff;
+  --soft: #f7f9fc;
+  --soft-blue: #eff4ff;
+  --border: #e3e8f0;
+  --text: #132238;
+  --secondary: #63748c;
+  --muted: #8a97a8;
+  --blue: #3567e8;
+  --purple: #7557ed;
+  --green: #16804a;
+  --amber: #c87508;
+  --red: #d63d3d;
+  --shadow: 0 10px 28px rgba(25, 43, 73, 0.07);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text);
+  background: var(--page);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 76px;
+  padding: 10px 40px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand,
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  gap: 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nav-links {
+  gap: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-links::-webkit-scrollbar,
+.filter-group::-webkit-scrollbar,
+.flow-track::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-links a {
+  color: #65748b;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 15px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--blue);
+}
+
+.page-container {
+  width: min(1280px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 38px 0 70px;
+}
+
+.page-header,
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.page-header {
+  margin-bottom: 34px;
+}
+
+.eyebrow {
+  margin-bottom: 6px;
+  color: var(--blue);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  margin-bottom: 6px;
+}
+
+.page-description,
+.section-heading p {
+  color: var(--secondary);
+  font-size: 14px;
+}
+
+.header-stats {
+  display: flex;
+  gap: 28px;
+  flex-shrink: 0;
+}
+
+.header-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.header-stats strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 22px;
+}
+
+.header-stats span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.dashboard-section,
+.action-flow,
+.detail-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.dashboard-section {
+  padding: 26px;
+  margin-bottom: 22px;
+}
+
+.section-heading {
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  font-size: 22px;
+  margin-bottom: 3px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.filter-button,
+.info-badge {
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--secondary);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.filter-button.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* Both dashboards use this reusable horizontal scroller. */
+.horizontal-track {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 2px 2px 13px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  cursor: grab;
+}
+
+.horizontal-track:active {
+  cursor: grabbing;
+}
+
+.tender-card,
+.priority-card {
+  flex: 0 0 340px;
+  scroll-snap-align: start;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--soft);
+  padding: 18px;
+}
+
+.tender-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+}
+
+.card-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.status-open {
+  color: var(--green);
+  background: #ecfdf3;
+}
+
+.status-warning {
+  color: var(--amber);
+  background: #fff7e9;
+}
+
+.tender-card h3,
+.priority-card h3 {
+  font-size: 18px;
+  line-height: 1.25;
+  margin-bottom: 7px;
+}
+
+.card-description {
+  color: var(--secondary);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.card-tags span {
+  padding: 5px 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--secondary);
+  font-size: 10px;
+}
+
+.tender-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: auto;
+  margin-bottom: 17px;
+}
+
+.tender-details div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tender-details span,
+.detail-grid span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.tender-details strong {
+  font-size: 11px;
+}
+
+.primary-button,
+.secondary-button,
+.vote-button {
+  border: 0;
+  padding: 10px 13px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.primary-button {
+  color: #fff;
+  background: var(--blue);
+}
+
+.primary-button:hover {
+  background: #2858d1;
+}
+
+.secondary-button {
+  color: var(--blue);
+  background: var(--soft-blue);
+}
+
+.vote-button {
+  width: 100%;
+  color: var(--blue);
+  background: var(--soft-blue);
+}
+
+.vote-button.voted {
+  color: var(--red);
+  background: #fff0f0;
+}
+
+.priority-card {
+  min-height: 300px;
+  position: relative;
+}
+
+.rank {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #edf1f6;
+  color: var(--secondary);
+  font-size: 10px;
+}
+
+.priority-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: var(--soft-blue);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.priority-card p {
+  color: var(--secondary);
+  font-size: 12px;
+}
+
+.vote-bar {
+  height: 7px;
+  margin: 18px 0 10px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: #e7ebf2;
+}
+
+.vote-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+}
+
+.vote-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.vote-summary strong {
+  font-size: 17px;
+}
+
+.vote-summary span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.voting-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.action-flow {
+  padding: 25px;
+  margin-bottom: 22px;
+}
+
+.section-heading.compact {
+  margin-bottom: 18px;
+}
+
+.flow-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 130px;
+}
+
+.flow-step span {
+  color: var(--blue);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+}
+
+.flow-step strong {
+  font-size: 13px;
+}
+
+.flow-step small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.flow-line {
+  width: 35px;
+  min-width: 35px;
+  height: 1px;
+  background: var(--border);
+}
+
+.detail-panel {
+  padding: 26px;
+}
+
+.detail-panel h2 {
+  font-size: 21px;
+  margin-bottom: 5px;
+}
+
+.detail-panel p {
+  color: var(--secondary);
+  font-size: 13px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.detail-grid div {
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--soft);
+}
+
+.detail-grid strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.detail-grid span,
+.tender-details span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+/* Tender progress section */
+.progress-section {
+  margin: 28px 0;
+}
+
+.progress-header {
+  margin-bottom: 24px;
+}
+
+.progress-header p {
+  margin: 0 0 6px 0;
+}
+
+.progress-header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.progress-tracker {
+  position: relative;
+  padding: 30px 0 50px 0;
+  width: 100%;
+}
+
+.progress-line-container {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: var(--border);
+  border-radius: 99px;
+  pointer-events: none;
+}
+
+.progress-line {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  width: 40%;
+}
+
+.progress-stages-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+.progress-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  cursor: pointer;
+}
+
+.stage-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid var(--border);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stage-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+/* Completed stage */
+.progress-stage.completed .stage-dot {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.progress-stage.completed .stage-label {
+  color: var(--blue);
+}
+
+/* Active stage */
+.progress-stage.active .stage-dot {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 8px rgba(53, 103, 232, 0.15), 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: scale(1.14);
+}
+
+.progress-stage.active .stage-label {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+/* Pending stage */
+.progress-stage.pending .stage-dot {
+  background: #fff;
+  border-color: var(--border);
+}
+
+.progress-stage.pending .stage-label {
+  color: var(--muted);
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  max-width: 330px;
+  padding: 12px 15px;
+  border-radius: 9px;
+  color: #fff;
+  background: #17243a;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: 0.2s ease;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Tablet/mobile layout */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .page-container {
+    width: min(100% - 28px, 760px);
+    padding-top: 28px;
+  }
+
+  .page-header,
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-stats {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .header-stats div {
+    align-items: flex-start;
+  }
+
+  .tender-card,
+  .priority-card {
+    flex-basis: min(330px, 82vw);
+  }
+
+  .detail-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .brand small {
+    display: none;
+  }
+
+  .navbar {
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    max-width: 48%;
+  }
+
+  .dashboard-section,
+  .action-flow,
+  .detail-panel {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .page-header h1 {
+    font-size: 29px;
+  }
+
+  .tender-details {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tender-details div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-step {
+    min-width: 115px;
+  }
+}
