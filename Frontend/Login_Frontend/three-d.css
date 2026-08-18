@@ -1,0 +1,113 @@
+/* A contained 3D scene for the NagrikSetu sign-in experience. */
+.auth-copy {
+  isolation: isolate;
+  overflow: hidden;
+  perspective: 1100px;
+  background-position: 58% center;
+}
+
+.auth-copy::before,
+.auth-copy::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  transition: transform 240ms ease-out;
+}
+
+/* Glass-map plane suspended over the city. */
+.auth-copy::before {
+  width: 84%;
+  height: 72%;
+  right: -8%;
+  bottom: -16%;
+  border: 1px solid rgba(160, 204, 255, .38);
+  border-radius: 34px;
+  background:
+    linear-gradient(90deg, rgba(63, 132, 255, .10) 1px, transparent 1px),
+    linear-gradient(rgba(63, 132, 255, .10) 1px, transparent 1px),
+    radial-gradient(circle at 66% 35%, rgba(84, 190, 255, .42), transparent 25%);
+  background-size: 42px 42px, 42px 42px, auto;
+  box-shadow: 0 0 0 1px rgba(14, 47, 99, .35), 0 30px 80px rgba(0, 11, 35, .46);
+  transform: translate(var(--scene-x, 0), var(--scene-y, 0)) rotateX(58deg) rotateZ(-10deg) translateZ(-80px);
+}
+
+/* A highlighted civic location marker. */
+.auth-copy::after {
+  width: 23px;
+  height: 23px;
+  right: 28%;
+  top: 37%;
+  border: 7px solid #e9f5ff;
+  border-radius: 50% 50% 50% 0;
+  background: #4382ff;
+  box-shadow: 0 0 0 10px rgba(76, 151, 255, .16), 0 0 35px rgba(99, 182, 255, .95);
+  transform: translate(var(--scene-x-near, 0), var(--scene-y-near, 0)) rotate(-45deg) translateZ(45px);
+  animation: marker-float 3.3s ease-in-out infinite;
+}
+
+.auth-copy .simple-nav,
+.auth-copy .hero-copy,
+.auth-copy .trust-line {
+  transform: translateZ(38px);
+}
+
+.hero-copy {
+  padding: 30px;
+  margin-left: -30px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 22px;
+  background: linear-gradient(115deg, rgba(8, 27, 58, .72), rgba(8, 27, 58, .16));
+  box-shadow: 18px 22px 46px rgba(0, 8, 29, .25);
+  backdrop-filter: blur(3px);
+}
+
+.hero-copy::after {
+  content: "";
+  display: block;
+  width: 102px;
+  height: 3px;
+  margin-top: 25px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #6bb7ff, #a1ffd8);
+  box-shadow: 0 0 18px rgba(85, 173, 255, .8);
+}
+
+.auth-panel {
+  position: relative;
+  z-index: 2;
+  box-shadow: -18px 0 55px rgba(11, 26, 55, .08);
+}
+
+@keyframes marker-float {
+
+  0%,
+  100% {
+    margin-top: 0;
+  }
+
+  50% {
+    margin-top: -13px;
+  }
+}
+
+@media (max-width: 850px) {
+
+  .auth-copy::before,
+  .auth-copy::after {
+    display: none;
+  }
+
+  .hero-copy {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .auth-copy::before,
+  .auth-copy::after {
+    animation: none;
+    transition: none;
+  }
+}
