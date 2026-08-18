@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Track Issues | CivicBuzz Admin</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+	<!-- =========================
+         HEADER
+    ========================== -->
+	<header class="top-header">
+
+		<div class="header-left">
+			<div class="logo">
+				<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+			</div>
+
+			<div class="page-heading">
+				<h1>Track Issues</h1>
+				<p>View, filter and manage all reported issues</p>
+			</div>
+		</div>
+
+		<div class="header-right">
+
+			<button class="notification-btn" type="button" aria-label="Notifications">
+				🔔
+				<span class="notification-count">3</span>
+			</button>
+
+			<div class="admin-profile">
+
+				<div class="admin-avatar">
+					👤
+				</div>
+
+				<div class="admin-info">
+					<span class="admin-id">ADMIN-001</span>
+				</div>
+
+				<button class="profile-dropdown" type="button" aria-label="Admin menu">
+					▾
+				</button>
+
+			</div>
+
+		</div>
+
+	</header>
+
+
+	<!-- =========================
+         MAIN CONTENT
+    ========================== -->
+	<main class="track-issues-container">
+
+		<!-- =========================
+             SUMMARY CARDS
+        ========================== -->
+		<section class="issue-summary">
+
+			<div class="summary-card total-card">
+				<div class="summary-icon">📋</div>
+
+				<div class="summary-content">
+					<span>Total Issues</span>
+					<strong>128</strong>
+					<small>All reported issues</small>
+				</div>
+			</div>
+
+
+			<div class="summary-card pending-card">
+				<div class="summary-icon">◷</div>
+
+				<div class="summary-content">
+					<span>Pending</span>
+					<strong>42</strong>
+					<small>Awaiting action</small>
+				</div>
+			</div>
+
+
+			<div class="summary-card progress-card">
+				<div class="summary-icon">↻</div>
+
+				<div class="summary-content">
+					<span>In Progress</span>
+					<strong>31</strong>
+					<small>Under progress</small>
+				</div>
+			</div>
+
+
+			<div class="summary-card resolved-card">
+				<div class="summary-icon">✓</div>
+
+				<div class="summary-content">
+					<span>Resolved</span>
+					<strong>55</strong>
+					<small>Successfully resolved</small>
+				</div>
+			</div>
+
+
+			<div class="summary-card priority-card">
+				<div class="summary-icon">!</div>
+
+				<div class="summary-content">
+					<span>High Priority</span>
+					<strong>12</strong>
+					<small>Requires attention</small>
+				</div>
+			</div>
+
+		</section>
+
+
+		<!-- =========================
+             SEARCH & FILTERS
+        ========================== -->
+		<section class="issue-filters">
+
+			<div class="search-box">
+
+				<input type="text" id="issueSearch" placeholder="Search by Issue ID, Title, User ID, Location..."
+					autocomplete="off">
+
+				<button type="button" id="searchButton" aria-label="Search">
+					🔍
+				</button>
+
+			</div>
+
+
+			<div class="filter-group">
+
+				<label for="statusFilter">Status</label>
+
+				<select id="statusFilter">
+					<option value="all">All Status</option>
+					<option value="pending">Pending</option>
+					<option value="progress">In Progress</option>
+					<option value="resolved">Resolved</option>
+					<option value="closed">Closed</option>
+					<option value="rejected">Rejected</option>
+				</select>
+
+			</div>
+
+
+			<div class="filter-group">
+
+				<label for="priorityFilter">Priority</label>
+
+				<select id="priorityFilter">
+					<option value="all">All Priority</option>
+					<option value="critical">Critical</option>
+					<option value="high">High</option>
+					<option value="medium">Medium</option>
+					<option value="low">Low</option>
+				</select>
+
+			</div>
+
+
+			<div class="filter-group">
+
+				<label for="categoryFilter">Category</label>
+
+				<select id="categoryFilter">
+					<option value="all">All Category</option>
+					<option value="road">Road</option>
+					<option value="electricity">Electricity</option>
+					<option value="water">Water</option>
+					<option value="garbage">Garbage</option>
+					<option value="drainage">Drainage</option>
+					<option value="other">Other</option>
+				</select>
+
+			</div>
+
+
+			<div class="filter-group">
+
+				<label for="dateFilter">Date</label>
+
+				<select id="dateFilter">
+					<option value="month">This Month</option>
+					<option value="today">Today</option>
+					<option value="week">This Week</option>
+					<option value="month">This Month</option>
+					<option value="year">This Year</option>
+					<option value="all">All Time</option>
+				</select>
+
+			</div>
+
+		</section>
+
+
+		<!-- =========================
+             ISSUE TABLE
+        ========================== -->
+		<section class="issues-table-section">
+
+			<div class="table-wrapper">
+
+				<table class="issues-table">
+
+					<thead>
+						<tr>
+							<th>Issue ID</th>
+							<th>Issue</th>
+							<th>User ID</th>
+							<th>Category</th>
+							<th>Priority</th>
+							<th>Date</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+
+
+					<tbody id="issuesTableBody">
+
+						<!-- Issue 1 -->
+						<tr data-status="pending" data-priority="high" data-category="electricity">
+
+							<td>
+								<strong>#ISS-1024</strong>
+							</td>
+
+							<td>
+								Street Light Not Working
+							</td>
+
+							<td>
+								USR-2045
+							</td>
+
+							<td>
+								<span class="category">
+									💡 Electricity
+								</span>
+							</td>
+
+							<td>
+								<span class="priority high">
+									High
+								</span>
+							</td>
+
+							<td>
+								18 Aug 2026
+							</td>
+
+							<td>
+								<span class="status pending">
+									Pending
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1024"
+									aria-label="View issue ISS-1024">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 2 -->
+						<tr data-status="progress" data-priority="medium" data-category="garbage">
+
+							<td>
+								<strong>#ISS-1023</strong>
+							</td>
+
+							<td>
+								Garbage Not Collected
+							</td>
+
+							<td>
+								USR-1821
+							</td>
+
+							<td>
+								<span class="category">
+									🗑️ Garbage
+								</span>
+							</td>
+
+							<td>
+								<span class="priority medium">
+									Medium
+								</span>
+							</td>
+
+							<td>
+								17 Aug 2026
+							</td>
+
+							<td>
+								<span class="status progress">
+									In Progress
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1023">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 3 -->
+						<tr data-status="resolved" data-priority="critical" data-category="road">
+
+							<td>
+								<strong>#ISS-1022</strong>
+							</td>
+
+							<td>
+								Road Damage
+							</td>
+
+							<td>
+								USR-1942
+							</td>
+
+							<td>
+								<span class="category">
+									🛣️ Road
+								</span>
+							</td>
+
+							<td>
+								<span class="priority critical">
+									Critical
+								</span>
+							</td>
+
+							<td>
+								17 Aug 2026
+							</td>
+
+							<td>
+								<span class="status resolved">
+									Resolved
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1022">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 4 -->
+						<tr data-status="pending" data-priority="medium" data-category="water">
+
+							<td>
+								<strong>#ISS-1021</strong>
+							</td>
+
+							<td>
+								Water Leakage
+							</td>
+
+							<td>
+								USR-1654
+							</td>
+
+							<td>
+								<span class="category">
+									💧 Water
+								</span>
+							</td>
+
+							<td>
+								<span class="priority medium">
+									Medium
+								</span>
+							</td>
+
+							<td>
+								16 Aug 2026
+							</td>
+
+							<td>
+								<span class="status pending">
+									Pending
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1021">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 5 -->
+						<tr data-status="progress" data-priority="medium" data-category="drainage">
+
+							<td>
+								<strong>#ISS-1020</strong>
+							</td>
+
+							<td>
+								Overflowing Drain
+							</td>
+
+							<td>
+								USR-1532
+							</td>
+
+							<td>
+								<span class="category">
+									🏙️ Drainage
+								</span>
+							</td>
+
+							<td>
+								<span class="priority medium">
+									Medium
+								</span>
+							</td>
+
+							<td>
+								16 Aug 2026
+							</td>
+
+							<td>
+								<span class="status progress">
+									In Progress
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1020">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 6 -->
+						<tr data-status="resolved" data-priority="low" data-category="road">
+
+							<td>
+								<strong>#ISS-1019</strong>
+							</td>
+
+							<td>
+								Broken Footpath
+							</td>
+
+							<td>
+								USR-2011
+							</td>
+
+							<td>
+								<span class="category">
+									🛣️ Road
+								</span>
+							</td>
+
+							<td>
+								<span class="priority low">
+									Low
+								</span>
+							</td>
+
+							<td>
+								15 Aug 2026
+							</td>
+
+							<td>
+								<span class="status resolved">
+									Resolved
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1019">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 7 -->
+						<tr data-status="pending" data-priority="high" data-category="water">
+
+							<td>
+								<strong>#ISS-1018</strong>
+							</td>
+
+							<td>
+								Water Supply Issue
+							</td>
+
+							<td>
+								USR-1776
+							</td>
+
+							<td>
+								<span class="category">
+									💧 Water
+								</span>
+							</td>
+
+							<td>
+								<span class="priority high">
+									High
+								</span>
+							</td>
+
+							<td>
+								15 Aug 2026
+							</td>
+
+							<td>
+								<span class="status pending">
+									Pending
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1018">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+
+						<!-- Issue 8 -->
+						<tr data-status="resolved" data-priority="low" data-category="garbage">
+
+							<td>
+								<strong>#ISS-1017</strong>
+							</td>
+
+							<td>
+								Garbage Bin Full
+							</td>
+
+							<td>
+								USR-1888
+							</td>
+
+							<td>
+								<span class="category">
+									🗑️ Garbage
+								</span>
+							</td>
+
+							<td>
+								<span class="priority low">
+									Low
+								</span>
+							</td>
+
+							<td>
+								14 Aug 2026
+							</td>
+
+							<td>
+								<span class="status resolved">
+									Resolved
+								</span>
+							</td>
+
+							<td>
+								<button class="view-issue-btn" type="button" data-issue-id="ISS-1017">
+									👁
+								</button>
+							</td>
+
+						</tr>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+
+			<!-- =========================
+                 TABLE FOOTER / PAGINATION
+            ========================== -->
+			<div class="table-footer">
+
+				<div class="issue-count">
+					Showing 1 to 8 of 128 issues
+				</div>
+
+
+				<div class="pagination">
+
+					<button type="button" class="page-btn prev">
+						«
+					</button>
+
+					<button type="button" class="page-btn active">
+						1
+					</button>
+
+					<button type="button" class="page-btn">
+						2
+					</button>
+
+					<button type="button" class="page-btn">
+						3
+					</button>
+
+					<span class="pagination-dots">
+						...
+					</span>
+
+					<button type="button" class="page-btn">
+						16
+					</button>
+
+					<button type="button" class="page-btn next">
+						»
+					</button>
+
+				</div>
+
+			</div>
+
+		</section>
+
+	</main>
+
+
+	<!-- =================================================
+         ISSUE DETAILS MODAL
+    ================================================== -->
+	<!-- =================================================
+     ISSUE DETAILS SIDE PANEL
+================================================= -->
+	<div class="issue-panel-overlay" id="issuePanelOverlay"></div>
+
+	<aside class="issue-details-panel" id="issueDetailsPanel">
+
+		<!-- Panel Header -->
+		<div class="details-panel-header">
+
+			<div>
+				<span class="details-label">ISSUE DETAILS</span>
+				<h2 id="panelIssueId">#ISS-1024</h2>
+			</div>
+
+			<button type="button" class="details-close-btn" id="closeIssuePanel" aria-label="Close issue details">
+				×
+			</button>
+
+		</div>
+
+
+		<!-- Panel Content -->
+		<div class="details-panel-body">
+
+			<!-- Status & Priority -->
+			<div class="details-status-row">
+
+				<span class="status pending" id="panelStatus">
+					Pending
+				</span>
+
+				<span class="priority high" id="panelPriority">
+					High
+				</span>
+
+			</div>
+
+
+			<!-- Issue Title -->
+			<div class="panel-section">
+
+				<h3 id="panelIssueTitle">
+					Street Light Not Working
+				</h3>
+
+				<p class="issue-description" id="panelDescription">
+					Street light near Sakchi Market has not been
+					working for the last 3 days. Please fix it as
+					soon as possible.
+				</p>
+
+			</div>
+
+
+			<!-- User Information -->
+			<div class="panel-section">
+
+				<h4>Reported By</h4>
+
+				<div class="user-detail-box">
+
+					<div class="user-detail-avatar">
+						👤
+					</div>
+
+					<div>
+						<strong id="panelUserId">
+							USR-2045
+						</strong>
+
+						<span>
+							Citizen
+						</span>
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<!-- Issue Information -->
+			<div class="panel-section">
+
+				<h4>Issue Information</h4>
+
+				<div class="detail-grid">
+
+					<div class="detail-item">
+						<span>Category</span>
+						<strong id="panelCategory">
+							Electricity
+						</strong>
+					</div>
+
+					<div class="detail-item">
+						<span>Reported On</span>
+						<strong id="panelDate">
+							18 Aug 2026
+						</strong>
+					</div>
+
+					<div class="detail-item">
+						<span>Location</span>
+						<strong id="panelLocation">
+							Sakchi, Jamshedpur
+						</strong>
+					</div>
+
+					<div class="detail-item">
+						<span>Assigned To</span>
+						<strong id="panelAssigned">
+							Electricity Team
+						</strong>
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<!-- Issue Image -->
+			<div class="panel-section">
+
+				<h4>Attached Image</h4>
+
+				<div class="panel-image" id="panelImageContainer">
+
+					<img id="panelIssueImage" src="" alt="Reported issue">
+
+					<div class="no-image-message" id="noImageMessage">
+						<span>🖼️</span>
+						<strong>Image not uploaded</strong>
+						<small>No image was attached to this issue.</small>
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<!-- Timeline -->
+			<div class="panel-section">
+
+				<h4>Issue Timeline</h4>
+
+				<div class="panel-timeline">
+
+					<div class="panel-timeline-item active">
+
+						<div class="timeline-marker"></div>
+
+						<div>
+							<strong>Issue Reported</strong>
+							<span>18 Aug, 10:30 AM</span>
+						</div>
+
+					</div>
+
+
+					<div class="panel-timeline-item active">
+
+						<div class="timeline-marker"></div>
+
+						<div>
+							<strong>Reviewed by Admin</strong>
+							<span>18 Aug, 11:15 AM</span>
+						</div>
+
+					</div>
+
+
+					<div class="panel-timeline-item active">
+
+						<div class="timeline-marker"></div>
+
+						<div>
+							<strong>Assigned to Team</strong>
+							<span>18 Aug, 12:00 PM</span>
+						</div>
+
+					</div>
+
+
+					<div class="panel-timeline-item">
+
+						<div class="timeline-marker"></div>
+
+						<div>
+							<strong>Resolution Pending</strong>
+							<span>Waiting for action</span>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<!-- Update Status -->
+			<div class="panel-section">
+
+				<h4>Update Status</h4>
+
+				<select id="panelStatusSelect">
+
+					<option value="pending">
+						Pending
+					</option>
+
+					<option value="progress">
+						In Progress
+					</option>
+
+					<option value="resolved">
+						Resolved
+					</option>
+
+					<option value="closed">
+						Closed
+					</option>
+
+					<option value="rejected">
+						Rejected
+					</option>
+
+				</select>
+
+			</div>
+
+		</div>
+
+
+		<!-- Panel Footer -->
+		<div class="details-panel-footer">
+
+			<button type="button" class="panel-action-btn assign" id="assignIssueBtn">
+				👤 Assign
+			</button>
+
+			<button type="button" class="panel-action-btn reject" id="rejectIssueBtn">
+				Reject
+			</button>
+
+			<button type="button" class="panel-action-btn resolve" id="resolveIssueBtn">
+				✓ Resolve
+			</button>
+
+		</div>
+
+	</aside>
+
+
+	<!-- =========================
+         JAVASCRIPT
+    ========================== -->
+	<script src="script.js"></script>
+
+</body>
+
+</html>
