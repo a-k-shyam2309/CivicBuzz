@@ -101,13 +101,18 @@ function updateVotePercentages() {
   });
 }
 
-voteButtons.forEach((button) => {
+voteButtons.forEach((button, idx) => {
   button.addEventListener("click", () => {
-    // This is only frontend demo behaviour.
-    // A real implementation can send the vote to the backend here.
     if (button.classList.contains("voted")) {
       showToast("You have already voted for this proposal.");
       return;
+    }
+
+    if (window.CivicBuzzAPI) {
+      const projId = idx + 1;
+      window.CivicBuzzAPI.projects.vote(projId).catch((err) => {
+        console.warn("Vote API note:", err.message);
+      });
     }
 
     // Find the vote summary element in the same card

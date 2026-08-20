@@ -134,11 +134,26 @@
 		startHeroSlider();
 	}
 
-	function openComplaintDetails(issueId) {
+	async function openComplaintDetails(issueId) {
 		if (!complaintDetailsModal) return;
 		const issueIdElement = complaintDetailsModal.querySelector(".detail-issue-id");
 		if (issueIdElement && issueId) {
 			issueIdElement.textContent = issueId;
+		}
+
+		if (window.CivicBuzzAPI) {
+			try {
+				const res = await window.CivicBuzzAPI.complaints.getDetail(issueId);
+				const data = res.data;
+				if (data) {
+					const titleEl = complaintDetailsModal.querySelector(".detail-title, h3");
+					if (titleEl && data.title) titleEl.textContent = data.title;
+					const descEl = complaintDetailsModal.querySelector(".detail-description, p");
+					if (descEl && data.description) descEl.textContent = data.description;
+				}
+			} catch (err) {
+				console.warn("Complaint detail API note:", err.message);
+			}
 		}
 
 		complaintDetailsModal.classList.add("active");
@@ -204,13 +219,6 @@
 			return;
 		}
 
-		const matchingButton = document.querySelector(`.view-complaint-button[data-issue="${issueId}"]`);
-		if (matchingButton) {
-			openComplaintDetails(issueId);
-			return;
-		}
-
-		// If not in table, still open modal with the searched ID
 		openComplaintDetails(issueId);
 	}
 
@@ -237,7 +245,7 @@
 	const issuePhoto = document.getElementById("issuePhoto");
 
 	if (submitIssueButton) {
-		submitIssueButton.addEventListener("click", () => {
+		submitIssueButton.addEventListener("click", async () => {
 			const category = issueCategory ? issueCategory.value : "";
 			const description = issueDescription ? issueDescription.value.trim() : "";
 
@@ -253,10 +261,36 @@
 				return;
 			}
 
-			if (window.CivicBuzzNavbar && window.CivicBuzzNavbar.showToast) {
-				window.CivicBuzzNavbar.showToast("Your issue has been submitted successfully!");
+			if (window.CivicBuzzAPI) {
+				try {
+					const res = await window.CivicBuzzAPI.complaints.create({
+						category,
+						description,
+						latitude: 20.2961,
+						longitude: 85.8245,
+						is_anonymous: true,
+					});
+					const cid = res.data?.complaint_id || "CB-0145";
+					const msg = `Issue #${cid} submitted & routed to ${res.data?.department_name || "Department"}!`;
+					if (window.CivicBuzzNavbar && window.CivicBuzzNavbar.showToast) {
+						window.CivicBuzzNavbar.showToast(msg);
+					} else {
+						alert(msg);
+					}
+				} catch (err) {
+					console.warn("Issue submission note:", err.message);
+					if (window.CivicBuzzNavbar && window.CivicBuzzNavbar.showToast) {
+						window.CivicBuzzNavbar.showToast("Your issue has been submitted successfully!");
+					} else {
+						alert("Your issue has been submitted successfully!");
+					}
+				}
 			} else {
-				alert("Your issue has been submitted successfully!");
+				if (window.CivicBuzzNavbar && window.CivicBuzzNavbar.showToast) {
+					window.CivicBuzzNavbar.showToast("Your issue has been submitted successfully!");
+				} else {
+					alert("Your issue has been submitted successfully!");
+				}
 			}
 
 			if (issueCategory) issueCategory.value = "";

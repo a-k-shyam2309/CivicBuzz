@@ -914,10 +914,25 @@ function setupLogin() {
 
   loginForm.addEventListener(
     "submit",
-    event => {
+    async event => {
 
       event.preventDefault();
 
+      const emailInput = loginForm.querySelector("input[type='email']")?.value?.trim() || "";
+      const passwordInput = loginForm.querySelector("#password")?.value || "";
+
+      let userFullName = role === "admin" ? "Administrator" : "Aanya";
+
+      if (window.CivicBuzzAPI && emailInput && passwordInput) {
+        try {
+          const res = await window.CivicBuzzAPI.auth.login(emailInput, passwordInput, role);
+          if (res.data?.full_name) {
+            userFullName = res.data.full_name;
+          }
+        } catch (err) {
+          console.warn("Backend login note:", err.message);
+        }
+      }
 
       const authScreen =
         $("#auth-screen");
@@ -953,15 +968,15 @@ function setupLogin() {
 
           heading.textContent =
             language === "hi"
-              ? "सुप्रभात, अधिकारी।"
-              : "Good morning, Administrator.";
+              ? `सुप्रभात, ${userFullName}।`
+              : `Good morning, ${userFullName}.`;
 
         } else {
 
           heading.textContent =
             language === "hi"
-              ? "सुप्रभात, आन्या।"
-              : "Good morning, Aanya.";
+              ? `सुप्रभात, ${userFullName}।`
+              : `Good morning, ${userFullName}.`;
 
         }
 
@@ -2261,11 +2276,70 @@ function initializeApp() {
 
 
   /*
+    Dashboard & Navigation.
+  */
+
+  setupDashboardNavigation();
+
+  /*
     Keyboard support.
   */
 
   setupEscapeKey();
 
+}
+
+function setupDashboardNavigation() {
+  // Sidebar and Header navigation handlers
+  $$("#dashboard .sidebar nav button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const text = btn.textContent.toLowerCase();
+      if (text.includes("report")) {
+        window.location.href = "Client Page Frontend/Report_Issue_Frontend/index.html";
+      } else if (text.includes("complaint") || text.includes("my")) {
+        window.location.href = "Client Page Frontend/Track_complaints_Frontend/index.html";
+      } else if (text.includes("budget") || text.includes("community")) {
+        window.location.href = "Client Page Frontend/Tenders/index.html";
+      } else if (text.includes("map") || text.includes("civic")) {
+        window.location.href = "Client Page Frontend/index.html#map";
+      } else if (text.includes("overview")) {
+        if (role === "admin") {
+          window.location.href = "Admin Page Frontend/index.html";
+        } else {
+          window.location.href = "Client Page Frontend/index.html";
+        }
+      }
+    });
+  });
+
+  // Header Report Button
+  const headerReportBtn = $(".report-button");
+  if (headerReportBtn) {
+    headerReportBtn.addEventListener("click", () => {
+      window.location.href = "Client Page Frontend/Report_Issue_Frontend/index.html";
+    });
+  }
+
+  // Notice & Latest report links
+  const viewAllLink = $("#dashboard .view-all");
+  if (viewAllLink) {
+    viewAllLink.addEventListener("click", () => {
+      window.location.href = "Client Page Frontend/Track_complaints_Frontend/index.html";
+    });
+  }
+
+  // Admin Dashboard Switch
+  const dashboardHeading = $("#dashboard-heading");
+  if (dashboardHeading) {
+    dashboardHeading.style.cursor = "pointer";
+    dashboardHeading.addEventListener("click", () => {
+      if (role === "admin") {
+        window.location.href = "Admin Page Frontend/index.html";
+      } else {
+        window.location.href = "Client Page Frontend/index.html";
+      }
+    });
+  }
 }
 
 

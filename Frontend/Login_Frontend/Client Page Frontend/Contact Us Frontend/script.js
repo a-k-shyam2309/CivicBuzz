@@ -106,17 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		const subject = fields.subject.input.value;
 		const message = fields.message.input.value.trim();
 
-		/*
-		  Frontend demo only.
-	
-		  When you connect your backend, send:
-		  name
-		  email
-		  subject
-		  message
-	
-		  to your API here.
-		*/
+		if (window.CivicBuzzAPI) {
+			window.CivicBuzzAPI.contact.submit({ name, email, subject, message }).catch((err) => {
+				console.warn("Contact API note:", err.message);
+			});
+		}
 
 		console.log("Contact Form Submitted:", {
 			name,
