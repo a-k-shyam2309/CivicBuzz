@@ -17,6 +17,44 @@
 	--shadow: 0 18px 50px rgba(20, 55, 100, 0.10);
 }
 
+body.dark-mode,
+html.dark-mode {
+	--blue: #3b82f6;
+	--blue-dark: #60a5fa;
+	--blue-soft: rgba(59, 130, 246, 0.15);
+	--yellow: #f5c542;
+	--yellow-dark: #fbbf24;
+	--white: #0b1120;
+	--text: #f8fafc;
+	--muted: #94a3b8;
+	--border: #2a3b53;
+	--shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .contact-page {
+	background:
+		radial-gradient(circle at 8% 10%, rgba(245, 197, 66, 0.08), transparent 25%),
+		radial-gradient(circle at 92% 90%, rgba(59, 130, 246, 0.08), transparent 28%),
+		#0b1120;
+}
+
+body.dark-mode .contact-form-card {
+	background: #172234;
+	border-color: #2a3b53;
+}
+
+body.dark-mode .form-group label {
+	color: #f8fafc;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+	background: #0b1120;
+	border-color: #2a3b53;
+	color: #f8fafc;
+}
+
 * {
 	margin: 0;
 	padding: 0;

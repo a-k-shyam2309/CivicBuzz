@@ -21,6 +21,51 @@
   --shadow: 0 8px 24px rgba(17,24,39,.06);
 }
 
+body.dark-mode,
+html.dark-mode {
+  --page: #0b1120;
+  --panel: #172234;
+  --card: #111d2e;
+  --border: #2a3b53;
+  --border-strong: #334b6e;
+  --text: #f8fafc;
+  --secondary: #94a3b8;
+  --muted: #64748b;
+  --blue: #3b82f6;
+  --blue-soft: rgba(59, 130, 246, 0.15);
+  --amber: #f5c542;
+  --amber-soft: rgba(245, 197, 66, 0.15);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.15);
+  --green: #4ade80;
+  --green-soft: rgba(74, 222, 128, 0.15);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .section-tabs a,
+body.dark-mode .filter-chip {
+  background: #172234;
+  border-color: #2a3b53;
+  color: #cbd5e1;
+}
+
+body.dark-mode .chip-dept,
+body.dark-mode .chip-priority-low {
+  background: #1c2a40;
+  color: #cbd5e1;
+}
+
+body.dark-mode .ai-analysis,
+body.dark-mode .map-visual {
+  background: #0b1120;
+  border-color: #2a3b53;
+}
+
+body.dark-mode .track-dot {
+  background: #172234;
+  border-color: #2a3b53;
+}
+
 html { scroll-behavior: smooth; }
 
 body {
