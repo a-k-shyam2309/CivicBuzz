@@ -19,9 +19,9 @@
 
 <body data-language="en">
 
-	<header class="navbar">
+	<header class="navbar" id="global-navbar">
 
-		<a href="#home" class="brand">
+		<a href="#home" class="brand" aria-label="CivicBuzz Home">
 
 			<div class="brand-mark">
 				<img src="Assets/Logo.png" alt="CivicBuzz Logo">
@@ -41,39 +41,39 @@
 
 		</a>
 
-		<nav class="nav-links">
+		<nav class="nav-links" id="navLinks" aria-label="Main Navigation">
 
-			<a href="#home" class="nav-link active">
+			<a href="#home" class="nav-link active" data-nav="home">
 				<i class="fa-solid fa-house"></i>
 				<span data-i18n="home">Home</span>
 			</a>
 
-			<a href="Report_Issue_Frontend/index.html" class="nav-link">
+			<a href="Report_Issue_Frontend/index.html" class="nav-link" data-nav="reportIssue">
 				<i class="fa-regular fa-pen-to-square"></i>
 				<span data-i18n="reportIssue">Report Issue</span>
 			</a>
 
-			<a href="Track_complaints_Frontend/index.html" class="nav-link">
+			<a href="Track_complaints_Frontend/index.html" class="nav-link" data-nav="trackIssue">
 				<i class="fa-regular fa-file-lines"></i>
 				<span data-i18n="trackIssue">Track Issue</span>
 			</a>
 
-			<a href="#map" class="nav-link">
+			<a href="#map" class="nav-link" data-nav="map">
 				<i class="fa-solid fa-location-dot"></i>
 				<span data-i18n="map">Map</span>
 			</a>
 
-			<a href="Tenders/index.html" class="nav-link">
+			<a href="Tenders/index.html" class="nav-link" data-nav="tender">
 				<i class="fa-solid fa-briefcase"></i>
 				<span data-i18n="tender">Tender</span>
 			</a>
 
-			<a href="Contact Us Frontend/index.html" class="nav-link">
+			<a href="Contact Us Frontend/index.html" class="nav-link" data-nav="contact">
 				<i class="fa-regular fa-envelope"></i>
 				<span data-i18n="contact">Contact Us</span>
 			</a>
 
-			<a href="#help" class="nav-link">
+			<a href="#help" class="nav-link" data-nav="needHelp">
 				<i class="fa-solid fa-circle-question"></i>
 				<span data-i18n="needHelp">Need Help</span>
 			</a>
@@ -86,7 +86,7 @@
 
 			<div class="language-wrapper">
 
-				<button class="language-btn" type="button" aria-label="Select language" aria-expanded="false">
+				<button class="language-btn" id="languageBtn" type="button" aria-label="Select language" aria-expanded="false">
 					<i class="fa-solid fa-globe"></i>
 
 					<span id="currentLanguage">
@@ -112,7 +112,7 @@
 
 			<!-- NOTIFICATION -->
 
-			<button class="icon-btn notification-btn" type="button" aria-label="Notifications">
+			<button class="icon-btn notification-btn" id="notificationBtn" type="button" aria-label="Notifications">
 				<i class="fa-regular fa-bell"></i>
 				<span class="notification-dot"></span>
 			</button>
@@ -121,7 +121,7 @@
 
 			<div class="profile-wrapper">
 
-				<button class="profile-btn" type="button" aria-label="Profile" aria-expanded="false">
+				<button class="profile-btn" id="profileBtn" type="button" aria-label="Profile" aria-expanded="false">
 					AK
 				</button>
 
@@ -187,7 +187,7 @@
 
 		</div>
 
-		<button class="mobile-menu-btn" type="button" aria-label="Open menu" aria-expanded="false">
+		<button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu" aria-expanded="false">
 			<i class="fa-solid fa-bars"></i>
 		</button>
 
@@ -1023,6 +1023,7 @@
 	</footer>
 
 
+	<script src="navbar-loader.js"></script>
 	<script src="script.js"></script>
 
 </body>
