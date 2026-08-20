@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Departments | CivicBuzz Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- =====================================================
+     Global Navbar
+     =====================================================
+     This page no longer has its own sidebar/topbar — it uses
+     the site's global navbar instead. Nothing renders here
+     until that navbar is wired in.
+     See "How to add the global navbar" in the project README
+     (or ask the person who owns navbar.html) for the exact steps.
+     ===================================================== -->
+<div id="global-navbar"></div>
+
+<div class="app-shell">
+
+  <!-- ===================== Main content ===================== -->
+  <div class="main-content">
+
+    <main class="page-body">
+
+      <div class="page-title">
+        <div>
+          
+          <h1>Departments</h1>
+          <p class="page-description">The government departments responsible for resolving reported civic issues.</p>
+        </div>
+        <button class="btn btn-primary" id="openAddDepartment">+ Add Department</button>
+      </div>
+
+      <!-- ===================== Dashboard 1: Overview ===================== -->
+      <section class="track-section">
+        <div class="section-heading">
+          <h2>Overview</h2>
+          <p>Snapshot across all departments.</p>
+        </div>
+
+        <div class="horizontal-track stats-track" tabindex="0">
+          <div class="stat-card">
+            <span>Total departments</span>
+            <strong id="statTotal">6</strong>
+            <small>Registered in the system</small>
+          </div>
+          <div class="stat-card">
+            <span>Active departments</span>
+            <strong id="statActive">5</strong>
+            <small>Currently taking assignments</small>
+          </div>
+          <div class="stat-card">
+            <span>Open issues assigned</span>
+            <strong>47</strong>
+            <small>Across all departments</small>
+          </div>
+          <div class="stat-card">
+            <span>Avg. resolution time</span>
+            <strong>4.2d</strong>
+            <small>Last 30 days</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Dashboard 2: Directory ===================== -->
+      <section class="track-section">
+        <div class="section-heading">
+          <div>
+            <h2>Department directory</h2>
+            <p>Contact details and current workload per department.</p>
+          </div>
+          <label class="search-box" for="departmentSearch">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="departmentSearch" type="search" placeholder="Search departments..." autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="horizontal-track department-track" id="departmentTrack" tabindex="0">
+
+          <article class="department-card" data-name="roads potholes">
+            <div class="card-topline">
+              <span class="dept-icon">🛣️</span>
+              <span class="badge badge-success">Active</span>
+            </div>
+            <h3>Roads &amp; Potholes</h3>
+            <p class="card-description">Road surface damage, potholes, and pavement repairs.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>R. Sharma</dd></div>
+              <div><dt>Email</dt><dd>roads@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>18</strong> open issues</span>
+              <span class="mono">3.1d avg</span>
+            </div>
+          </article>
+
+          <article class="department-card" data-name="street lighting">
+            <div class="card-topline">
+              <span class="dept-icon">💡</span>
+              <span class="badge badge-success">Active</span>
+            </div>
+            <h3>Street Lighting</h3>
+            <p class="card-description">Broken or non-functional street and public lighting.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>P. Nair</dd></div>
+              <div><dt>Email</dt><dd>lighting@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>6</strong> open issues</span>
+              <span class="mono">2.4d avg</span>
+            </div>
+          </article>
+
+          <article class="department-card" data-name="sanitation waste">
+            <div class="card-topline">
+              <span class="dept-icon">🗑️</span>
+              <span class="badge badge-success">Active</span>
+            </div>
+            <h3>Sanitation &amp; Waste</h3>
+            <p class="card-description">Garbage collection, overflowing bins, and dumping complaints.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>A. Verma</dd></div>
+              <div><dt>Email</dt><dd>sanitation@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>12</strong> open issues</span>
+              <span class="mono">1.8d avg</span>
+            </div>
+          </article>
+
+          <article class="department-card" data-name="water supply">
+            <div class="card-topline">
+              <span class="dept-icon">🚰</span>
+              <span class="badge badge-warning">Understaffed</span>
+            </div>
+            <h3>Water Supply</h3>
+            <p class="card-description">Pipe leaks, sewage overflow, and water outage reports.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>S. Iyer</dd></div>
+              <div><dt>Email</dt><dd>water@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>9</strong> open issues</span>
+              <span class="mono">6.5d avg</span>
+            </div>
+          </article>
+
+          <article class="department-card" data-name="parks public spaces">
+            <div class="card-topline">
+              <span class="dept-icon">🌳</span>
+              <span class="badge badge-success">Active</span>
+            </div>
+            <h3>Parks &amp; Public Spaces</h3>
+            <p class="card-description">Damaged benches, playgrounds, and public green spaces.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>M. Fernandes</dd></div>
+              <div><dt>Email</dt><dd>parks@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>2</strong> open issues</span>
+              <span class="mono">5.0d avg</span>
+            </div>
+          </article>
+
+          <article class="department-card" data-name="general unrouted">
+            <div class="card-topline">
+              <span class="dept-icon">🏛️</span>
+              <span class="badge badge-danger">Inactive</span>
+            </div>
+            <h3>General / Unrouted</h3>
+            <p class="card-description">Catch-all for issues that don't match another department yet.</p>
+            <dl class="dept-meta">
+              <div><dt>Head</dt><dd>Unassigned</dd></div>
+              <div><dt>Email</dt><dd>general@civicbuzz.gov</dd></div>
+            </dl>
+            <div class="dept-footline">
+              <span><strong>0</strong> open issues</span>
+              <span class="mono">&mdash;</span>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="track-empty" id="departmentEmpty" hidden>No departments match your search.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== Add Department modal ===================== -->
+<div class="modal-overlay" id="addDepartmentModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addDepartmentTitle">
+    <div class="modal-header">
+      <h2 id="addDepartmentTitle">Add department</h2>
+      <button class="close-button" id="closeAddDepartment" aria-label="Close">&times;</button>
+    </div>
+
+    <form id="addDepartmentForm">
+      <label>Department name
+        <input type="text" name="name" required placeholder="e.g. Waste Management" />
+      </label>
+
+      <div class="form-grid">
+        <label>Head of department
+          <input type="text" name="head" required placeholder="Full name" />
+        </label>
+        <label>Contact email
+          <input type="email" name="email" required placeholder="name@civicbuzz.gov" />
+        </label>
+      </div>
+
+      <label>Description
+        <textarea name="description" rows="3" placeholder="What this department is responsible for" required></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="cancelAddDepartment">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add department</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

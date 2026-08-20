@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivicBuzz | Tenders</title>
+
+  <!-- Google fonts used by the existing CivicBuzz design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="page-container">
+
+    <!-- Page introduction -->
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">CIVIC ACTION</p>
+        <h1>Government Tenders</h1>
+        <p class="page-description">
+          Turn verified civic issues into actionable projects for the community and private contractors.
+        </p>
+      </div>
+
+      <div class="header-stats">
+        <div>
+          <strong>18</strong>
+          <span>Open tenders</span>
+        </div>
+        <div>
+          <strong>₹42L</strong>
+          <span>Total value</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard 1: Government tenders -->
+    <section class="dashboard-section" id="tenders-dashboard">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FOR COMPANIES</p>
+          <h2>Open government tenders</h2>
+          <p>Browse projects created from verified civic issues.</p>
+        </div>
+
+        <!-- Simple category filters -->
+        <div class="filter-group" id="tenderFilters">
+          <button class="filter-button active" data-filter="all">All</button>
+          <button class="filter-button" data-filter="roads">Roads</button>
+          <button class="filter-button" data-filter="drainage">Drainage</button>
+          <button class="filter-button" data-filter="lighting">Lighting</button>
+          <button class="filter-button" data-filter="sanitation">Sanitation</button>
+        </div>
+      </div>
+
+      <!-- Horizontal scrolling tender cards -->
+      <div class="horizontal-track" id="tenderTrack" tabindex="0" aria-label="Open government tenders">
+        <article class="tender-card" data-category="roads">
+          <div class="card-topline">
+            <span class="status status-open">Open</span>
+            <span class="status status-warning">Closing in 3 days</span>
+          </div>
+
+          <h3>Priority road patching — Ward 15</h3>
+          <p class="card-description">Repair the most-reported pothole locations across Ward 15.</p>
+
+          <div class="card-tags">
+            <span>📍 Ward 15</span>
+            <span>✓ 3 verified locations</span>
+          </div>
+
+          <div class="tender-details">
+            <div><span>Estimated value</span><strong>₹2,50,000</strong></div>
+            <div><span>Duration</span><strong>30 days</strong></div>
+            <div><span>Community votes</span><strong>21</strong></div>
+          </div>
+
+          <a class="primary-button" href="#tender-detail">View Tender</a>
+        </article>
+
+        <article class="tender-card" data-category="drainage">
+          <div class="card-topline">
+            <span class="status status-open">Open</span>
+            <span class="status status-warning">Closing in 7 days</span>
+          </div>
+
+          <h3>Drainage improvement — School Road</h3>
+          <p class="card-description">Clear blocked drains and improve two drainage segments near the primary school.</p>
+
+          <div class="card-tags">
+            <span>📍 Ward 12</span>
+            <span>✓ 4 verified locations</span>
+          </div>
+
+          <div class="tender-details">
+            <div><span>Estimated value</span><strong>₹4,00,000</strong></div>
+            <div><span>Duration</span><strong>45 days</strong></div>
+            <div><span>Community votes</span><strong>49</strong></div>
+          </div>
+
+          <a class="primary-button" href="#tender-detail">View Tender</a>
+        </article>
+
+        <article class="tender-card" data-category="lighting">
+          <div class="card-topline">
+            <span class="status status-open">Open</span>
+            <span class="status status-warning">Closing in 10 days</span>
+          </div>
+
+          <h3>Install 20 LED streetlights</h3>
+          <p class="card-description">Add or replace streetlights around the market and school corridors.</p>
+
+          <div class="card-tags">
+            <span>📍 Ward 8</span>
+            <span>✓ 2 verified locations</span>
+          </div>
+
+          <div class="tender-details">
+            <div><span>Estimated value</span><strong>₹3,00,000</strong></div>
+            <div><span>Duration</span><strong>30 days</strong></div>
+            <div><span>Community votes</span><strong>33</strong></div>
+          </div>
+
+          <a class="primary-button" href="#tender-detail">View Tender</a>
+        </article>
+
+        <article class="tender-card" data-category="sanitation">
+          <div class="card-topline">
+            <span class="status status-open">Open</span>
+            <span class="status status-warning">Closing in 12 days</span>
+          </div>
+
+          <h3>Market sanitation upgrade</h3>
+          <p class="card-description">Improve waste collection points and sanitation facilities near the market.</p>
+
+          <div class="card-tags">
+            <span>📍 Ward 9</span>
+            <span>✓ 5 verified locations</span>
+          </div>
+
+          <div class="tender-details">
+            <div><span>Estimated value</span><strong>₹1,80,000</strong></div>
+            <div><span>Duration</span><strong>20 days</strong></div>
+            <div><span>Community votes</span><strong>18</strong></div>
+          </div>
+
+          <a class="primary-button" href="#tender-detail">View Tender</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Dashboard 2: Community priorities -->
+    <section class="dashboard-section" id="community-dashboard">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FOR CITIZENS</p>
+          <h2>Community priorities</h2>
+          <p>Vote for the civic proposals that matter most to your neighbourhood.</p>
+        </div>
+
+        <span class="info-badge">One vote per proposal</span>
+      </div>
+
+      <!-- Horizontal scrolling priority cards -->
+      <div class="horizontal-track priority-track" id="priorityTrack" tabindex="0" aria-label="Community priorities">
+        <article class="priority-card">
+          <span class="rank">#1 Priority</span>
+          <div class="priority-icon">💧</div>
+          <h3>Drainage improvement on School Road</h3>
+          <p>Ward 12 · ₹4,00,000</p>
+
+          <div class="vote-bar">
+            <span style="width: 48%"></span>
+          </div>
+
+          <div class="vote-summary">
+            <strong>49 votes</strong>
+            <span>48% of votes</span>
+          </div>
+
+          <button class="vote-button" data-proposal="Drainage improvement on School Road">
+            Vote for this proposal
+          </button>
+        </article>
+
+        <article class="priority-card">
+          <span class="rank">#2 Priority</span>
+          <div class="priority-icon">💡</div>
+          <h3>Install 20 LED streetlights</h3>
+          <p>Ward 8 · ₹3,00,000</p>
+
+          <div class="vote-bar">
+            <span style="width: 32%"></span>
+          </div>
+
+          <div class="vote-summary">
+            <strong>33 votes</strong>
+            <span>32% of votes</span>
+          </div>
+
+          <button class="vote-button" data-proposal="Install 20 LED streetlights">
+            Vote for this proposal
+          </button>
+        </article>
+
+        <article class="priority-card">
+          <span class="rank">#3 Priority</span>
+          <div class="priority-icon">🛣️</div>
+          <h3>Priority road patching</h3>
+          <p>Ward 15 · ₹2,50,000</p>
+
+          <div class="vote-bar">
+            <span style="width: 20%"></span>
+          </div>
+
+          <div class="vote-summary">
+            <strong>21 votes</strong>
+            <span>20% of votes</span>
+          </div>
+
+          <button class="vote-button" data-proposal="Priority road patching">
+            Vote for this proposal
+          </button>
+        </article>
+      </div>
+
+      <p class="voting-note">
+        Community votes help highlight priorities. Final tender selection remains subject to the official procurement process.
+      </p>
+    </section>
+
+    <!-- Combined tender detail with progress flow -->
+    <section class="detail-panel" id="tender-detail">
+      <div>
+        <p class="eyebrow">TENDER DETAILS</p>
+        <h2>Priority road patching — Ward 15</h2>
+        <p>Repair the most-reported pothole locations across Ward 15.</p>
+      </div>
+
+      <div class="detail-grid">
+        <div><span>Tender ID</span><strong>CB-T-0015</strong></div>
+        <div><span>Estimated value</span><strong>₹2,50,000</strong></div>
+        <div><span>Application deadline</span><strong>24 Aug 2026</strong></div>
+        <div><span>Community priority</span><strong>#3 · 21 votes</strong></div>
+      </div>
+
+      <!-- CivicBuzz Flow Progress Tracker -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <p class="eyebrow">CIVICBUZZ FLOW</p>
+          <h3>Tender progress</h3>
+        </div>
+
+        <div class="progress-tracker">
+          <div class="progress-line-container">
+            <div class="progress-line" id="progressLine"></div>
+          </div>
+          
+          <div class="progress-stages-wrapper">
+            <div class="progress-stage" id="stage-1" data-stage="1">
+              <div class="stage-dot"></div>
+              <span class="stage-label">Reported</span>
+            </div>
+            <div class="progress-stage" id="stage-2" data-stage="2">
+              <div class="stage-dot"></div>
+              <span class="stage-label">Acknowledged</span>
+            </div>
+            <div class="progress-stage" id="stage-3" data-stage="3">
+              <div class="stage-dot"></div>
+              <span class="stage-label">In Progress</span>
+            </div>
+            <div class="progress-stage" id="stage-4" data-stage="4">
+              <div class="stage-dot"></div>
+              <span class="stage-label">Resolved</span>
+            </div>
+            <div class="progress-stage" id="stage-5" data-stage="5">
+              <div class="stage-dot"></div>
+              <span class="stage-label">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="secondary-button" id="officialButton">Continue to official procurement</button>
+    </section>
+
+  </main>
+
+  <!-- Small toast used for simple frontend interactions -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+  <script src="../navbar-loader.js"></script>
+</body>
+</html>
