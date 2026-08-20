@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="CivicBuzz administrator dashboard" />
+	<title>CivicBuzz Admin Portal</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Admin navigation">
+			<div class="brand">
+				<div class="brand-mark">
+					<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+				</div>
+				<span class="brand-name">CivicBuzz</span>
+			</div>
+
+			<nav class="main-nav">
+				<a class="nav-link active" href="#dashboard" data-section="Dashboard">
+					<span>⌂</span> Dashboard
+				</a>
+				<a class="nav-link" href="#queue" data-section="Issue Queue">
+					<span>☷</span> Issue Queue <b class="nav-count">16</b>
+				</a>
+				<a class="nav-link" href="#map" data-section="Map & Hotspots">
+					<span>⌖</span> Map &amp; Hotspots
+				</a>
+				<a class="nav-link" href="#departments" data-section="Departments">
+					<span>♜</span> Departments
+				</a>
+				<a class="nav-link" href="#budgeting" data-section="Budgeting">
+					<span>◴</span> Budgeting
+				</a>
+				<a class="nav-link" href="#analytics" data-section="Analytics">
+					<span>◫</span> Analytics
+				</a>
+			</nav>
+		</aside>
+
+		<main class="main-content">
+			<header class="topbar">
+				<button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false">
+					☰
+				</button>
+
+				<div class="breadcrumb">
+					<span>Admin Portal</span>
+					<i>/</i>
+					<strong id="breadcrumbCurrent">Dashboard</strong>
+				</div>
+
+				<div class="topbar-actions">
+					<label class="search-box" for="dashboardSearch">
+						<span>⌕</span>
+						<input id="dashboardSearch" type="search" placeholder="Search issues, locations, departments..."
+							autocomplete="off" />
+						<kbd>⌘ K</kbd>
+					</label>
+
+					<!-- Language Selector -->
+					<div class="language-selector">
+
+						<button class="language-button" type="button" id="languageButton" aria-haspopup="true"
+							aria-expanded="false" title="Select Language">
+
+							<span class="language-icon">
+								🌐
+							</span>
+
+							<span class="language-current" id="languageCurrent">
+								English
+							</span>
+
+							<span class="language-arrow">
+								▾
+							</span>
+
+						</button>
+
+
+						<!-- Language Dropdown -->
+
+						<div class="language-dropdown" id="languageDropdown" role="menu">
+
+							<button class="language-option active" type="button" data-language="en" role="menuitem">
+
+								<span class="language-option-icon">
+									🇬🇧
+								</span>
+
+								<span>
+									English
+								</span>
+
+								<span class="language-check" aria-hidden="true">
+									✓
+								</span>
+
+							</button>
+
+
+							<button class="language-option" type="button" data-language="hi" role="menuitem">
+
+								<span class="language-option-icon">
+									🇮🇳
+								</span>
+
+								<span>
+									हिन्दी
+								</span>
+
+								<span class="language-check" aria-hidden="true">
+									✓
+								</span>
+
+							</button>
+
+						</div>
+
+					</div>
+
+					<button class="icon-button notification" type="button" aria-label="Notifications">
+						<i class="fa-regular fa-bell"></i> <b></b>
+					</button>
+
+					<div class="profile-wrapper" id="profileWrapper">
+						<button class="profile-btn" id="profileButton" type="button" aria-label="Open profile menu"
+							aria-expanded="false" aria-controls="profileDropdown">
+							AK
+						</button>
+
+						<div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+							<div class="profile-dropdown-header">
+								<div class="profile-avatar-large">AK</div>
+
+								<div>
+									<strong data-i18n="accountName">Aditya Kumar Shyam</strong>
+									<small data-i18n="accountStatus">Super Admin</small>
+								</div>
+							</div>
+
+
+
+							<button class="user-id-button" type="button" id="userIdButton">
+								<span class="user-id-icon" aria-hidden="true">👤</span>
+								<span class="user-id-text" id="userIdText">USER123</span>
+							</button>
+
+
+
+							<button type="button" class="profile-menu-item" id="profileThemeToggle" data-action="theme"
+								aria-pressed="false">
+								<i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+								<span id="themeLabel" data-i18n="darkMode">Dark Mode</span>
+								<span class="theme-switch" id="themeSwitch" aria-hidden="true">
+									<span></span>
+								</span>
+							</button>
+
+							<div class="profile-menu-divider"></div>
+
+							<button type="button" class="profile-menu-item logout-item" data-action="logout">
+								<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+								<span data-i18n="logout">Logout</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<section class="dashboard" id="dashboard">
+				<div class="dashboard-heading">
+					<div>
+						<p class="eyebrow">TUESDAY, 18 AUGUST 2026</p>
+						<h1>Good morning, Admin <span>✦</span></h1>
+						<p>Here is what is happening across your city today.</p>
+					</div>
+				</div>
+
+				<section class="metrics" aria-label="Issue statistics">
+					<article class="metric-card blue-card">
+						<div class="metric-icon">▤</div>
+						<div>
+							<p>Issues Reported</p>
+							<h2>12,480</h2>
+							<small class="positive">↑ 12.5% <em>vs last month</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card green-card">
+						<div class="metric-icon">✓</div>
+						<div>
+							<p>Issues Resolved</p>
+							<h2>8,240</h2>
+							<small class="positive">↑ 15.3% <em>vs last month</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card amber-card">
+						<div class="metric-icon">◷</div>
+						<div>
+							<p>Open Issues</p>
+							<h2>1,162</h2>
+							<small class="negative">↓ 6.8% <em>vs last month</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card red-card">
+						<div class="metric-icon">!</div>
+						<div>
+							<p>Overdue</p>
+							<h2>94</h2>
+							<small class="negative">↓ 8.2% <em>vs last month</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+				</section>
+
+				<section class="dashboard-grid overview-row">
+					<article class="panel trend-panel">
+						<div class="panel-header">
+							<div>
+								<h2>Reported vs Resolved Trend</h2>
+								<div class="legend">
+									<span class="blue-dot"></span> Reported
+									<span class="green-dot"></span> Resolved
+								</div>
+							</div>
+
+							<select id="trendRange" aria-label="Trend date range">
+								<option value="week">Last 7 days</option>
+								<option value="month">Last 30 days</option>
+								<option value="quarter">This quarter</option>
+							</select>
+						</div>
+
+						<div class="chart-wrap">
+							<div class="y-axis">
+								<span>2K</span>
+								<span>1.5K</span>
+								<span>1K</span>
+								<span>500</span>
+								<span>0</span>
+							</div>
+
+							<svg class="line-chart" id="lineChart" viewBox="0 0 730 190" role="img"
+								aria-label="Reported and resolved issues chart">
+								<g class="chart-grid">
+									<line x1="0" y1="12" x2="730" y2="12" />
+									<line x1="0" y1="54" x2="730" y2="54" />
+									<line x1="0" y1="96" x2="730" y2="96" />
+									<line x1="0" y1="138" x2="730" y2="138" />
+									<line x1="0" y1="180" x2="730" y2="180" />
+								</g>
+
+								<polyline id="reportedLine" class="reported-line"
+									points="10,111 124,105 238,80 352,57 466,94 580,72 720,53" />
+								<polyline id="resolvedLine" class="resolved-line"
+									points="10,142 124,135 238,134 352,112 466,133 580,115 720,104" />
+
+								<g id="reportedPoints" class="reported-points"></g>
+								<g id="resolvedPoints" class="resolved-points"></g>
+							</svg>
+
+							<div class="x-axis" id="chartLabels">
+								<span>May 8</span>
+								<span>May 9</span>
+								<span>May 10</span>
+								<span>May 11</span>
+								<span>May 12</span>
+								<span>May 13</span>
+								<span>May 14</span>
+							</div>
+						</div>
+					</article>
+
+					<article class="panel alerts-panel">
+						<div class="panel-header">
+							<h2>Priority Alerts</h2>
+							<button class="text-button" data-toast="Opening all priority alerts">
+								View all
+							</button>
+						</div>
+
+						<div class="alert-list">
+							<article class="alert-item">
+								<span class="alert-icon road">⌁</span>
+								<div>
+									<h3>Pothole on MG Road</h3>
+									<p>Near Metro Station, MG Road</p>
+								</div>
+								<span class="status-pill overdue">Overdue</span>
+								<time>2h ago</time>
+							</article>
+
+							<article class="alert-item">
+								<span class="alert-icon garbage">♜</span>
+								<div>
+									<h3>Garbage Overflow</h3>
+									<p>Sector 15, Nehru Park</p>
+								</div>
+								<span class="status-pill overdue">Overdue</span>
+								<time>4h ago</time>
+							</article>
+
+							<article class="alert-item">
+								<span class="alert-icon water">◒</span>
+								<div>
+									<h3>Water Leakage</h3>
+									<p>Block A, Green View Apartments</p>
+								</div>
+								<span class="status-pill attention">High</span>
+								<time>6h ago</time>
+							</article>
+						</div>
+
+						<button class="view-queue" data-toast="Opening the priority issue queue">
+							View priority queue <span>→</span>
+						</button>
+					</article>
+				</section>
+
+				<section class="dashboard-grid operations-row">
+					<article class="panel map-panel" id="map">
+						<div class="panel-header">
+							<h2>Live Issue Map</h2>
+							<button class="text-button" data-toast="Full map opened">View full map ↗</button>
+						</div>
+
+						<div class="abstract-map" aria-label="Map showing reported issue hotspots">
+							<span class="river river-one"></span>
+							<span class="river river-two"></span>
+
+							<span class="road road-one"></span>
+							<span class="road road-two"></span>
+							<span class="road road-three"></span>
+							<span class="road road-four"></span>
+							<span class="road road-five"></span>
+
+							<span class="map-label label-a">Indiranagar</span>
+							<span class="map-label label-b">Koramangala</span>
+							<span class="map-label label-c">HSR Layout</span>
+
+							<button class="pin green-pin" style="left: 15%; top: 24%"
+								aria-label="4 resolved issues">●</button>
+							<button class="pin red-pin" style="left: 50%; top: 18%"
+								aria-label="7 urgent issues">●</button>
+							<button class="pin red-pin" style="left: 78%; top: 29%"
+								aria-label="5 urgent issues">●</button>
+							<button class="pin amber-pin" style="left: 61%; top: 53%"
+								aria-label="3 open issues">●</button>
+							<button class="pin red-pin" style="left: 27%; top: 69%"
+								aria-label="6 urgent issues">●</button>
+							<button class="pin green-pin" style="left: 66%; top: 74%"
+								aria-label="6 resolved issues">●</button>
+							<button class="pin amber-pin" style="left: 45%; top: 83%"
+								aria-label="2 open issues">●</button>
+
+							<div class="map-key">
+								<span><i class="red-dot"></i> Urgent</span>
+								<span><i class="amber-dot"></i> Open</span>
+								<span><i class="green-dot"></i> Resolved</span>
+							</div>
+						</div>
+					</article>
+
+					<article class="panel routing-panel" id="queue">
+						<div class="panel-header">
+							<div>
+								<h2>AI Routing Queue</h2>
+								<p>Reports awaiting department assignment</p>
+							</div>
+							<button class="text-button" data-toast="Opening all AI recommendations">
+								View all
+							</button>
+						</div>
+
+						<div class="routing-table" role="table">
+							<div class="table-head" role="row">
+								<span>Issue</span>
+								<span>Duplicate match</span>
+								<span>Suggested department</span>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb pothole-thumb">⌁</span>
+									<span>
+										<b>Pothole on 5th Main St</b>
+										<small>HSR Layout · #CB-12481</small>
+									</span>
+								</div>
+								<strong class="match high">92%</strong>
+								<button class="department-chip" data-toast="Assigned to Roads & Potholes">
+									Roads &amp; Potholes <i>⌄</i>
+								</button>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb garbage-thumb">♜</span>
+									<span>
+										<b>Garbage not collected</b>
+										<small>7th Cross, BTM Layout · #CB-12482</small>
+									</span>
+								</div>
+								<strong class="match high">87%</strong>
+								<button class="department-chip" data-toast="Assigned to Garbage & Sanitation">
+									Garbage &amp; Sanitation <i>⌄</i>
+								</button>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb street-thumb">☼</span>
+									<span>
+										<b>Street light not working</b>
+										<small>16th Main, Sector 4 · #CB-12483</small>
+									</span>
+								</div>
+								<strong class="match medium">78%</strong>
+								<button class="department-chip" data-toast="Assigned to Street Lights">
+									Street Lights <i>⌄</i>
+								</button>
+							</div>
+						</div>
+					</article>
+
+					<article class="panel resolution-panel">
+						<div class="panel-header">
+							<h2>Resolution Rate</h2>
+							<button class="icon-ellipsis" aria-label="Resolution menu">•••</button>
+						</div>
+
+						<div class="donut" aria-label="78 percent of issues resolved">
+							<div>
+								<strong>78%</strong>
+								<span>Resolved</span>
+							</div>
+						</div>
+
+						<p class="positive">↑ 6.4% <span>vs last month</span></p>
+
+						<div class="rate-summary">
+							<span><i></i> 8,240 resolved</span>
+							<span><i></i> 2,335 pending</span>
+						</div>
+					</article>
+				</section>
+
+				<section class="panel activity-panel">
+					<div class="panel-header">
+						<div>
+							<h2>Recent Activity</h2>
+							<p>Latest updates from your departments</p>
+						</div>
+						<button class="text-button" data-toast="Opening complete activity history">
+							View all
+						</button>
+					</div>
+
+					<div class="activity-list">
+						<article class="activity">
+							<span class="activity-symbol resolved-symbol">✓</span>
+							<div>
+								<b>Issue #CB-12480 resolved</b>
+								<p>By Roads &amp; Potholes Department</p>
+							</div>
+							<time>10m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol report-symbol">▤</span>
+							<div>
+								<b>New issue #CB-12481 reported</b>
+								<p>Water leakage in Sector 9</p>
+							</div>
+							<time>25m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol assignment-symbol">♙</span>
+							<div>
+								<b>Department assigned #CB-12482</b>
+								<p>Garbage &amp; Sanitation → Street Lights</p>
+							</div>
+							<time>35m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol comment-symbol">◌</span>
+							<div>
+								<b>Public comment on #CB-12479</b>
+								<p>Additional details added</p>
+							</div>
+							<time>1h ago</time>
+						</article>
+					</div>
+				</section>
+			</section>
+
+			<footer class="site-footer" id="footer">
+
+				<div class="footer-skyline" aria-hidden="true">
+					<i></i><i></i><i></i><i></i><i></i><i></i>
+				</div>
+
+				<div class="footer-content">
+
+					<section class="footer-intro">
+						<a class="footer-brand" href="#dashboard" aria-label="CivicBuzz dashboard">
+							<span class="footer-logo">
+								<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+							</span>
+							<strong>CivicBuzz</strong>
+						</a>
+
+						<p class="footer-tagline">
+							Making every civic issue visible,<br>
+							actionable and accountable.
+						</p>
+
+						<p class="footer-copy">
+							Empowering citizens to report problems<br>
+							and build better communities together.
+						</p>
+					</section>
+
+					<section class="footer-links">
+
+						<div>
+							<h2>Quick Links</h2>
+							<a href="#dashboard">Home</a>
+							<a href="#queue">Report an Issue</a>
+							<a href="#queue">Track Complaint</a>
+							<a href="#budgeting">Community</a>
+							<a href="#footer">About CivicBuzz</a>
+						</div>
+
+						<div>
+							<h2>Civic Services</h2>
+							<a href="#queue">Road &amp; Potholes</a>
+							<a href="#queue">Garbage &amp; Sanitation</a>
+							<a href="#queue">Street Lights</a>
+							<a href="#queue">Water &amp; Drainage</a>
+							<a href="#queue">Public Infrastructure</a>
+						</div>
+
+						<div>
+							<h2>Need Help?</h2>
+							<a href="#footer">FAQs</a>
+							<a href="#footer">How to Report</a>
+							<a href="#footer">How Tracking Works</a>
+							<a href="#footer">Contact Support</a>
+
+							<div class="footer-contact">
+								<span>Have a question?</span>
+								<a href="mailto:civicbuzz@gmail.com">
+									civicbuzz@gmail.com
+								</a>
+							</div>
+						</div>
+
+					</section>
+				</div>
+
+				<section class="footer-stats" aria-label="CivicBuzz impact statistics">
+					<div>
+						<strong>12K+</strong>
+						<span>Issues Reported</span>
+					</div>
+
+					<div>
+						<strong>8K+</strong>
+						<span>Issues Resolved</span>
+					</div>
+
+					<div>
+						<strong>4K+</strong>
+						<span>Active Citizens</span>
+					</div>
+
+					<div>
+						<strong>50+</strong>
+						<span>Communities</span>
+					</div>
+				</section>
+
+				<div class="footer-bottom">
+
+					<nav>
+						<a href="#footer">Privacy Policy</a>
+						<a href="#footer">Terms &amp; Conditions</a>
+					</nav>
+
+					<p>
+						© 2026 CivicBuzz. All rights reserved.<br>
+						<span>Built with <b>♥</b> for better communities.</span>
+					</p>
+
+					<nav>
+						<a href="https://github.com/a-k-shyam2309/CivicBuzz" target="_blank" rel="noreferrer">
+							GitHub
+						</a>
+						<a href="#footer">LinkedIn</a>
+					</nav>
+
+				</div>
+
+			</footer>
+		</main>
+	</div>
+
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+	<script src="script.js"></script>
+</body>
+
+</html>

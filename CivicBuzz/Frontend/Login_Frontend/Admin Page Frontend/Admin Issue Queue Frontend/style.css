@@ -1,0 +1,4276 @@
+/* =========================================================
+   CIVICBUZZ - TRACK ISSUES
+   COMPLETE STYLESHEET
+========================================================= */
+
+
+/* =========================================================
+   1. ROOT VARIABLES
+========================================================= */
+
+:root {
+
+    --primary-blue: #1769e0;
+    --primary-dark: #0d47a1;
+    --light-blue: #eaf3ff;
+
+    --yellow: #f5b400;
+    --light-yellow: #fff7df;
+
+    --green: #16a66a;
+    --light-green: #e9f8f1;
+
+    --red: #ef4444;
+    --light-red: #fff0f0;
+
+    --orange: #f59e0b;
+    --light-orange: #fff6e5;
+
+    --purple: #7c3aed;
+    --light-purple: #f3edff;
+
+    --text-dark: #172033;
+    --text-medium: #4b5563;
+    --text-light: #7b8494;
+
+    --border: #e4e8ef;
+
+    --background: #f6f8fc;
+
+    --white: #ffffff;
+
+    --shadow-sm:
+        0 2px 8px rgba(20, 35, 60, 0.06);
+
+    --shadow-md:
+        0 8px 25px rgba(20, 35, 60, 0.10);
+
+    --radius-sm: 7px;
+    --radius-md: 11px;
+    --radius-lg: 15px;
+
+    --transition: 0.25s ease;
+}
+
+
+/* =========================================================
+   2. GLOBAL RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: var(--background);
+
+    color: var(--text-dark);
+
+    overflow-x: hidden;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* =========================================================
+   3. TOP HEADER
+========================================================= */
+
+.top-header {
+
+    width: 100%;
+
+    min-height: 94px;
+
+    background: var(--white);
+
+    border-bottom:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 34px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+/* Header Left */
+
+.header-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+}
+
+
+/* Logo */
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.logo img {
+
+    width: 150px;
+
+    height: auto;
+
+    max-height: 70px;
+
+    object-fit: contain;
+}
+
+
+/* Page Heading */
+
+.page-heading {
+
+    border-left:
+        1px solid var(--border);
+
+    padding-left: 24px;
+}
+
+
+.page-heading h1 {
+
+    font-size: 27px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    color: var(--text-dark);
+}
+
+
+.page-heading p {
+
+    margin-top: 5px;
+
+    font-size: 14px;
+
+    color: var(--text-light);
+}
+
+
+/* Header Right */
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 22px;
+}
+
+
+/* Notification */
+
+.notification-btn {
+
+    position: relative;
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 21px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    transition: var(--transition);
+}
+
+
+.notification-btn:hover {
+
+    background: var(--light-blue);
+}
+
+
+.notification-count {
+
+    position: absolute;
+
+    top: 1px;
+
+    right: 0;
+
+    min-width: 18px;
+
+    height: 18px;
+
+    padding: 0 4px;
+
+    background: var(--yellow);
+
+    color: #ffffff;
+
+    border-radius: 50%;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* Admin */
+
+.admin-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.admin-avatar {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: var(--primary-blue);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+
+.admin-id {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--text-dark);
+}
+
+
+.profile-dropdown {
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 18px;
+
+    color: var(--text-medium);
+
+    padding: 4px;
+}
+
+
+/* =========================================================
+   4. MAIN CONTAINER
+========================================================= */
+
+.track-issues-container {
+
+    width: 100%;
+
+    max-width: 1550px;
+
+    margin: 0 auto;
+
+    padding:
+        28px
+        34px
+        45px;
+}
+
+
+/* =========================================================
+   5. SUMMARY CARDS
+========================================================= */
+
+.issue-summary {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+
+.summary-card {
+
+    min-height: 126px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        background 0.3s ease;
+}
+
+
+.summary-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        var(--shadow-md);
+}
+
+
+/* Summary Icons */
+
+.summary-icon {
+
+    flex-shrink: 0;
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 27px;
+
+    font-weight: 700;
+}
+
+
+.total-card .summary-icon {
+
+    background: #eaf2ff;
+
+    color: var(--primary-blue);
+}
+
+
+.pending-card .summary-icon {
+
+    background: var(--light-yellow);
+
+    color: var(--yellow);
+}
+
+
+.progress-card .summary-icon {
+
+    background: #eaf2ff;
+
+    color: var(--primary-blue);
+}
+
+
+.resolved-card .summary-icon {
+
+    background: var(--light-green);
+
+    color: var(--green);
+}
+
+
+.priority-card .summary-icon {
+
+    background: var(--light-red);
+
+    color: var(--red);
+}
+
+
+/* Summary Text */
+
+.summary-content {
+
+    min-width: 0;
+}
+
+
+.summary-content span {
+
+    display: block;
+
+    font-size: 13px;
+
+    color: var(--text-medium);
+
+    margin-bottom: 5px;
+}
+
+
+.summary-content strong {
+
+    display: block;
+
+    font-size: 27px;
+
+    line-height: 1;
+
+    color: var(--text-dark);
+}
+
+
+.summary-content small {
+
+    display: block;
+
+    margin-top: 7px;
+
+    font-size: 11px;
+
+    color: var(--text-light);
+}
+
+
+/* =========================================================
+   6. SEARCH + FILTERS
+========================================================= */
+
+.issue-filters {
+
+    width: 100%;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    padding: 16px 18px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(280px, 1.8fr)
+        repeat(4, minmax(130px, 0.75fr));
+
+    gap: 15px;
+
+    align-items: end;
+
+    margin-bottom: 18px;
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* Search */
+
+.search-box {
+
+    height: 47px;
+
+    border:
+        1px solid #d9dee7;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    transition: var(--transition);
+}
+
+
+.search-box:focus-within {
+
+    border-color:
+        var(--primary-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 105, 224, 0.10);
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    height: 100%;
+
+    border: none;
+
+    outline: none;
+
+    padding: 0 13px;
+
+    font-size: 13px;
+
+    color: var(--text-dark);
+
+    background: transparent;
+}
+
+
+.search-box input::placeholder {
+
+    color: #9aa2af;
+}
+
+
+.search-box button {
+
+    width: 46px;
+
+    height: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--text-medium);
+
+    font-size: 17px;
+}
+
+
+.search-box button:hover {
+
+    color: var(--primary-blue);
+}
+
+
+/* Filter */
+
+.filter-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.filter-group label {
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color: var(--text-medium);
+}
+
+
+.filter-group select {
+
+    width: 100%;
+
+    height: 47px;
+
+    padding: 0 12px;
+
+    border:
+        1px solid #d9dee7;
+
+    border-radius: 8px;
+
+    background: var(--white);
+
+    color: var(--text-dark);
+
+    font-size: 13px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+
+.filter-group select:focus {
+
+    border-color:
+        var(--primary-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 105, 224, 0.10);
+}
+
+
+/* =========================================================
+   7. ISSUE TABLE
+========================================================= */
+
+.issues-table-section {
+
+    width: 100%;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.issues-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
+}
+
+
+/* Table Header */
+
+.issues-table thead {
+
+    background: #f8fafc;
+}
+
+
+.issues-table th {
+
+    height: 52px;
+
+    padding: 0 18px;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: var(--text-medium);
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+/* Table Rows */
+
+.issues-table tbody tr {
+
+    transition:
+        background var(--transition);
+}
+
+
+.issues-table tbody tr:hover {
+
+    background: #f9fbff;
+}
+
+
+.issues-table td {
+
+    height: 64px;
+
+    padding: 0 18px;
+
+    border-bottom:
+        1px solid #edf0f4;
+
+    font-size: 13px;
+
+    color: var(--text-dark);
+
+    white-space: nowrap;
+}
+
+
+.issues-table tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+.issues-table td strong {
+
+    font-size: 12px;
+
+    color: var(--text-dark);
+}
+
+
+/* =========================================================
+   8. CATEGORY
+========================================================= */
+
+.category {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--text-medium);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   9. PRIORITY BADGES
+========================================================= */
+
+.priority {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 9px;
+
+    border-radius: 5px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.priority.high {
+
+    color: #e53e3e;
+
+    background: #fff1f1;
+
+    border:
+        1px solid #ffcaca;
+}
+
+
+.priority.medium {
+
+    color: #d97706;
+
+    background: #fff7e8;
+
+    border:
+        1px solid #ffd98c;
+}
+
+
+.priority.low {
+
+    color: #138a58;
+
+    background: #ebfaf3;
+
+    border:
+        1px solid #b8ead1;
+}
+
+
+.priority.critical {
+
+    color: #dc2626;
+
+    background: #fff0f0;
+
+    border:
+        1px solid #ffbaba;
+}
+
+
+/* =========================================================
+   10. STATUS BADGES
+========================================================= */
+
+.status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.status.pending {
+
+    color: #d88b00;
+
+    background: #fff7e5;
+
+    border:
+        1px solid #ffd77c;
+}
+
+
+.status.progress {
+
+    color: var(--primary-blue);
+
+    background: #edf5ff;
+
+    border:
+        1px solid #bcd7ff;
+}
+
+
+.status.resolved {
+
+    color: #14885a;
+
+    background: #eaf9f1;
+
+    border:
+        1px solid #b8e8d1;
+}
+
+
+/* NEW: VERIFIED */
+
+.status.verified {
+
+    color: #6d28d9;
+
+    background: #f3edff;
+
+    border:
+        1px solid #d8c5ff;
+}
+
+
+/* NEW: CLOSED */
+
+.status.closed {
+
+    color: #5b6472;
+
+    background: #f1f3f5;
+
+    border:
+        1px solid #d9dde2;
+}
+
+
+.status.rejected {
+
+    color: #dc2626;
+
+    background: #fff0f0;
+
+    border:
+        1px solid #ffc6c6;
+}
+
+
+/* =========================================================
+   11. VIEW BUTTON
+========================================================= */
+
+.view-issue-btn {
+
+    width: 38px;
+
+    height: 34px;
+
+    border:
+        1px solid #bcd4ff;
+
+    border-radius: 6px;
+
+    background: #f8fbff;
+
+    color: var(--primary-blue);
+
+    font-size: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: var(--transition);
+}
+
+
+.view-issue-btn:hover {
+
+    background:
+        var(--primary-blue);
+
+    color: var(--white);
+
+    border-color:
+        var(--primary-blue);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   12. TABLE FOOTER
+========================================================= */
+
+.table-footer {
+
+    min-height: 66px;
+
+    padding: 12px 18px;
+
+    border-top:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.issue-count {
+
+    font-size: 12px;
+
+    color: var(--text-medium);
+}
+
+
+/* Pagination */
+
+.pagination {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.page-btn {
+
+    width: 34px;
+
+    height: 34px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 6px;
+
+    background: var(--white);
+
+    color: var(--text-medium);
+
+    font-size: 12px;
+
+    transition: var(--transition);
+}
+
+
+.page-btn:hover {
+
+    border-color:
+        var(--primary-blue);
+
+    color:
+        var(--primary-blue);
+}
+
+
+.page-btn.active {
+
+    background:
+        var(--primary-blue);
+
+    border-color:
+        var(--primary-blue);
+
+    color: var(--white);
+}
+
+
+.pagination-dots {
+
+    color: var(--text-light);
+
+    font-size: 13px;
+
+    padding: 0 2px;
+}
+
+/* =========================================================
+   13. RIGHT SIDE PANEL OVERLAY
+========================================================= */
+
+.issue-panel-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(15, 23, 42, 0.38);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+
+    z-index: 900;
+
+    backdrop-filter:
+        blur(2px);
+}
+
+
+.issue-panel-overlay.active {
+
+    opacity: 1;
+
+    visibility: visible;
+}
+
+
+/* =========================================================
+   14. RIGHT SIDE ISSUE DETAILS PANEL
+========================================================= */
+
+.issue-details-panel {
+
+    position: fixed;
+
+    top: 0;
+
+    right: 0;
+
+    width: 475px;
+
+    max-width: 94vw;
+
+    height: 100vh;
+
+    background: var(--white);
+
+    z-index: 1000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow:
+        -15px 0 45px
+        rgba(15, 23, 42, 0.15);
+
+    transform:
+        translateX(100%);
+
+    transition:
+        transform 0.35s ease;
+
+    overflow: hidden;
+}
+
+
+.issue-details-panel.active {
+
+    transform:
+        translateX(0);
+}
+
+
+/* =========================================================
+   15. PANEL HEADER
+========================================================= */
+
+.details-panel-header {
+
+    min-height: 82px;
+
+    padding:
+        17px 22px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    flex-shrink: 0;
+}
+
+
+.details-label {
+
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: var(--text-light);
+
+    margin-bottom: 4px;
+}
+
+
+.details-panel-header h2 {
+
+    font-size: 21px;
+
+    line-height: 1.2;
+
+    color: var(--text-dark);
+}
+
+
+/* Close Button */
+
+.details-close-btn {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f3f5f8;
+
+    color: var(--text-medium);
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: var(--transition);
+}
+
+
+.details-close-btn:hover {
+
+    background:
+        #fff0f0;
+
+    color:
+        var(--red);
+}
+
+
+/* =========================================================
+   16. PANEL BODY
+========================================================= */
+
+.details-panel-body {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding:
+        22px;
+
+    scrollbar-width: thin;
+}
+
+
+.details-panel-body::-webkit-scrollbar {
+
+    width: 6px;
+}
+
+
+.details-panel-body::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+
+.details-panel-body::-webkit-scrollbar-thumb {
+
+    background: #cbd2dc;
+
+    border-radius: 10px;
+}
+
+
+.details-panel-body::-webkit-scrollbar-thumb:hover {
+
+    background: #aeb7c4;
+}
+
+
+/* =========================================================
+   17. STATUS + PRIORITY ROW
+========================================================= */
+
+.details-status-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   18. PANEL SECTION
+========================================================= */
+
+.panel-section {
+
+    margin-bottom: 25px;
+}
+
+
+.panel-section h4 {
+
+    margin-bottom: 11px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: var(--text-medium);
+}
+
+
+.panel-section h3 {
+
+    margin-bottom: 8px;
+
+    font-size: 19px;
+
+    line-height: 1.35;
+
+    color: var(--text-dark);
+}
+
+
+.issue-description {
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    color: var(--text-medium);
+}
+
+
+/* =========================================================
+   19. USER DETAIL BOX
+========================================================= */
+
+.user-detail-box {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.user-detail-avatar {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--light-blue);
+
+    color:
+        var(--primary-blue);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+
+.user-detail-box strong {
+
+    display: block;
+
+    font-size: 13px;
+
+    color: var(--text-dark);
+}
+
+
+.user-detail-box span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: var(--text-light);
+}
+
+
+/* =========================================================
+   20. DETAIL GRID
+========================================================= */
+
+.detail-grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+
+.detail-item {
+
+    min-height: 72px;
+
+    padding: 12px;
+
+    background: var(--white);
+
+    border-right:
+        1px solid var(--border);
+
+    border-bottom:
+        1px solid var(--border);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 5px;
+}
+
+
+.detail-item:nth-child(2n) {
+
+    border-right: none;
+}
+
+
+.detail-item:nth-last-child(-n + 2) {
+
+    border-bottom: none;
+}
+
+
+.detail-item span {
+
+    font-size: 10px;
+
+    color: var(--text-light);
+}
+
+
+.detail-item strong {
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    color: var(--text-dark);
+}
+
+
+/* =========================================================
+   21. IMAGE CONTAINER
+========================================================= */
+
+.panel-image {
+
+    width: 100%;
+
+    min-height: 190px;
+
+    height: 190px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    background: #f6f8fb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* Actual Uploaded Image */
+
+.panel-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: none;
+}
+
+
+/* =========================================================
+   22. NO IMAGE MESSAGE
+========================================================= */
+
+.no-image-message {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 190px;
+
+    padding: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background: #f6f8fb;
+
+    color: var(--text-light);
+}
+
+
+.no-image-message span {
+
+    width: 52px;
+
+    height: 52px;
+
+    margin-bottom: 10px;
+
+    border-radius: 50%;
+
+    background: #e9edf3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+}
+
+
+.no-image-message strong {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: var(--text-medium);
+}
+
+
+.no-image-message small {
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    color: var(--text-light);
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   23. ISSUE TIMELINE
+========================================================= */
+
+.panel-timeline {
+
+    position: relative;
+
+    padding-left: 27px;
+}
+
+
+.panel-timeline::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 5px;
+
+    top: 6px;
+
+    bottom: 8px;
+
+    width: 2px;
+
+    background: #e1e6ed;
+}
+
+
+.panel-timeline-item {
+
+    position: relative;
+
+    min-height: 60px;
+
+    padding-bottom: 17px;
+
+    display: flex;
+}
+
+
+.panel-timeline-item:last-child {
+
+    padding-bottom: 0;
+}
+
+
+.timeline-marker {
+
+    position: absolute;
+
+    left: -27px;
+
+    top: 3px;
+
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: var(--white);
+
+    border:
+        2px solid #cbd3de;
+
+    z-index: 2;
+}
+
+
+.panel-timeline-item.active
+.timeline-marker {
+
+    background:
+        var(--primary-blue);
+
+    border-color:
+        var(--primary-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 105, 224, 0.10);
+}
+
+
+.panel-timeline-item strong {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: var(--text-dark);
+
+    margin-bottom: 4px;
+}
+
+
+.panel-timeline-item span {
+
+    display: block;
+
+    font-size: 10px;
+
+    color: var(--text-light);
+}
+
+
+/* =========================================================
+   24. STATUS SELECT
+========================================================= */
+
+#panelStatusSelect {
+
+    width: 100%;
+
+    height: 44px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid #d8dee7;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: var(--white);
+
+    color: var(--text-dark);
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+
+#panelStatusSelect:focus {
+
+    border-color:
+        var(--primary-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 105, 224, 0.10);
+}
+
+
+/* =========================================================
+   25. CITIZEN VERIFICATION SECTION
+========================================================= */
+
+.verification-section {
+
+    padding: 15px;
+
+    border:
+        1px solid #ddd2ff;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fbf9ff,
+            #ffffff
+        );
+}
+
+
+/* Heading */
+
+.verification-heading {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 13px;
+}
+
+
+.verification-heading h4 {
+
+    margin-bottom: 4px;
+
+    color:
+        #5f27c9;
+}
+
+
+.verification-heading p {
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    color: var(--text-light);
+
+    max-width: 290px;
+}
+
+
+/* Count */
+
+.verification-count {
+
+    flex-shrink: 0;
+
+    min-width: 52px;
+
+    height: 28px;
+
+    padding: 0 8px;
+
+    border-radius: 6px;
+
+    background:
+        var(--light-purple);
+
+    border:
+        1px solid #d7c5ff;
+
+    color:
+        var(--purple);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================================================
+   26. VERIFICATION PROGRESS
+========================================================= */
+
+.verification-progress {
+
+    width: 100%;
+
+    height: 8px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    background: #e8e4f1;
+
+    margin-bottom: 10px;
+}
+
+
+.verification-progress-bar {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7c3aed,
+            #9f67ff
+        );
+
+    transition:
+        width 0.4s ease;
+}
+
+
+/* =========================================================
+   27. VERIFICATION MESSAGE
+========================================================= */
+
+.verification-message {
+
+    padding: 9px 10px;
+
+    border-radius: 6px;
+
+    background: #f4f0ff;
+
+    color: #6d28d9;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   28. CITIZEN VERIFICATION LIST
+========================================================= */
+
+.citizen-verification-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.citizen-verification-item {
+
+    min-height: 52px;
+
+    padding: 8px 9px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+/* Citizen Info */
+
+.citizen-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+
+.citizen-avatar {
+
+    width: 32px;
+
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--light-blue);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+}
+
+
+.citizen-info strong {
+
+    display: block;
+
+    font-size: 11px;
+
+    color: var(--text-dark);
+}
+
+
+.citizen-info span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    color: var(--text-light);
+}
+
+
+/* =========================================================
+   29. VERIFICATION STATUS
+========================================================= */
+
+.verification-status {
+
+    flex-shrink: 0;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+.verification-status.waiting {
+
+    color: #9a6a00;
+
+    background: #fff7e5;
+
+    border:
+        1px solid #ffdb8a;
+}
+
+
+.verification-status.verified {
+
+    color: #138653;
+
+    background: #eaf9f1;
+
+    border:
+        1px solid #b9e8d2;
+}
+
+
+.verification-status.rejected {
+
+    color: #dc2626;
+
+    background: #fff0f0;
+
+    border:
+        1px solid #ffc4c4;
+}
+
+
+/* =========================================================
+   30. VERIFICATION COMPLETE
+========================================================= */
+
+.verification-complete {
+
+    display: none;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    padding: 11px;
+
+    border:
+        1px solid #b8e8d1;
+
+    border-radius: 8px;
+
+    background:
+        #eaf9f1;
+}
+
+
+.verification-complete > span {
+
+    width: 31px;
+
+    height: 31px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+.verification-complete strong {
+
+    display: block;
+
+    font-size: 11px;
+
+    color: #13734b;
+}
+
+
+.verification-complete small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    color: #4c8069;
+
+    line-height: 1.4;
+}
+
+/* =========================================================
+   31. PANEL FOOTER
+========================================================= */
+
+.details-panel-footer {
+
+    min-height: 76px;
+
+    padding:
+        13px 18px;
+
+    border-top:
+        1px solid var(--border);
+
+    background:
+        var(--white);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   32. PANEL ACTION BUTTON
+========================================================= */
+
+.panel-action-btn {
+
+    min-height: 41px;
+
+    padding:
+        0 10px;
+
+    border-radius: 7px;
+
+    background:
+        var(--white);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    transition: var(--transition);
+
+    white-space: nowrap;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+}
+
+
+/* =========================================================
+   33. ASSIGN BUTTON
+========================================================= */
+
+.panel-action-btn.assign {
+
+    border:
+        1px solid #b9d4ff;
+
+    color:
+        var(--primary-blue);
+}
+
+
+.panel-action-btn.assign:hover {
+
+    background:
+        var(--light-blue);
+
+    border-color:
+        var(--primary-blue);
+}
+
+
+/* =========================================================
+   34. REJECT BUTTON
+========================================================= */
+
+.panel-action-btn.reject {
+
+    border:
+        1px solid #ffc4c4;
+
+    color:
+        var(--red);
+}
+
+
+.panel-action-btn.reject:hover {
+
+    background:
+        var(--light-red);
+
+    border-color:
+        var(--red);
+}
+
+
+/* =========================================================
+   35. RESOLVE BUTTON
+========================================================= */
+
+.panel-action-btn.resolve {
+
+    border:
+        1px solid #b8e8d1;
+
+    color:
+        var(--green);
+}
+
+
+.panel-action-btn.resolve:hover {
+
+    background:
+        var(--light-green);
+
+    border-color:
+        var(--green);
+}
+
+
+/* =========================================================
+   36. CLOSE COMPLAINT BUTTON
+========================================================= */
+
+.panel-action-btn.close-complaint {
+
+    border:
+        1px solid #d5c2ff;
+
+    background:
+        #f6f0ff;
+
+    color:
+        var(--purple);
+
+    grid-column:
+        1 / -1;
+}
+
+
+.panel-action-btn.close-complaint:hover {
+
+    background:
+        var(--purple);
+
+    color:
+        var(--white);
+
+    border-color:
+        var(--purple);
+}
+
+
+/* =========================================================
+   37. WORKFLOW ALERT OVERLAY
+========================================================= */
+
+.workflow-alert-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    background:
+        rgba(15, 23, 42, 0.45);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+.workflow-alert-overlay.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   38. WORKFLOW ALERT BOX
+========================================================= */
+
+.workflow-alert {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    background:
+        var(--white);
+
+    box-shadow:
+        0 20px 60px
+        rgba(15, 23, 42, 0.20);
+
+    text-align: center;
+
+    transform:
+        translateY(15px)
+        scale(0.97);
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.workflow-alert-overlay.active
+.workflow-alert {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   39. ALERT ICON
+========================================================= */
+
+.workflow-alert-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    margin:
+        0 auto 15px;
+
+    border-radius: 50%;
+
+    background:
+        var(--light-green);
+
+    color:
+        var(--green);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ALERT CONTENT
+========================================================= */
+
+.workflow-alert-content h3 {
+
+    font-size: 18px;
+
+    color:
+        var(--text-dark);
+
+    margin-bottom: 8px;
+}
+
+
+.workflow-alert-content p {
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    color:
+        var(--text-medium);
+
+    max-width: 350px;
+
+    margin:
+        0 auto 20px;
+}
+
+
+/* =========================================================
+   ALERT BUTTON
+========================================================= */
+
+.workflow-alert-btn {
+
+    min-width: 120px;
+
+    height: 40px;
+
+    padding:
+        0 18px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        var(--primary-blue);
+
+    color:
+        var(--white);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition:
+        var(--transition);
+}
+
+
+.workflow-alert-btn:hover {
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   40. VERIFIED STATE - PANEL
+========================================================= */
+
+.issue-details-panel.verified
+.details-status-row .status {
+
+    color:
+        var(--purple);
+
+    background:
+        var(--light-purple);
+
+    border-color:
+        #d8c5ff;
+}
+
+
+/* =========================================================
+   41. CLOSED STATE - PANEL
+========================================================= */
+
+.issue-details-panel.closed
+.details-status-row .status {
+
+    color:
+        #5b6472;
+
+    background:
+        #f1f3f5;
+
+    border-color:
+        #d9dde2;
+}
+
+
+/* =========================================================
+   42. DISABLED ACTION
+========================================================= */
+
+.panel-action-btn:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+}
+
+
+.panel-action-btn:disabled:hover {
+
+    background:
+        var(--white);
+
+    border-color:
+        var(--border);
+
+    color:
+        var(--text-light);
+}
+
+
+/* =========================================================
+   43. VERIFICATION WAITING STATE
+========================================================= */
+
+.verification-section.waiting {
+
+    border-color:
+        #ddd2ff;
+}
+
+
+.verification-section.waiting
+.verification-progress-bar {
+
+    background:
+        linear-gradient(
+            90deg,
+            #7c3aed,
+            #a879ff
+        );
+}
+
+
+/* =========================================================
+   44. VERIFICATION VERIFIED STATE
+========================================================= */
+
+.verification-section.verified {
+
+    border-color:
+        #b8e8d1;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f2fcf7,
+            #ffffff
+        );
+}
+
+
+.verification-section.verified
+.verification-heading h4 {
+
+    color:
+        #138653;
+}
+
+
+.verification-section.verified
+.verification-message {
+
+    background:
+        #eaf9f1;
+
+    color:
+        #138653;
+}
+
+
+/* =========================================================
+   45. VERIFIED BADGE IN VERIFICATION
+========================================================= */
+
+.verification-count.complete {
+
+    background:
+        var(--light-green);
+
+    border-color:
+        #b8e8d1;
+
+    color:
+        var(--green);
+}
+
+
+/* =========================================================
+   46. TABLE VERIFIED ROW
+========================================================= */
+
+.issues-table tbody tr[data-status="verified"] {
+
+    background:
+        rgba(124, 58, 237, 0.025);
+}
+
+
+.issues-table tbody tr[data-status="verified"]:hover {
+
+    background:
+        rgba(124, 58, 237, 0.06);
+}
+
+
+/* =========================================================
+   47. TABLE CLOSED ROW
+========================================================= */
+
+.issues-table tbody tr[data-status="closed"] {
+
+    opacity: 0.82;
+}
+
+
+.issues-table tbody tr[data-status="closed"]:hover {
+
+    opacity: 1;
+
+    background:
+        #f8f9fa;
+}
+
+
+/* =========================================================
+   48. CUSTOM SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width: 7px;
+
+    height: 7px;
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #f3f5f8;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #c7ced8;
+
+    border-radius:
+        10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #aeb7c4;
+}
+
+
+/* =========================================================
+   49. TABLE RESPONSIVE SCROLL
+========================================================= */
+
+.table-wrapper {
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #c7ced8
+        #f3f5f8;
+}
+
+/* =========================================================
+   50. DARK MODE
+========================================================= */
+
+body.dark-mode {
+
+    --background: #0f172a;
+
+    --white: #111827;
+
+    --text-dark: #f1f5f9;
+
+    --text-medium: #cbd5e1;
+
+    --text-light: #94a3b8;
+
+    --border: #263244;
+
+    --light-blue: #172b49;
+
+    --light-green: #16382a;
+
+    --light-red: #3a2024;
+
+    --light-yellow: #3a301b;
+
+    --light-purple: #30234d;
+}
+
+
+body.dark-mode {
+
+    background:
+        var(--background);
+
+    color:
+        var(--text-dark);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+body.dark-mode .top-header {
+
+    background:
+        #111827;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .page-heading {
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .page-heading h1 {
+
+    color:
+        #f8fafc;
+}
+
+
+body.dark-mode .page-heading p {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .admin-id {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .profile-dropdown {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .notification-btn {
+
+    color:
+        #e2e8f0;
+}
+
+
+body.dark-mode .notification-btn:hover {
+
+    background:
+        #182235;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+body.dark-mode .summary-card {
+
+    background:
+        #111827;
+
+    border-color:
+        #263244;
+
+    box-shadow:
+        0 7px 25px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+body.dark-mode .summary-card:hover {
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+body.dark-mode .summary-content span {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .summary-content strong {
+
+    color:
+        #f8fafc;
+}
+
+
+body.dark-mode .summary-content small {
+
+    color:
+        #94a3b8;
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+body.dark-mode .issue-filters {
+
+    background:
+        #111827;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .search-box {
+
+    border-color:
+        #344155;
+}
+
+
+body.dark-mode .search-box input {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .search-box input::placeholder {
+
+    color:
+        #64748b;
+}
+
+
+body.dark-mode .search-box button {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .filter-group label {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .filter-group select {
+
+    background:
+        #182235;
+
+    border-color:
+        #344155;
+
+    color:
+        #f1f5f9;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+body.dark-mode .issues-table-section {
+
+    background:
+        #111827;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .issues-table thead {
+
+    background:
+        #182235;
+}
+
+
+body.dark-mode .issues-table th {
+
+    color:
+        #cbd5e1;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .issues-table td {
+
+    color:
+        #e2e8f0;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .issues-table td strong {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .issues-table tbody tr:hover {
+
+    background:
+        #182235;
+}
+
+
+body.dark-mode .category {
+
+    color:
+        #cbd5e1;
+}
+
+
+/* =========================================================
+   DARK MODE BADGES
+========================================================= */
+
+body.dark-mode .status.pending {
+
+    background:
+        #3a301b;
+
+    border-color:
+        #66501c;
+
+    color:
+        #f4c95d;
+}
+
+
+body.dark-mode .status.progress {
+
+    background:
+        #172b49;
+
+    border-color:
+        #31527e;
+
+    color:
+        #70a7ff;
+}
+
+
+body.dark-mode .status.resolved {
+
+    background:
+        #16382a;
+
+    border-color:
+        #286044;
+
+    color:
+        #5ed39b;
+}
+
+
+body.dark-mode .status.verified {
+
+    background:
+        #30234d;
+
+    border-color:
+        #5b3b8e;
+
+    color:
+        #b99aff;
+}
+
+
+body.dark-mode .status.closed {
+
+    background:
+        #242a33;
+
+    border-color:
+        #3b4654;
+
+    color:
+        #aeb8c6;
+}
+
+
+body.dark-mode .status.rejected {
+
+    background:
+        #3a2024;
+
+    border-color:
+        #713333;
+
+    color:
+        #ff7373;
+}
+
+
+/* Priority */
+
+body.dark-mode .priority.high,
+body.dark-mode .priority.critical {
+
+    background:
+        #3a2024;
+
+    border-color:
+        #713333;
+
+    color:
+        #ff7373;
+}
+
+
+body.dark-mode .priority.medium {
+
+    background:
+        #3a301b;
+
+    border-color:
+        #66501c;
+
+    color:
+        #f4c95d;
+}
+
+
+body.dark-mode .priority.low {
+
+    background:
+        #16382a;
+
+    border-color:
+        #286044;
+
+    color:
+        #5ed39b;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+body.dark-mode .view-issue-btn {
+
+    background:
+        #17243a;
+
+    border-color:
+        #31527e;
+
+    color:
+        #70a7ff;
+}
+
+
+body.dark-mode .view-issue-btn:hover {
+
+    background:
+        var(--primary-blue);
+
+    color:
+        #ffffff;
+
+    border-color:
+        var(--primary-blue);
+}
+
+
+/* =========================================================
+   TABLE FOOTER
+========================================================= */
+
+body.dark-mode .table-footer {
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .issue-count {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .page-btn {
+
+    background:
+        #182235;
+
+    border-color:
+        #344155;
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .page-btn:hover {
+
+    border-color:
+        var(--primary-blue);
+
+    color:
+        #70a7ff;
+}
+
+
+body.dark-mode .page-btn.active {
+
+    background:
+        var(--primary-blue);
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   RIGHT SIDE PANEL
+========================================================= */
+
+body.dark-mode .issue-details-panel {
+
+    background:
+        #111827;
+
+    box-shadow:
+        -15px 0 45px
+        rgba(0, 0, 0, 0.50);
+}
+
+
+body.dark-mode .details-panel-header {
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .details-panel-header h2 {
+
+    color:
+        #f8fafc;
+}
+
+
+body.dark-mode .details-label {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .details-close-btn {
+
+    background:
+        #1f2937;
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .details-close-btn:hover {
+
+    background:
+        #3a2024;
+
+    color:
+        #ff7373;
+}
+
+
+/* =========================================================
+   PANEL CONTENT
+========================================================= */
+
+body.dark-mode .user-detail-box {
+
+    background:
+        #182235;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .user-detail-box strong {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .user-detail-box span {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .panel-section h3 {
+
+    color:
+        #f8fafc;
+}
+
+
+body.dark-mode .panel-section h4 {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .issue-description {
+
+    color:
+        #b8c3d1;
+}
+
+
+/* Detail Grid */
+
+body.dark-mode .detail-grid {
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .detail-item {
+
+    background:
+        #182235;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .detail-item span {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .detail-item strong {
+
+    color:
+        #f1f5f9;
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+body.dark-mode .panel-image {
+
+    background:
+        #182235;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .no-image-message {
+
+    background:
+        #182235;
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .no-image-message span {
+
+    background:
+        #263244;
+}
+
+
+body.dark-mode .no-image-message strong {
+
+    color:
+        #cbd5e1;
+}
+
+
+body.dark-mode .no-image-message small {
+
+    color:
+        #64748b;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+body.dark-mode .panel-timeline::before {
+
+    background:
+        #344155;
+}
+
+
+body.dark-mode .timeline-marker {
+
+    background:
+        #111827;
+
+    border-color:
+        #64748b;
+}
+
+
+body.dark-mode .panel-timeline-item strong {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .panel-timeline-item span {
+
+    color:
+        #94a3b8;
+}
+
+
+/* =========================================================
+   STATUS SELECT
+========================================================= */
+
+body.dark-mode #panelStatusSelect {
+
+    background:
+        #182235;
+
+    border-color:
+        #344155;
+
+    color:
+        #f1f5f9;
+}
+
+
+/* =========================================================
+   VERIFICATION SECTION
+========================================================= */
+
+body.dark-mode .verification-section {
+
+    background:
+        linear-gradient(
+            145deg,
+            #19152a,
+            #111827
+        );
+
+    border-color:
+        #49356f;
+}
+
+
+body.dark-mode .verification-heading h4 {
+
+    color:
+        #b99aff;
+}
+
+
+body.dark-mode .verification-heading p {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .verification-count {
+
+    background:
+        #30234d;
+
+    border-color:
+        #5b3b8e;
+
+    color:
+        #b99aff;
+}
+
+
+body.dark-mode .verification-progress {
+
+    background:
+        #2b2637;
+}
+
+
+body.dark-mode .verification-message {
+
+    background:
+        #30234d;
+
+    color:
+        #b99aff;
+}
+
+
+/* Citizen Cards */
+
+body.dark-mode .citizen-verification-item {
+
+    background:
+        #182235;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .citizen-info strong {
+
+    color:
+        #f1f5f9;
+}
+
+
+body.dark-mode .citizen-info span {
+
+    color:
+        #94a3b8;
+}
+
+
+body.dark-mode .citizen-avatar {
+
+    background:
+        #172b49;
+}
+
+
+/* Verification States */
+
+body.dark-mode .verification-status.waiting {
+
+    background:
+        #3a301b;
+
+    border-color:
+        #66501c;
+
+    color:
+        #f4c95d;
+}
+
+
+body.dark-mode .verification-status.verified {
+
+    background:
+        #16382a;
+
+    border-color:
+        #286044;
+
+    color:
+        #5ed39b;
+}
+
+
+body.dark-mode .verification-status.rejected {
+
+    background:
+        #3a2024;
+
+    border-color:
+        #713333;
+
+    color:
+        #ff7373;
+}
+
+
+/* Complete */
+
+body.dark-mode .verification-complete {
+
+    background:
+        #16382a;
+
+    border-color:
+        #286044;
+}
+
+
+body.dark-mode .verification-complete strong {
+
+    color:
+        #5ed39b;
+}
+
+
+body.dark-mode .verification-complete small {
+
+    color:
+        #8bc9aa;
+}
+
+
+/* =========================================================
+   PANEL FOOTER
+========================================================= */
+
+body.dark-mode .details-panel-footer {
+
+    background:
+        #111827;
+
+    border-color:
+        #263244;
+}
+
+
+body.dark-mode .panel-action-btn {
+
+    background:
+        #182235;
+}
+
+
+body.dark-mode .panel-action-btn.assign {
+
+    border-color:
+        #31527e;
+
+    color:
+        #70a7ff;
+}
+
+
+body.dark-mode .panel-action-btn.assign:hover {
+
+    background:
+        #1d3557;
+}
+
+
+body.dark-mode .panel-action-btn.reject {
+
+    border-color:
+        #713333;
+
+    color:
+        #ff7373;
+}
+
+
+body.dark-mode .panel-action-btn.reject:hover {
+
+    background:
+        #3a2024;
+}
+
+
+body.dark-mode .panel-action-btn.resolve {
+
+    border-color:
+        #286044;
+
+    color:
+        #5ed39b;
+}
+
+
+body.dark-mode .panel-action-btn.resolve:hover {
+
+    background:
+        #18372a;
+}
+
+
+/* Close Complaint */
+
+body.dark-mode
+.panel-action-btn.close-complaint {
+
+    background:
+        #30234d;
+
+    border-color:
+        #5b3b8e;
+
+    color:
+        #b99aff;
+}
+
+
+body.dark-mode
+.panel-action-btn.close-complaint:hover {
+
+    background:
+        #7c3aed;
+
+    border-color:
+        #7c3aed;
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   WORKFLOW ALERT - DARK MODE
+========================================================= */
+
+body.dark-mode .workflow-alert {
+
+    background:
+        #111827;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-mode .workflow-alert-content h3 {
+
+    color:
+        #f8fafc;
+}
+
+
+body.dark-mode .workflow-alert-content p {
+
+    color:
+        #cbd5e1;
+}
+
+
+/* =========================================================
+   DARK MODE SCROLLBAR
+========================================================= */
+
+body.dark-mode ::-webkit-scrollbar-track {
+
+    background:
+        #111827;
+}
+
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+
+    background:
+        #3b4658;
+}
+
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #526176;
+}
+
+
+/* =========================================================
+   51. RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .issue-summary {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+
+    .issue-filters {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+
+    .search-box {
+
+        grid-column:
+            1 / -1;
+    }
+
+}
+
+
+/* =========================================================
+   52. RESPONSIVE - SMALL TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .top-header {
+
+        padding:
+            0 20px;
+    }
+
+
+    .logo img {
+
+        width: 135px;
+
+        max-height: 55px;
+    }
+
+
+    .page-heading {
+
+        padding-left: 17px;
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 22px;
+    }
+
+
+    .page-heading p {
+
+        font-size: 12px;
+    }
+
+
+    .track-issues-container {
+
+        padding:
+            22px 20px 35px;
+    }
+
+
+    .issue-summary {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .issue-filters {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .search-box {
+
+        grid-column:
+            1 / -1;
+    }
+
+}
+
+
+/* =========================================================
+   53. RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .top-header {
+
+        min-height: 75px;
+
+        padding:
+            0 14px;
+    }
+
+
+    .header-left {
+
+        gap: 10px;
+    }
+
+
+    .logo img {
+
+        width: 105px;
+
+        max-height: 45px;
+    }
+
+
+    .page-heading {
+
+        padding-left: 10px;
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 17px;
+    }
+
+
+    .page-heading p {
+
+        display: none;
+    }
+
+
+    .header-right {
+
+        gap: 7px;
+    }
+
+
+    .admin-info,
+    .profile-dropdown {
+
+        display: none;
+    }
+
+
+    .admin-avatar {
+
+        width: 34px;
+
+        height: 34px;
+
+        font-size: 16px;
+    }
+
+
+    .notification-btn {
+
+        width: 34px;
+
+        height: 34px;
+
+        font-size: 17px;
+    }
+
+
+    .notification-count {
+
+        width: 15px;
+
+        height: 15px;
+
+        min-width: 15px;
+
+        font-size: 8px;
+    }
+
+
+    .track-issues-container {
+
+        padding:
+            16px 12px 30px;
+    }
+
+
+    .issue-summary {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+
+    .summary-card {
+
+        min-height: 105px;
+
+        padding: 13px;
+
+        gap: 10px;
+    }
+
+
+    .summary-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 19px;
+    }
+
+
+    .summary-content strong {
+
+        font-size: 21px;
+    }
+
+
+    .summary-content span {
+
+        font-size: 11px;
+    }
+
+
+    .summary-content small {
+
+        font-size: 9px;
+    }
+
+
+    .issue-filters {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 11px;
+
+        padding: 13px;
+    }
+
+
+    .search-box {
+
+        grid-column:
+            auto;
+    }
+
+
+    .table-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .pagination {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    /* Right panel */
+
+    .issue-details-panel {
+
+        width: 100%;
+
+        max-width: 100%;
+    }
+
+
+    .details-panel-header {
+
+        padding:
+            15px 17px;
+    }
+
+
+    .details-panel-body {
+
+        padding:
+            17px;
+    }
+
+
+    .detail-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .detail-item {
+
+        border-right: none;
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+
+    .detail-item:nth-last-child(-n + 2) {
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+
+    .detail-item:last-child {
+
+        border-bottom: none;
+    }
+
+
+    .verification-heading {
+
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+
+    .verification-count {
+
+        align-self: flex-start;
+    }
+
+
+    .details-panel-footer {
+
+        padding:
+            10px 12px;
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .panel-action-btn.close-complaint {
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .workflow-alert {
+
+        max-width:
+            calc(100vw - 30px);
+
+        padding:
+            21px;
+    }
+
+}
+
+
+/* =========================================================
+   54. VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .logo img {
+
+        width: 90px;
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 15px;
+    }
+
+
+    .issue-summary {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .details-panel-body {
+
+        padding:
+            14px;
+    }
+
+
+    .details-panel-footer {
+
+        gap: 6px;
+    }
+
+
+    .panel-action-btn {
+
+        font-size: 10px;
+
+        padding:
+            0 5px;
+    }
+
+}
+
+/* =====================================================
+   FINAL LOGO SIZE
+===================================================== */
+
+.top-header .header-left .logo img {
+    width: 200px !important;
+    max-width: 200px !important;
+    height: auto !important;
+    max-height: 75px !important;
+    object-fit: contain;
+}
+
+.top-header .header-left .logo img {
+    width: 220px !important;
+    max-width: 220px !important;
+    height: auto !important;
+    max-height: 80px !important;
+}
