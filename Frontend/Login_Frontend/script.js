@@ -592,7 +592,7 @@ function translate() {
       if (button) {
 
         button.textContent =
-          `${languageCatalog[language].label}⌄`;
+          languageCatalog[language].label;
 
       }
 
