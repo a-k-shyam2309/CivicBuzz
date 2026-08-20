@@ -1,0 +1,299 @@
+/* =============================================================
+   CivicBuzz Admin — Departments page
+   Variable names match Admin/css/variables.css so this folder can
+   be dropped straight into the shared Admin structure later
+   without renaming anything.
+   ============================================================= */
+
+:root {
+  --civic-blue: #1D63FF;
+  --civic-yellow: #FFCE32;
+  --civic-black: #111111;
+
+  --background: #FFFFFF;
+  --surface: #F7F9FC;
+  --border: #E2E8F0;
+  --text-primary: #111827;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+
+  --status-warning: #F5B400;
+  --status-warning-soft: #FFF3D6;
+  --status-success: #16A34A;
+  --status-success-soft: #E3F7EB;
+  --status-danger: #EF4444;
+  --status-danger-soft: #FFE9E8;
+
+  --shadow-sm: 0 2px 8px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 10px 28px rgba(17, 24, 39, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Plus Jakarta Sans", var(--font-body);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  background: var(--background);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* ---- Shell: content column ----
+   The sidebar and topbar used to live here — this page now relies
+   on the site's global navbar instead (see #global-navbar in
+   index.html), so only the content column remains. */
+.app-shell { min-height: 100vh; display: flex; }
+
+.main-content { flex: 1 1 auto; min-width: 0; }
+
+/* ---- Page body ---- */
+.page-body { padding: 28px clamp(16px, 4vw, 34px) 60px; }
+
+.page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--civic-blue);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.page-title h1 { margin: 0 0 4px; font: 700 clamp(24px, 3.4vw, 32px) var(--font-display); }
+.page-description { margin: 0; color: var(--text-secondary); font-size: 13px; max-width: 46ch; }
+
+/* ---- Buttons (matches the shared Admin button system) ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-primary { color: #fff; background: var(--civic-blue); }
+.btn-primary:hover { background: #1a54d6; }
+
+.btn-outline { color: var(--text-secondary); background: transparent; border-color: var(--border); }
+.btn-outline:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+
+/* ---- Section heading ---- */
+.track-section { margin-bottom: 34px; }
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-heading h2 { margin: 0 0 2px; font: 700 18px var(--font-display); }
+.section-heading p { margin: 0; color: var(--text-secondary); font-size: 12px; }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.search-box i { font-size: 12px; }
+
+.search-box input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  width: 180px;
+}
+
+/* ---- Horizontal scrolling dashboards ----
+   The one reusable pattern behind both "dashboards": a flex row
+   that scrolls on the x-axis with snap points, instead of two
+   separate hand-rolled carousel widgets. */
+.horizontal-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 4px 4px 14px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.horizontal-track:focus-visible {
+  outline: 2px solid var(--civic-blue);
+  outline-offset: 2px;
+}
+
+.stats-track .stat-card { flex: 0 0 200px; }
+
+.stat-card {
+  scroll-snap-align: start;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card span { display: block; color: var(--text-secondary); font-size: 11px; }
+.stat-card strong { display: block; margin: 6px 0 2px; font: 700 24px var(--font-display); }
+.stat-card small { display: block; color: var(--text-muted); font-size: 10px; }
+
+.department-track .department-card { flex: 0 0 300px; }
+
+.department-card {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--background);
+  box-shadow: var(--shadow-sm);
+}
+
+.department-card[hidden] { display: none; }
+
+.card-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.dept-icon { font-size: 22px; }
+
+.department-card h3 { margin: 0 0 6px; font: 700 16px var(--font-display); }
+.card-description { margin: 0 0 14px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+
+.dept-meta { display: grid; gap: 6px; margin: 0 0 16px; }
+.dept-meta div { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; }
+.dept-meta dt { color: var(--text-muted); }
+.dept-meta dd { margin: 0; color: var(--text-primary); font-weight: 600; text-align: right; }
+
+.dept-footline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.dept-footline strong { color: var(--text-primary); }
+.mono { font-family: "IBM Plex Mono", monospace; color: var(--text-muted); }
+
+.track-empty { color: var(--text-secondary); font-size: 13px; padding: 8px 4px; }
+
+/* ---- Status badges ---- */
+.badge { padding: 4px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+.badge-success { color: #0F6B32; background: var(--status-success-soft); }
+.badge-warning { color: #8A5D00; background: var(--status-warning-soft); }
+.badge-danger { color: #B8291F; background: var(--status-danger-soft); }
+
+/* ---- Modal ---- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(17, 24, 39, 0.4);
+}
+
+.modal-overlay[hidden] { display: none; }
+
+.modal {
+  width: min(480px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.modal-header h2 { margin: 0; font: 700 19px var(--font-display); }
+
+.close-button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1;
+}
+
+#addDepartmentForm { display: flex; flex-direction: column; gap: 14px; }
+
+#addDepartmentForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+#addDepartmentForm input,
+#addDepartmentForm textarea {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  resize: vertical;
+}
+
+#addDepartmentForm input:focus,
+#addDepartmentForm textarea:focus {
+  outline: none;
+  border-color: var(--civic-blue);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--civic-blue) 12%, transparent);
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .stats-track .stat-card { flex-basis: 170px; }
+  .department-track .department-card { flex-basis: min(280px, 78vw); }
+}
+
+@media (max-width: 760px) {
+  .page-body { padding-top: 22px; }
+  .search-box input { width: 130px; }
+}

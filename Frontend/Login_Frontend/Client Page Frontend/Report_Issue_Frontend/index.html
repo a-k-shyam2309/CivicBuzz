@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CivicBuzz — Report a civic issue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="scene">
+  <div class="road">
+    <div class="lane-marking"></div>
+    <div class="pothole"></div>
+  </div>
+</div>
+
+
+
+
+
+<header class="page-head">
+  <div class="eyebrow">New report &middot; 04</div>
+  <h1>Report a civic issue</h1>
+  <p>Describe what's wrong, drop a pin, attach evidence — we'll route it to the right department.</p>
+</header>
+
+<main class="panels">
+
+  <section class="glass">
+    <div class="panel-head">
+      <div>
+        <h2>Issue details</h2>
+        <div class="panel-sub">Text, photo, location and optional voice input</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">
+        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        Describe the issue
+      </div>
+      <textarea placeholder="e.g. Large pothole near the college gate, causing traffic to swerve into the oncoming lane."></textarea>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">
+        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Map location
+      </div>
+      <div class="map-box">
+        <div class="map-pin"></div>
+        <div class="coords mono">20.2961, 85.8245</div>
+      </div>
+    </div>
+
+    <div class="row-2 field-group">
+      <div>
+        <div class="field-label">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          Add photo
+        </div>
+        <div class="upload-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <div>Drop image or browse</div>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          Voice note
+        </div>
+        <div class="voice-box" id="voiceBox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <div id="voiceLabel">Tap to record</div>
+        </div>
+      </div>
+    </div>
+
+    <label class="checkbox-row">
+      <input type="checkbox" checked />
+      Hide my identity publicly
+    </label>
+
+    <button class="submit-btn">Analyze &amp; submit</button>
+  </section>
+
+  <section class="glass ai-panel">
+    <div class="panel-head">
+      <div>
+        <h2>AI triage assistant</h2>
+        <div class="panel-sub">Live read as you type</div>
+      </div>
+      <span class="ai-badge">Prototype</span>
+    </div>
+
+    <div class="ai-analysis">
+      <div class="ai-row">
+        <span class="ai-row-label">Category</span>
+        <span class="chip chip-category">Road &middot; pothole</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label">Severity</span>
+        <span class="chip chip-severity">High &middot; traffic risk</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label">Routed to</span>
+        <span class="chip chip-dept">Roads &amp; potholes dept.</span>
+      </div>
+      <div class="ai-row" style="border-bottom: none; flex-direction: column; align-items: stretch;">
+        <span class="ai-row-label" style="margin-bottom: 6px;">Confidence</span>
+        <div class="confidence-bar"><div class="confidence-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="ai-note">
+      Combines keyword rules, location context and similarity checks against nearby open reports. Swap in an LLM or embedding API for production.
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/script.js"></script>
+<script src="../navbar-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CivicBuzz | Civic intelligence platform</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="language.css" />
+</head>
+
+<body>
+
+  <main>
+
+    <!-- =====================================================
+         LANGUAGE SCREEN
+         ===================================================== -->
+
+    <section id="language-screen" class="language-screen hidden" aria-labelledby="language-title">
+
+      <div class="language-orb orb-one"></div>
+      <div class="language-orb orb-two"></div>
+
+      <div class="language-card">
+
+        <div class="brand-mark">NS</div>
+
+        <p class="eyebrow">CIVICBUZZ</p>
+
+        <h1 id="language-title">
+          Choose your language
+        </h1>
+
+        <p class="subtext">
+          आपकी आवाज़, आपके शहर के लिए।
+        </p>
+
+        <div class="language-picker">
+
+          <label for="welcome-language">
+            Select language
+          </label>
+
+          <div id="welcome-language" aria-label="Select your language"></div>
+
+          <button id="continue-language" class="continue-language" type="button">
+            Continue →
+          </button>
+
+        </div>
+
+        <p class="language-note">
+          You can change this anytime.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AUTH / LOGIN SCREEN
+         ===================================================== -->
+
+    <section id="auth-screen" class="auth-screen" aria-label="Login">
+
+      <!-- LEFT HERO CONTENT -->
+
+      <div class="auth-copy">
+
+        <nav class="simple-nav">
+
+          <a class="logo" href="#">
+            <img src="assets/Logo.jpeg" alt="CivicBuzz logo" />
+            <span class="logo-name">
+              <h2>CivicBuzz</h2>
+            </span>
+          </a>
+
+        </nav>
+
+
+        <div class="hero-copy">
+
+          <p class="eyebrow" data-i18n="better_city">
+            A BETTER CITY, TOGETHER
+          </p>
+
+          <h1 data-i18n="hero_title">
+            Turn civic issues into visible action.
+          </h1>
+
+          <p data-i18n="hero_text">
+            A trusted space where citizens report, officials act,
+            and every resolution is evidence-grounded.
+          </p>
+
+        </div>
+
+
+        <div class="trust-line">
+
+          <span>⌖</span>
+
+          <span data-i18n="civic_connection">
+            Connected civic action, from report to resolution.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           LOGIN PANEL
+           ===================================================== -->
+
+      <div class="auth-panel">
+
+        <div class="auth-top">
+
+          <button class="icon-button theme-toggle" type="button" aria-label="Toggle light or dark mode">
+            ☾
+          </button>
+
+          <button class="nav-language language-trigger" type="button">
+            English⌄
+          </button>
+
+        </div>
+
+
+        <div class="login-card">
+
+          <p class="eyebrow" data-i18n="welcome">
+            WELCOME BACK
+          </p>
+
+          <h2 data-i18n="sign_in">
+            Sign in to CivicBuzz
+          </h2>
+
+          <p class="card-subtitle" data-i18n="sign_in_text">
+            Choose how you want to enter the platform.
+          </p>
+
+
+          <!-- ROLE SWITCH -->
+
+          <div class="role-switch" role="group" aria-label="Select account type">
+
+            <button class="role active" data-role="citizen" type="button">
+              ◉
+              <span data-i18n="citizen">
+                Citizen
+              </span>
+            </button>
+
+            <button class="role" data-role="admin" type="button">
+              ◉
+              <span data-i18n="admin">
+                Administrator
+              </span>
+            </button>
+
+          </div>
+
+
+          <!-- LOGIN FORM -->
+
+          <form id="login-form">
+
+            <!-- EMAIL -->
+
+            <label>
+
+              <span data-i18n="email">
+                Email address
+              </span>
+
+              <input required type="email" placeholder="name@example.com" />
+
+            </label>
+
+
+            <!-- PASSWORD -->
+
+            <label>
+
+              <span data-i18n="password">
+                Password
+              </span>
+
+              <div class="password-field">
+
+                <input id="password" required type="password" placeholder="Name@123" />
+
+                <button id="show-password" type="button" aria-label="Show password">
+                  ◉
+                </button>
+
+              </div>
+
+            </label>
+
+
+            <!-- REMEMBER / FORGOT -->
+
+            <div class="form-row">
+
+              <label class="checkbox">
+
+                <input type="checkbox" />
+
+                <span data-i18n="remember">
+                  Remember me
+                </span>
+
+              </label>
+
+
+              <!-- FORGOT PASSWORD -->
+
+              <button id="forgot-password-button" type="button" class="forgot-password-button" data-i18n="forgot">
+                Forgot password?
+              </button>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button class="primary-button" type="submit">
+
+              <span data-i18n="sign_in">
+                Sign in to CivicBuzz
+              </span>
+
+              <b>→</b>
+
+            </button>
+
+          </form>
+
+
+          <!-- REGISTER -->
+
+          <p class="new-user">
+
+            <span data-i18n="new_here">
+              New to CivicBuzz?
+            </span>
+
+            <button id="register-button" type="button" data-i18n="create_account">
+              Create an account
+            </button>
+
+          </p>
+
+        </div>
+
+
+        <p class="secure-note">
+
+          ⌁
+
+          <span data-i18n="secure">
+            Secure civic access · Your data stays protected
+          </span>
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DASHBOARD
+         ===================================================== -->
+
+    <section id="dashboard" class="dashboard hidden" aria-label="Dashboard">
+
+      <!-- SIDEBAR -->
+
+      <aside class="sidebar">
+
+        <a class="logo" href="#">
+          CivicBuzz
+        </a>
+
+
+        <p class="sidebar-label" data-i18n="menu">
+          MENU
+        </p>
+
+
+        <nav>
+
+          <button class="active">
+
+            ▦
+
+            <span data-i18n="overview">
+              Overview
+            </span>
+
+          </button>
+
+
+          <button>
+
+            ⊕
+
+            <span data-i18n="report_issue">
+              Report an issue
+            </span>
+
+          </button>
+
+
+          <button>
+
+            ⌖
+
+            <span data-i18n="civic_map">
+              Civic map
+            </span>
+
+          </button>
+
+
+          <button>
+
+            ◴
+
+            <span data-i18n="my_complaints">
+              My complaints
+            </span>
+
+          </button>
+
+
+          <button>
+
+            ♢
+
+            <span data-i18n="budget">
+              Community budget
+            </span>
+
+          </button>
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+          <button class="language-trigger" type="button">
+            English⌄
+          </button>
+
+
+          <button class="theme-toggle" type="button">
+
+            ☾
+
+            <span data-i18n="dark_mode">
+              Dark mode
+            </span>
+
+          </button>
+
+
+          <button id="logout" type="button">
+
+            ↪
+
+            <span data-i18n="logout">
+              Log out
+            </span>
+
+          </button>
+
+        </div>
+
+      </aside>
+
+
+      <!-- DASHBOARD MAIN -->
+
+      <div class="dashboard-main">
+
+        <header>
+
+          <div>
+
+            <p class="eyebrow" data-i18n="your_city">
+              YOUR CITY AT A GLANCE
+            </p>
+
+            <h1 id="dashboard-heading">
+              Good morning, Tanya.
+            </h1>
+
+          </div>
+
+
+          <button class="primary-button report-button">
+
+            ＋
+
+            <span data-i18n="report_issue">
+              Report an issue
+            </span>
+
+          </button>
+
+        </header>
+
+
+        <!-- NOTICE -->
+
+        <div class="notice">
+
+          ✦
+
+          <span data-i18n="notice">
+            Your report #CIV-1042 is now being reviewed by
+            Road Maintenance.
+          </span>
+
+          <button aria-label="Dismiss">
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <section class="stats">
+
+          <article>
+
+            <span class="stat-icon blue">
+              ◌
+            </span>
+
+            <div>
+
+              <small data-i18n="active_reports">
+                Active reports
+              </small>
+
+              <strong>
+                03
+              </strong>
+
+              <em data-i18n="active_context">
+                Across your area
+              </em>
+
+            </div>
+
+          </article>
+
+
+          <article>
+
+            <span class="stat-icon amber">
+              ✓
+            </span>
+
+            <div>
+
+              <small data-i18n="resolved">
+                Resolved this month
+              </small>
+
+              <strong>
+                12
+              </strong>
+
+              <em>
+
+                ↑ 20%
+
+                <span data-i18n="vs_last">
+                  vs. last month
+                </span>
+
+              </em>
+
+            </div>
+
+          </article>
+
+
+          <article>
+
+            <span class="stat-icon green">
+              ♧
+            </span>
+
+            <div>
+
+              <small data-i18n="community_impact">
+                Community impact
+              </small>
+
+              <strong>
+                247
+              </strong>
+
+              <em data-i18n="citizens_helped">
+                Citizens helped
+              </em>
+
+            </div>
+
+          </article>
+
+        </section>
+
+
+        <!-- CONTENT GRID -->
+
+        <section class="content-grid">
+
+
+          <!-- LATEST REPORT -->
+
+          <article class="report-card">
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2 data-i18n="latest_report">
+                  Latest report
+                </h2>
+
+                <p data-i18n="track_status">
+                  Track its status in real time
+                </p>
+
+              </div>
+
+              <button class="text-button" data-i18n="view_all">
+                View all →
+              </button>
+
+            </div>
+
+
+            <div class="issue-row">
+
+              <div class="issue-icon">
+                ◒
+              </div>
+
+
+              <div class="issue-info">
+
+                <div>
+
+                  <span class="status amber" data-i18n="under_review">
+                    Under review
+                  </span>
+
+                  <span class="issue-id">
+                    #CIV-1042
+                  </span>
+
+                </div>
+
+
+                <h3 data-i18n="issue_title">
+                  Pothole near college gate
+                </h3>
+
+
+                <p>
+                  ⌖ Janpath Road, Ward 12 · 2h ago
+                </p>
+
+
+                <div class="progress">
+                  <i></i>
+                </div>
+
+
+                <small data-i18n="review_progress">
+                  Review in progress
+                </small>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- COMMUNITY PRIORITIES -->
+
+          <article class="priority-card">
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2 data-i18n="community_priority">
+                  Community priorities
+                </h2>
+
+                <p data-i18n="shaped_by">
+                  Shaped by local reports
+                </p>
+
+              </div>
+
+
+              <span class="live">
+
+                ●
+
+                <span data-i18n="live_data">
+                  Live data
+                </span>
+
+              </span>
+
+            </div>
+
+
+            <!-- PRIORITY 1 -->
+
+            <div class="priority">
+
+              <b>1</b>
+
+              <div>
+
+                <strong data-i18n="drainage">
+                  Drainage improvement
+                </strong>
+
+                <span>
+                  <i style="width:72%"></i>
+                </span>
+
+                <small>
+
+                  72
+
+                  <span data-i18n="reports">
+                    reports
+                  </span>
+
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- PRIORITY 2 -->
+
+            <div class="priority">
+
+              <b>2</b>
+
+              <div>
+
+                <strong data-i18n="streetlights">
+                  Streetlight repair
+                </strong>
+
+                <span>
+                  <i style="width:54%"></i>
+                </span>
+
+                <small>
+
+                  54
+
+                  <span data-i18n="reports">
+                    reports
+                  </span>
+
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- PRIORITY 3 -->
+
+            <div class="priority">
+
+              <b>3</b>
+
+              <div>
+
+                <strong data-i18n="roads">
+                  Road repair
+                </strong>
+
+                <span>
+                  <i style="width:41%"></i>
+                </span>
+
+                <small>
+
+                  41
+
+                  <span data-i18n="reports">
+                    reports
+                  </span>
+
+                </small>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </section>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         REGISTER MODAL
+         ===================================================== -->
+
+    <div id="register-modal" class="modal hidden" role="dialog" aria-modal="true">
+
+      <div>
+
+        <button class="close-modal" type="button">
+          ×
+        </button>
+
+
+        <p class="eyebrow" data-i18n="new_here">
+          NEW USER
+        </p>
+
+
+        <h2 data-i18n="create_account">
+          Create an account
+        </h2>
+
+
+        <p data-i18n="register_text">
+          Join your community's civic action network.
+        </p>
+
+
+        <form id="register-form">
+
+          <!-- FULL NAME -->
+
+          <input required data-placeholder="full_name" placeholder="Full name" />
+
+
+          <!-- EMAIL -->
+
+          <input required type="email" placeholder="Email address" />
+
+
+          <!-- CREATE PASSWORD -->
+
+          <label class="register-password-label" for="new-password">
+            Create password
+          </label>
+
+
+          <div class="password-field">
+
+            <input id="new-password" required type="password" minlength="8"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}"
+              title="Use at least 8 characters, including uppercase, lowercase, number, and one of ! @ # $ % ^ & *"
+              placeholder="Create a secure password" />
+
+
+            <button class="password-visibility" type="button" data-target="new-password" aria-label="Show password">
+              ◉
+            </button>
+
+          </div>
+
+
+          <!-- PASSWORD RULES -->
+
+          <ul class="password-rules" aria-label="Password requirements">
+
+            <li data-rule="length">
+              At least 8 characters
+            </li>
+
+            <li data-rule="upper">
+              One uppercase letter
+            </li>
+
+            <li data-rule="lower">
+              One lowercase letter
+            </li>
+
+            <li data-rule="number">
+              One number
+            </li>
+
+            <li data-rule="symbol">
+              One symbol: ! @ # $ % ^ & *
+            </li>
+
+          </ul>
+
+
+          <!-- CONFIRM PASSWORD -->
+
+          <label class="register-password-label" for="confirm-password">
+            Confirm password
+          </label>
+
+
+          <div class="password-field">
+
+            <input id="confirm-password" required type="password" minlength="8"
+              placeholder="Type your password again" />
+
+
+            <button class="password-visibility" type="button" data-target="confirm-password" aria-label="Show password">
+              ◉
+            </button>
+
+          </div>
+
+
+          <p id="password-message" class="password-message" aria-live="polite"></p>
+
+
+          <button class="primary-button" type="submit" data-i18n="continue">
+            Continue →
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORGOT PASSWORD MODAL
+         ===================================================== -->
+
+    <div id="forgot-password-modal" class="modal hidden" role="dialog" aria-modal="true"
+      aria-labelledby="forgot-password-title">
+
+      <div class="forgot-password-card">
+
+        <!-- CLOSE BUTTON -->
+
+        <button id="close-forgot-password" class="close-modal" type="button" aria-label="Close">
+          ×
+        </button>
+
+
+        <!-- =================================================
+             STEP 1 - ENTER EMAIL
+             ================================================= -->
+
+        <section id="forgot-step-id" class="forgot-step">
+
+          <div class="forgot-icon">
+            🔐
+          </div>
+
+
+          <p class="eyebrow">
+            ACCOUNT RECOVERY
+          </p>
+
+
+          <h2 id="forgot-password-title">
+            Forgot your password?
+          </h2>
+
+
+          <p class="forgot-description">
+            Enter your registered email ID and we will send
+            you a one-time verification code.
+          </p>
+
+
+          <form id="forgot-id-form">
+
+            <label>
+
+              <span>
+                Registered Email ID
+              </span>
+
+              <input id="forgot-email" type="email" required autocomplete="email" placeholder="name@example.com" />
+
+            </label>
+
+
+            <p id="forgot-id-message" class="forgot-message" aria-live="polite"></p>
+
+
+            <button class="primary-button" type="submit">
+
+              Send OTP
+
+              <b>→</b>
+
+            </button>
+
+          </form>
+
+        </section>
+
+
+        <!-- =================================================
+             STEP 2 - OTP VERIFICATION
+             ================================================= -->
+
+        <section id="forgot-step-otp" class="forgot-step hidden">
+
+          <div class="forgot-icon">
+            ✉
+          </div>
+
+
+          <p class="eyebrow">
+            VERIFY YOUR IDENTITY
+          </p>
+
+
+          <h2>
+            Enter verification code
+          </h2>
+
+
+          <p class="forgot-description">
+            Enter the 6-digit OTP sent to your registered
+            email address.
+          </p>
+
+
+          <form id="otp-form">
+
+            <label>
+
+              <span>
+                6-digit OTP
+              </span>
+
+              <input id="otp-input" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required
+                autocomplete="one-time-code" placeholder="123456" />
+
+            </label>
+
+
+            <p id="otp-message" class="forgot-message" aria-live="polite"></p>
+
+
+            <button class="primary-button" type="submit">
+
+              Verify OTP
+
+              <b>→</b>
+
+            </button>
+
+          </form>
+
+
+          <button id="resend-otp" class="forgot-secondary-button" type="button">
+            Resend OTP
+          </button>
+
+        </section>
+
+
+        <!-- =================================================
+             STEP 3 - RESET PASSWORD
+             ================================================= -->
+
+        <section id="forgot-step-reset" class="forgot-step hidden">
+
+          <div class="forgot-icon">
+            🔑
+          </div>
+
+
+          <p class="eyebrow">
+            CREATE NEW PASSWORD
+          </p>
+
+
+          <h2>
+            Reset your password
+          </h2>
+
+
+          <p class="forgot-description">
+            Create a new secure password for your
+            CivicBuzz account.
+          </p>
+
+
+          <form id="reset-password-form">
+
+            <!-- NEW PASSWORD -->
+
+            <label>
+
+              <span>
+                New password
+              </span>
+
+
+              <div class="password-field">
+
+                <input id="reset-new-password" type="password" minlength="8" required
+                  placeholder="Create a secure password" />
+
+
+                <button type="button" class="password-visibility" data-target="reset-new-password"
+                  aria-label="Show password">
+                  ◉
+                </button>
+
+              </div>
+
+            </label>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <label>
+
+              <span>
+                Confirm new password
+              </span>
+
+
+              <div class="password-field">
+
+                <input id="reset-confirm-password" type="password" minlength="8" required
+                  placeholder="Type your password again" />
+
+
+                <button type="button" class="password-visibility" data-target="reset-confirm-password"
+                  aria-label="Show password">
+                  ◉
+                </button>
+
+              </div>
+
+            </label>
+
+
+            <p id="reset-password-message" class="forgot-message" aria-live="polite"></p>
+
+
+            <button class="primary-button" type="submit">
+
+              Reset Password
+
+              <b>→</b>
+
+            </button>
+
+          </form>
+
+        </section>
+
+
+        <!-- =================================================
+             STEP 4 - SUCCESS
+             ================================================= -->
+
+        <section id="forgot-step-success" class="forgot-step hidden">
+
+          <div class="success-icon">
+            ✓
+          </div>
+
+
+          <p class="eyebrow">
+            PASSWORD UPDATED
+          </p>
+
+
+          <h2>
+            Password reset successfully
+          </h2>
+
+
+          <p class="forgot-description">
+            Your CivicBuzz password has been updated
+            successfully. You can now sign in using
+            your new password.
+          </p>
+
+
+          <button id="back-to-login" class="primary-button" type="button">
+
+            Back to Login
+
+            <b>→</b>
+
+          </button>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
