@@ -275,100 +275,156 @@ function translatePage(language) {
 }
 
 function setupLanguage() {
-  const languageDropdown = $("#languageDropdown");
-  const languageSelected = $("#languageSelected");
-  const selectedLanguage = $("#selectedLanguage");
-  const languageOptions = $$(".lang-option");
 
-  if (!languageDropdown || !languageSelected) {
+  const languageSelector =
+    document.querySelector(".language-selector");
+
+  const languageButton =
+    document.getElementById("languageButton");
+
+  const languageDropdown =
+    document.getElementById("languageDropdown");
+
+  const languageCurrent =
+    document.getElementById("languageCurrent");
+
+  const languageOptions =
+    document.querySelectorAll(".language-option");
+
+  if (
+    !languageSelector ||
+    !languageButton ||
+    !languageDropdown
+  ) {
     return;
   }
 
   let language = "en";
 
   try {
-    language = localStorage.getItem("civicbuzz-admin-language") || "en";
+    language =
+      localStorage.getItem("civicbuzz-admin-language") || "en";
   } catch (_) {
-    // Storage is optional.
+    language = "en";
   }
 
   if (language !== "hi") {
     language = "en";
   }
 
-  if (selectedLanguage) {
-    selectedLanguage.textContent =
+  // Current language
+  if (languageCurrent) {
+    languageCurrent.textContent =
       language === "hi" ? "हिन्दी" : "English";
   }
 
-  languageSelected.setAttribute("aria-expanded", "false");
-
-  translatePage(language);
-  updateTrendChart($("#trendRange")?.value || "week");
-
-  languageSelected.addEventListener("click", (event) => {
-    event.stopPropagation();
-
-    const isOpen = languageDropdown.classList.toggle("open");
-
-    languageSelected.setAttribute(
-      "aria-expanded",
-      String(isOpen)
+  // Active option
+  languageOptions.forEach((option) => {
+    option.classList.toggle(
+      "active",
+      option.dataset.language === language
     );
   });
 
+  // Translate saved language
+  translatePage(language);
+
+  // Open / close dropdown
+  languageButton.addEventListener("click", (event) => {
+
+    event.stopPropagation();
+
+    const isOpen =
+      languageSelector.classList.contains("open");
+
+    languageSelector.classList.toggle(
+      "open",
+      !isOpen
+    );
+
+    languageButton.setAttribute(
+      "aria-expanded",
+      String(!isOpen)
+    );
+  });
+
+  // Language selection
   languageOptions.forEach((option) => {
+
     option.addEventListener("click", (event) => {
+
+      event.preventDefault();
       event.stopPropagation();
 
-      const selectedValue =
-        option.dataset.value === "hi" ? "hi" : "en";
+      const selectedLanguage =
+        option.dataset.language === "hi"
+          ? "hi"
+          : "en";
 
-      if (selectedLanguage) {
-        selectedLanguage.textContent =
-          selectedValue === "hi" ? "हिन्दी" : "English";
+      // Update button text
+      if (languageCurrent) {
+        languageCurrent.textContent =
+          selectedLanguage === "hi"
+            ? "हिन्दी"
+            : "English";
       }
 
-      languageDropdown.classList.remove("open");
+      // Update active option
+      languageOptions.forEach((item) => {
+        item.classList.toggle(
+          "active",
+          item === option
+        );
+      });
 
-      languageSelected.setAttribute(
-        "aria-expanded",
-        "false"
-      );
+      // Translate complete page
+      translatePage(selectedLanguage);
 
-      translatePage(selectedValue);
-
+      // Update chart
       updateTrendChart(
         $("#trendRange")?.value || "week"
       );
 
+      // Close dropdown
+      languageSelector.classList.remove("open");
+
+      languageButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+      // Save language
       try {
         localStorage.setItem(
           "civicbuzz-admin-language",
-          selectedValue
+          selectedLanguage
         );
-      } catch (_) {
-        // Storage is optional.
-      }
+      } catch (_) { }
     });
   });
 
+  // Close when clicking outside
   document.addEventListener("click", (event) => {
-    if (!languageDropdown.contains(event.target)) {
-      languageDropdown.classList.remove("open");
 
-      languageSelected.setAttribute(
+    if (!languageSelector.contains(event.target)) {
+
+      languageSelector.classList.remove("open");
+
+      languageButton.setAttribute(
         "aria-expanded",
         "false"
       );
     }
   });
 
+  // Close with Escape
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      languageDropdown.classList.remove("open");
 
-      languageSelected.setAttribute(
+    if (event.key === "Escape") {
+
+      languageSelector.classList.remove("open");
+
+      languageButton.setAttribute(
         "aria-expanded",
         "false"
       );
@@ -1003,3 +1059,4 @@ if (
   initialiseDashboard();
 }
 document.getElementById("userIdText").textContent = userId;
+
