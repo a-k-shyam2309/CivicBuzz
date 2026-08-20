@@ -69,22 +69,66 @@
 						<kbd>⌘ K</kbd>
 					</label>
 
-					<div class="language-button" id="languageDropdown">
-						<button type="button" class="language-selected" id="languageSelected" aria-haspopup="listbox"
-							aria-expanded="false">
-							<span id="selectedLanguage">English</span>
-							<span class="language-arrow" aria-hidden="true">▾</span>
+					<!-- Language Selector -->
+					<div class="language-selector">
+
+						<button class="language-button" type="button" id="languageButton" aria-haspopup="true"
+							aria-expanded="false" title="Select Language">
+
+							<span class="language-icon">
+								🌐
+							</span>
+
+							<span class="language-current" id="languageCurrent">
+								English
+							</span>
+
+							<span class="language-arrow">
+								▾
+							</span>
+
 						</button>
 
-						<div class="language-options" id="languageOptions" role="listbox" aria-label="Choose language">
-							<button type="button" class="lang-option" data-value="en" role="option">
-								English
+
+						<!-- Language Dropdown -->
+
+						<div class="language-dropdown" id="languageDropdown" role="menu">
+
+							<button class="language-option active" type="button" data-language="en" role="menuitem">
+
+								<span class="language-option-icon">
+									🇬🇧
+								</span>
+
+								<span>
+									English
+								</span>
+
+								<span class="language-check" aria-hidden="true">
+									✓
+								</span>
+
 							</button>
 
-							<button type="button" class="lang-option" data-value="hi" role="option">
-								हिन्दी
+
+							<button class="language-option" type="button" data-language="hi" role="menuitem">
+
+								<span class="language-option-icon">
+									🇮🇳
+								</span>
+
+								<span>
+									हिन्दी
+								</span>
+
+								<span class="language-check" aria-hidden="true">
+									✓
+								</span>
+
 							</button>
+
 						</div>
+
 					</div>
 
 					<button class="icon-button notification" type="button" aria-label="Notifications">
