@@ -5,19 +5,20 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>CivicBuzz | Your Voice. Our Responsibility.</title>
+	<title>CivicBuzz - Client Dashboard</title>
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 	<link rel="stylesheet" href="style.css">
 </head>
 
 <body data-language="en">
+
+	<!-- ============================= -->
+	<!-- GLOBAL NAVBAR -->
+	<!-- ============================= -->
 
 	<header class="navbar" id="global-navbar">
 
@@ -58,7 +59,7 @@
 				<span data-i18n="trackIssue">Track Issue</span>
 			</a>
 
-			<a href="#map" class="nav-link" data-nav="map">
+			<a href="#nearbyMap" class="nav-link" data-nav="map">
 				<i class="fa-solid fa-location-dot"></i>
 				<span data-i18n="map">Map</span>
 			</a>
@@ -194,700 +195,860 @@
 	</header>
 
 
-	<main id="home">
 
-		<section class="hero">
+	<!-- ============================= -->
+	<!-- MAIN CONTENT -->
+	<!-- ============================= -->
 
-			<div class="hero-slides">
+	<main class="client-dashboard" id="home">
 
-				<!-- SLIDE 1 -->
 
-				<article class="hero-slide active" style="--bg-image: url('Assets/Image1.png');">
+		<!-- ============================= -->
+		<!-- HERO SLIDER -->
+		<!-- ============================= -->
 
-					<div class="hero-overlay"></div>
+		<section class="hero-slider" id="heroSlider">
 
-					<div class="hero-content">
+			<!-- ========================================= -->
+			<!-- SLIDE 1 -->
+			<!-- ========================================= -->
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-shield-heart"></i>
-							Stronger Communities, Better Tomorrow
-						</span>
+			<div class="hero-slide active">
 
-						<h1>
-							See It.
-							<span>Report It.</span>
-							<br>
-							We'll
-							<span>Fix It.</span>
-						</h1>
+				<img src="Assets/Image1.png" alt="Clean city environment" class="hero-image">
 
-						<p>
-							CivicBuzz helps you report civic issues
-							in your area and track action by the
-							responsible authorities.
-						</p>
+				<div class="hero-overlay"></div>
 
-						<div class="hero-buttons">
+				<div class="hero-content">
 
-<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-							<i class="fa-regular fa-pen-to-square"></i>
-							Report an Issue
-						</a>
+					<h1>
+						Together, let's build
+						<br>
+						a better and cleaner city!
+					</h1>
 
-						<a href="#map" class="btn btn-outline">
-							<i class="fa-regular fa-map"></i>
-							View Map
-						</a>
+					<p>
+						Report issues. Track progress.
+						<br>
+						Make your city better.
+					</p>
 
-					</div>
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
 
 				</div>
 
-			</article>
+			</div>
 
 
+			<!-- ========================================= -->
 			<!-- SLIDE 2 -->
+			<!-- ========================================= -->
 
-			<article class="hero-slide" style="--bg-image: url('Assets/Image2.png');">
+			<div class="hero-slide">
+
+				<img src="Assets/Image2.png" alt="Road maintenance" class="hero-image">
 
 				<div class="hero-overlay"></div>
 
 				<div class="hero-content">
 
-					<span class="eyebrow">
-						<i class="fa-solid fa-road"></i>
-						Better Roads Start With Better Reporting
-					</span>
-
 					<h1>
-						Spot It.
-						<span>Report It.</span>
+						See a problem?
 						<br>
-						Track the
-						<span>Progress.</span>
+						Let your voice be heard.
 					</h1>
 
 					<p>
-						Turn everyday civic problems into
-						structured reports that can reach
-						the right responsible unit.
+						Report civic issues in just
+						<br>
+						a few simple steps.
 					</p>
 
-					<div class="hero-buttons">
-
-						<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-								<i class="fa-regular fa-pen-to-square"></i>
-								Report an Issue
-							</a>
-
-							<a href="#map" class="btn btn-outline">
-								<i class="fa-regular fa-map"></i>
-								View Map
-							</a>
-
-						</div>
-
-					</div>
-
-				</article>
-
-
-				<!-- SLIDE 3 -->
-
-				<article class="hero-slide" style="--bg-image: url('Assets/Image3.png');">
-
-					<div class="hero-overlay"></div>
-
-					<div class="hero-content">
-
-						<span class="eyebrow">
-							<i class="fa-solid fa-people-group"></i>
-							Citizens At The Center
-						</span>
-
-						<h1>
-							Your Voice.
-							<br>
-							<span>Your Community.</span>
-							<br>
-							Your Impact.
-						</h1>
-
-						<p>
-							Make civic problems visible and help
-							communities understand what needs attention.
-						</p>
-
-						<div class="hero-buttons">
-
-<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-							<i class="fa-regular fa-pen-to-square"></i>
-							Report an Issue
-						</a>
-
-						<a href="#map" class="btn btn-outline">
-							<i class="fa-regular fa-map"></i>
-							View Map
-						</a>
-
-					</div>
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
 
 				</div>
 
-			</article>
+			</div>
 
 
-			<!-- SLIDE 4 -->
+			<!-- ========================================= -->
+			<!-- SLIDE 3 -->
+			<!-- ========================================= -->
 
-			<article class="hero-slide" style="--bg-image: url('Assets/Image4.png');">
+			<div class="hero-slide">
+
+				<img src="Assets/Image3.png" alt="Community development" class="hero-image">
 
 				<div class="hero-overlay"></div>
 
 				<div class="hero-content">
 
-					<span class="eyebrow">
-						<i class="fa-solid fa-location-dot"></i>
-						Know What Is Happening Around You
-					</span>
-
 					<h1>
-						Find Issues.
+						Your complaint
 						<br>
-						<span>See Patterns.</span>
-						<br>
-						Take Action.
+						can make a difference.
 					</h1>
 
 					<p>
-						Explore civic issues on the map and
-						understand where problems are being reported.
+						Track every update and
+						<br>
+						stay informed.
 					</p>
 
-					<div class="hero-buttons">
+					<button class="hero-report-button" type="button" id="heroTrackButton" onclick="window.location.href='Track_complaints_Frontend/index.html'">
+						Track Your Complaint
+					</button>
 
-						<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-								<i class="fa-regular fa-pen-to-square"></i>
-								Report an Issue
-							</a>
+				</div>
 
-							<a href="#map" class="btn btn-outline">
-								<i class="fa-regular fa-map"></i>
-								View Map
-							</a>
-
-						</div>
-
-					</div>
-
-				</article>
+			</div>
 
 
-				<!-- SLIDE 5 -->
+			<!-- ========================================= -->
+			<!-- SLIDE 4 -->
+			<!-- ========================================= -->
 
-				<article class="hero-slide" style="--bg-image: url('Assets/Image5.png');">
+			<div class="hero-slide">
 
-					<div class="hero-overlay"></div>
+				<img src="Assets/Image4.png" alt="Better civic facilities" class="hero-image">
 
-					<div class="hero-content">
+				<div class="hero-overlay"></div>
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-language"></i>
-							Designed For Diverse Communities
-						</span>
+				<div class="hero-content">
 
-						<h1>
-							Report In Your
-							<br>
-							<span>Own Language.</span>
-						</h1>
+					<h1>
+						Better cities start
+						<br>
+						with responsible citizens.
+					</h1>
 
-						<p>
-							CivicBuzz is designed to accept civic
-							issues through text, voice, or images
-							across languages.
-						</p>
+					<p>
+						Together we can create
+						<br>
+						cleaner and safer communities.
+					</p>
 
-						<div class="hero-buttons">
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
 
-							<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-								<i class="fa-regular fa-pen-to-square"></i>
-								Report an Issue
-							</a>
+				</div>
 
-							<a href="#map" class="btn btn-outline">
-								<i class="fa-regular fa-map"></i>
-								View Map
-							</a>
-
-						</div>
-
-					</div>
-
-				</article>
+			</div>
 
 
-				<!-- SLIDE 6 -->
+			<!-- ========================================= -->
+			<!-- SLIDE 5 -->
+			<!-- ========================================= -->
 
-				<article class="hero-slide" style="--bg-image: url('Assets/Image6.png');">
+			<div class="hero-slide">
 
-					<div class="hero-overlay"></div>
+				<img src="Assets/Image5.png" alt="Citizens reporting civic issues" class="hero-image">
 
-					<div class="hero-content">
+				<div class="hero-overlay"></div>
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-circle-check"></i>
-							From Report To Resolution
-						</span>
+				<div class="hero-content">
 
-						<h1>
-							Make Problems
-							<br>
-							<span>Visible.</span>
-							<br>
-							Make Progress
-							<span>Trackable.</span>
-						</h1>
+					<h1>
+						Your city,
+						<br>
+						your responsibility.
+					</h1>
 
-						<p>
-							Follow the journey of a civic issue
-							from reporting and routing to action
-							and resolution evidence.
-						</p>
+					<p>
+						Spot an issue?
+						<br>
+						Report it before it gets worse.
+					</p>
 
-						<div class="hero-buttons">
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
 
-							<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-								<i class="fa-regular fa-pen-to-square"></i>
-								Report an Issue
-							</a>
+				</div>
 
-							<a href="#map" class="btn btn-outline">
-								<i class="fa-regular fa-map"></i>
-								View Map
-							</a>
-
-						</div>
-
-					</div>
-
-				</article>
+			</div>
 
 
-				<!-- SLIDE 7 -->
+			<!-- ========================================= -->
+			<!-- SLIDE 6 -->
+			<!-- ========================================= -->
 
-				<article class="hero-slide" style="--bg-image: url('Assets/Image7.png');">
+			<div class="hero-slide">
 
-					<div class="hero-overlay"></div>
+				<img src="Assets/Image6.png" alt="Citizen tracking complaint" class="hero-image">
 
-					<div class="hero-content">
+				<div class="hero-overlay"></div>
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-city"></i>
-							Building Better Cities
-						</span>
+				<div class="hero-content">
 
-						<h1>
-							Better Cities.
-							<br>
-							<span>Better Living.</span>
-						</h1>
+					<h1>
+						Stay updated
+						<br>
+						on every complaint.
+					</h1>
 
-						<p>
-							Help make your surroundings safer,
-							cleaner and better through meaningful
-							civic participation.
-						</p>
+					<p>
+						Know what's happening
+						<br>
+						after you report an issue.
+					</p>
 
-						<div class="hero-buttons">
+					<button class="hero-report-button" type="button" id="heroTrackButton2" onclick="window.location.href='Track_complaints_Frontend/index.html'">
+						Track Your Complaint
+					</button>
 
-							<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-								<i class="fa-regular fa-pen-to-square"></i>
-								Report an Issue
-							</a>
+				</div>
 
-							<a href="#map" class="btn btn-outline">
-								<i class="fa-regular fa-map"></i>
-								View Map
-							</a>
-
-						</div>
-
-					</div>
-
-				</article>
+			</div>
 
 
-				<!-- SLIDE 8 -->
+			<!-- ========================================= -->
+			<!-- SLIDE 7 -->
+			<!-- ========================================= -->
 
-				<article class="hero-slide" style="--bg-image: url('Assets/Image8.png');">
+			<div class="hero-slide">
 
-					<div class="hero-overlay"></div>
+				<img src="Assets/Image7.png" alt="Community members working together" class="hero-image">
 
-					<div class="hero-content">
+				<div class="hero-overlay"></div>
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-users"></i>
-							Community Powered
-						</span>
+				<div class="hero-content">
 
-						<h1>
-							Every Report
-							<br>
-							<span>Makes A Difference.</span>
-						</h1>
+					<h1>
+						Small reports
+						<br>
+						create big changes.
+					</h1>
 
-						<p>
-							When citizens speak up and communities
-							work together, real change becomes possible.
-						</p>
+					<p>
+						One responsible citizen
+						<br>
+						can inspire an entire community.
+					</p>
 
-						<div class="hero-buttons">
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
 
-						<a href="Report_Issue_Frontend/index.html" class="btn btn-primary">
-				<article class="hero-slide" style="--bg-image: url('Assets/Image9.png');"> </a>
+				</div>
 
-					<div class="hero-overlay"></div>
+			</div>
 
-					<div class="hero-content">
 
-						<span class="eyebrow">
-							<i class="fa-solid fa-handshake"></i>
-							Together For A Better Tomorrow
-						</span>
+			<!-- ========================================= -->
+			<!-- SLIDE 8 -->
+			<!-- ========================================= -->
 
-						<h1>
-							Your Voice.
-							<br>
-							<span>Real Action.</span>
-						</h1>
+			<div class="hero-slide">
 
-						<p>
-							CivicBuzz connects citizens, communities
-							and responsible authorities to turn reports
-							into visible action.
-						</p>
+				<img src="Assets/Image8.png" alt="Clean and safe public street" class="hero-image">
 
-						<div class="hero-buttons">
-			<button class="carousel-arrow prev" type="button" aria-label="Previous slide">			
-						
-				<i class="fa-solid fa-chevron-left"></i> 
-					
+				<div class="hero-overlay"></div>
+
+				<div class="hero-content">
+
+					<h1>
+						Cleaner streets.
+						<br>
+						Safer communities.
+					</h1>
+
+					<p>
+						Your reports help authorities
+						<br>
+						identify problems faster.
+					</p>
+
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
+
+				</div>
+
+			</div>
+
+
+			<!-- ========================================= -->
+			<!-- SLIDE 9 -->
+			<!-- ========================================= -->
+
+			<div class="hero-slide">
+
+				<img src="Assets/Image9.png" alt="People building a better community" class="hero-image">
+
+				<div class="hero-overlay"></div>
+
+				<div class="hero-content">
+
+					<h1>
+						Together,
+						<br>
+						we can make a difference.
+					</h1>
+
+					<p>
+						Be the voice of your community
+						<br>
+						and help build a better city.
+					</p>
+
+					<button class="hero-report-button" type="button" onclick="window.location.href='Report_Issue_Frontend/index.html'">
+						<span>+</span>
+						Report a Problem
+					</button>
+
+				</div>
+
+			</div>
+
+
+			<!-- ========================================= -->
+			<!-- PREVIOUS BUTTON -->
+			<!-- ========================================= -->
+
+			<button class="hero-arrow hero-prev" type="button" id="heroPrev" aria-label="Previous slide">
+				<span>←</span>
 			</button>
 
-			<button class="carousel-arrow next" type="button" aria-label="Next slide">
-				<i class="fa-solid fa-chevron-right"></i>
+			<button class="hero-arrow hero-next" type="button" id="heroNext" aria-label="Next slide">
+				<span>→</span>
 			</button>
 
 
-			<div class="carousel-dots">
+			<!-- ========================================= -->
+			<!-- SLIDE INDICATORS - 9 SLIDES -->
+			<!-- ========================================= -->
 
-				<button class="dot active" type="button" aria-label="Slide 1"></button>
-				<button class="dot" type="button" aria-label="Slide 2"></button>
-				<button class="dot" type="button" aria-label="Slide 3"></button>
-				<button class="dot" type="button" aria-label="Slide 4"></button>
-				<button class="dot" type="button" aria-label="Slide 5"></button>
-				<button class="dot" type="button" aria-label="Slide 6"></button>
-				<button class="dot" type="button" aria-label="Slide 7"></button>
-				<button class="dot" type="button" aria-label="Slide 8"></button>
-				<button class="dot" type="button" aria-label="Slide 9"></button>
+			<div class="hero-dots">
+
+				<button class="hero-dot active" type="button" data-slide="0" aria-label="Slide 1"></button>
+
+				<button class="hero-dot" type="button" data-slide="1" aria-label="Slide 2"></button>
+
+				<button class="hero-dot" type="button" data-slide="2" aria-label="Slide 3"></button>
+
+				<button class="hero-dot" type="button" data-slide="3" aria-label="Slide 4"></button>
+
+				<button class="hero-dot" type="button" data-slide="4" aria-label="Slide 5"></button>
+
+				<button class="hero-dot" type="button" data-slide="5" aria-label="Slide 6"></button>
+
+				<button class="hero-dot" type="button" data-slide="6" aria-label="Slide 7"></button>
+
+				<button class="hero-dot" type="button" data-slide="7" aria-label="Slide 8"></button>
+
+				<button class="hero-dot" type="button" data-slide="8" aria-label="Slide 9"></button>
 
 			</div>
 
 		</section>
 
 
-		<!-- NEED HELP -->
+		<!-- ============================= -->
+		<!-- COMPLAINT SUMMARY -->
+		<!-- ============================= -->
 
-		<section id="help" class="help-section">
+		<section class="complaint-summary-section">
 
-			<div class="help-container">
+			<div class="section-header-row">
 
-				<div class="help-workflow">
+				<h2>
+					My Complaint Summary
+				</h2>
 
-					<div class="section-heading">
+				<button class="view-all-button" type="button" onclick="window.location.href='Track_complaints_Frontend/index.html'">
+					View All
+				</button>
 
-						<h2>
-							How CivicBuzz Works
-						</h2>
-
-						<span></span>
-
-					</div>
-
-					<p class="help-intro">
-						Understand how your civic report moves
-						from submission to resolution.
-					</p>
+			</div>
 
 
-					<!-- STEP 1 -->
+			<div class="summary-grid">
 
-					<div class="help-step">
 
-						<div class="help-step-icon green">
-							<i class="fa-solid fa-microphone"></i>
-						</div>
+				<!-- Total -->
+				<div class="summary-card total-card">
 
-						<div class="help-step-number">
-							1
-						</div>
+					<div class="summary-card-content">
 
-						<div class="help-step-content">
+						<span class="summary-number">
+							03
+						</span>
 
-							<h3>
-								Report
-							</h3>
-
-							<p>
-								Citizens can report issues via
-								text, voice or images in multiple
-								languages. Simply describe the
-								problem and provide the necessary
-								details.
-							</p>
-
-						</div>
+						<span class="summary-label">
+							Total Complaints
+						</span>
 
 					</div>
 
-
-					<!-- STEP 2 -->
-
-					<div class="help-step">
-
-						<div class="help-step-icon blue">
-							<i class="fa-solid fa-language"></i>
-						</div>
-
-						<div class="help-step-number">
-							2
-						</div>
-
-						<div class="help-step-content">
-
-							<h3>
-								AI Understands
-							</h3>
-
-							<p>
-								AI processes the submitted report
-								and extracts the important issue
-								information so the complaint can
-								be properly understood and handled.
-							</p>
-
-						</div>
-
-					</div>
-
-
-					<!-- STEP 3 -->
-
-					<div class="help-step">
-
-						<div class="help-step-icon gold">
-							<i class="fa-regular fa-file-lines"></i>
-						</div>
-
-						<div class="help-step-number">
-							3
-						</div>
-
-						<div class="help-step-content">
-
-							<h3>
-								Duplicate Detection
-							</h3>
-
-							<p>
-								Similar reports are identified
-								to reduce duplicate complaints.
-								This helps authorities focus on
-								the actual issue instead of handling
-								the same problem repeatedly.
-							</p>
-
-						</div>
-
-					</div>
-
-
-					<!-- STEP 4 -->
-
-					<div class="help-step">
-
-						<div class="help-step-icon purple">
-							<i class="fa-solid fa-building-columns"></i>
-						</div>
-
-						<div class="help-step-number">
-							4
-						</div>
-
-						<div class="help-step-content">
-
-							<h3>
-								Smart Routing
-							</h3>
-
-							<p>
-								The issue is routed to the responsible
-								department or unit. This ensures that
-								the complaint reaches the authority
-								that can take appropriate action.
-							</p>
-
-						</div>
-
-					</div>
-
-
-					<!-- STEP 5 -->
-
-					<div class="help-step">
-
-						<div class="help-step-icon coral">
-							<i class="fa-solid fa-arrows-rotate"></i>
-						</div>
-
-						<div class="help-step-number">
-							5
-						</div>
-
-						<div class="help-step-content">
-
-							<h3>
-								Action & Updates
-							</h3>
-
-							<p>
-								Authorities take action and update
-								the status of the reported issue.
-								Citizens can follow the progress
-								of their complaint.
-							</p>
-
-						</div>
-
-					</div>
-
-
-					<!-- STEP 6 -->
-
-					<div class="help-step">
-
-						<div class="help-step-icon dark-green">
-							<i class="fa-solid fa-circle-check"></i>
-						</div>
-
-						<div class="help-step-number">
-							6
-						</div>
-
-						<div class="help-step-content">
-
-							<h3>
-								Resolution & Evidence
-							</h3>
-
-							<p>
-								Once the issue is resolved,
-								resolution evidence can be uploaded
-								and made public but it will be closed by the Complainant only. This creates a
-								transparent record of the outcome.
-							</p>
-
-						</div>
-
+					<div class="summary-icon">
+						📋
 					</div>
 
 				</div>
 
 
-				<!-- CHATBOT -->
+				<!-- In Progress -->
+				<div class="summary-card progress-card">
 
-				<div class="help-chatbot">
+					<div class="summary-card-content">
 
-					<div class="chatbot-card">
+						<span class="summary-number">
+							01
+						</span>
 
-						<div class="chatbot-header">
+						<span class="summary-label">
+							In Progress
+						</span>
 
-							<div class="chatbot-avatar">
-								<i class="fa-solid fa-robot"></i>
-							</div>
+					</div>
 
-							<div class="chatbot-title">
+					<div class="summary-icon">
+						◷
+					</div>
 
-								<h3>
-									CivicBuzz Assistant
-								</h3>
+				</div>
 
-								<span>
-									<i class="fa-solid fa-circle"></i>
-									Online
+
+				<!-- Resolved -->
+				<div class="summary-card resolved-card">
+
+					<div class="summary-card-content">
+
+						<span class="summary-number">
+							02
+						</span>
+
+						<span class="summary-label">
+							Resolved
+						</span>
+
+					</div>
+
+					<div class="summary-icon">
+						✓
+					</div>
+
+				</div>
+
+
+				<!-- Rejected -->
+				<div class="summary-card rejected-card">
+
+					<div class="summary-card-content">
+
+						<span class="summary-number">
+							00
+						</span>
+
+						<span class="summary-label">
+							Rejected
+						</span>
+
+					</div>
+
+					<div class="summary-icon">
+						×
+					</div>
+
+				</div>
+
+			</div>
+
+		</section>
+
+
+
+		<!-- ============================= -->
+		<!-- RECENT COMPLAINTS -->
+		<!-- ============================= -->
+
+		<section class="recent-complaints-section">
+
+			<div class="section-header-row">
+
+				<h2>
+					My Recent Complaints
+				</h2>
+
+				<button class="view-all-button" type="button" onclick="window.location.href='Track_complaints_Frontend/index.html'">
+					View All
+				</button>
+
+			</div>
+
+
+			<div class="complaints-table-wrapper">
+
+				<table class="complaints-table">
+
+					<thead>
+
+						<tr>
+
+							<th>
+								Issue ID
+							</th>
+
+							<th>
+								Problem
+							</th>
+
+							<th>
+								Location
+							</th>
+
+							<th>
+								Status
+							</th>
+
+							<th>
+								Date
+							</th>
+
+							<th>
+								Action
+							</th>
+
+						</tr>
+
+					</thead>
+
+
+					<tbody>
+
+
+						<!-- Complaint 1 -->
+
+						<tr>
+
+							<td>
+								<strong>
+									CB-1024
+								</strong>
+							</td>
+
+							<td>
+								Road Pothole
+							</td>
+
+							<td>
+								<span class="location-text">
+									📍 Patia, Bhubaneswar
+								</span>
+							</td>
+
+							<td>
+
+								<span class="status-badge status-progress">
+									In Progress
 								</span>
 
-							</div>
+							</td>
+
+							<td>
+								18 Aug 2026
+							</td>
+
+							<td>
+
+								<button class="view-complaint-button" type="button" data-issue="CB-1024"
+									aria-label="View CB-1024">
+									👁
+								</button>
+
+							</td>
+
+						</tr>
+
+
+						<!-- Complaint 2 -->
+
+						<tr>
+
+							<td>
+								<strong>
+									CB-1018
+								</strong>
+							</td>
+
+							<td>
+								Street Light Not Working
+							</td>
+
+							<td>
+								<span class="location-text">
+									📍 Kalinga Vihar
+								</span>
+							</td>
+
+							<td>
+
+								<span class="status-badge status-resolved">
+									Resolved
+								</span>
+
+							</td>
+
+							<td>
+								14 Aug 2026
+							</td>
+
+							<td>
+
+								<button class="view-complaint-button" type="button" data-issue="CB-1018"
+									aria-label="View CB-1018">
+									👁
+								</button>
+
+							</td>
+
+						</tr>
+
+
+						<!-- Complaint 3 -->
+
+						<tr>
+
+							<td>
+								<strong>
+									CB-1007
+								</strong>
+							</td>
+
+							<td>
+								Garbage Not Collected
+							</td>
+
+							<td>
+								<span class="location-text">
+									📍 Nayapalli
+								</span>
+							</td>
+
+							<td>
+
+								<span class="status-badge status-resolved">
+									Resolved
+								</span>
+
+							</td>
+
+							<td>
+								10 Aug 2026
+							</td>
+
+							<td>
+
+								<button class="view-complaint-button" type="button" data-issue="CB-1007"
+									aria-label="View CB-1007">
+									👁
+								</button>
+
+							</td>
+
+						</tr>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+		</section>
+
+
+
+		<!-- ============================= -->
+		<!-- TRACK COMPLAINT -->
+		<!-- ============================= -->
+
+		<section class="track-complaint-section">
+
+			<div class="track-content">
+
+				<h2>
+					Track Your Complaint
+				</h2>
+
+				<p>
+					Enter your Issue ID to check current status
+				</p>
+
+
+				<div class="track-form">
+
+					<label for="issueIdInput" class="sr-only">
+						Issue ID
+					</label>
+
+					<input type="text" id="issueIdInput" placeholder="Enter Issue ID (e.g. CB-1024)">
+
+					<button type="button" id="trackNowButton">
+						🔍 Track Now
+					</button>
+
+				</div>
+
+			</div>
+
+
+			<div class="track-illustration">
+
+				<div class="track-icon">
+					📋
+				</div>
+
+				<div class="track-search-icon">
+					🔍
+				</div>
+
+			</div>
+
+		</section>
+
+
+
+		<!-- ============================= -->
+		<!-- NEARBY ISSUES -->
+		<!-- ============================= -->
+
+		<section class="nearby-issues-section" id="nearbyMap">
+
+			<div class="section-header-row">
+
+				<h2>
+					Issues Around You
+				</h2>
+
+				<button class="view-all-button" type="button" id="viewMapButton">
+					View on Map
+				</button>
+
+			</div>
+
+
+			<div class="nearby-content">
+
+
+				<!-- Map -->
+				<div class="nearby-map">
+
+					<img src="Assets/map-placeholder.png" alt="Map showing nearby civic issues" id="nearbyMapImage"
+						class="nearby-map-image" onerror="this.style.background='#e2e8f0'; this.style.minHeight='220px'">
+
+					<div class="map-location-center">
+						●
+					</div>
+
+					<div class="map-marker marker-one">
+						📍
+					</div>
+
+					<div class="map-marker marker-two">
+						📍
+					</div>
+
+					<div class="map-marker marker-three">
+						📍
+					</div>
+
+				</div>
+
+
+				<!-- Nearby Issue List -->
+
+				<div class="nearby-list">
+
+
+					<!-- Nearby Issue 1 -->
+
+					<div class="nearby-issue">
+
+						<div class="nearby-icon">
+							📍
+						</div>
+
+						<div class="nearby-info">
+
+							<strong>
+								Road Pothole
+							</strong>
+
+							<span>
+								150m away • Patia Main Road
+							</span>
 
 						</div>
 
+						<span class="nearby-status open-status">
+							Open
+						</span>
 
-						<div class="chatbot-messages" id="chatbotMessages">
+					</div>
 
-							<div class="chat-message bot-message">
 
-								<div class="message-avatar">
-									<i class="fa-solid fa-robot"></i>
-								</div>
+					<!-- Nearby Issue 2 -->
 
-								<div class="message-content">
+					<div class="nearby-issue">
 
-									<p>
-										Hi! 👋 I'm the CivicBuzz
-										Assistant.
-									</p>
+						<div class="nearby-icon">
+							💡
+						</div>
 
-									<p>
-										I can help you understand
-										how CivicBuzz works, report
-										an issue, track a complaint,
-										or find the right information.
-									</p>
+						<div class="nearby-info">
 
-								</div>
+							<strong>
+								Street Light Not Working
+							</strong>
 
-							</div>
+							<span>
+								300m away • Kalinga Vihar
+							</span>
 
 						</div>
 
+						<span class="nearby-status progress-status">
+							In Progress
+						</span>
 
-						<div class="chatbot-quick-actions">
+					</div>
 
-							<button type="button" class="quick-question">
-								How do I report an issue?
-							</button>
 
-							<button type="button" class="quick-question">
-								How can I track my issue?
-							</button>
+					<!-- Nearby Issue 3 -->
 
-							<button type="button" class="quick-question">
-								How does AI routing work?
-							</button>
+					<div class="nearby-issue">
+
+						<div class="nearby-icon">
+							🗑
+						</div>
+
+						<div class="nearby-info">
+
+							<strong>
+								Garbage Overflow
+							</strong>
+
+							<span>
+								500m away • Jayadev Vihar
+							</span>
 
 						</div>
 
-
-						<div class="chatbot-input-area">
-
-							<input type="text" id="chatbotInput" placeholder="Ask CivicBuzz anything..."
-								autocomplete="off">
-
-							<button type="button" id="chatbotSend" aria-label="Send message">
-								<i class="fa-solid fa-arrow-up"></i>
-							</button>
-
-						</div>
+						<span class="nearby-status open-status">
+							Open
+						</span>
 
 					</div>
 
@@ -898,130 +1059,552 @@
 		</section>
 
 
-		<!-- NAVIGATION TARGETS -->
 
-		<section id="contact" class="hidden-target"></section>
+		<!-- ============================= -->
+		<!-- BOTTOM INFORMATION -->
+		<!-- ============================= -->
+
+		<footer class="civic-footer" id="help">
+
+			<div class="footer-city-bg"></div>
+
+			<div class="footer-content">
+
+				<!-- BRAND -->
+				<div class="footer-brand">
+
+					<div class="footer-brand-logo">
+
+						<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+
+						<span>
+							CivicBuzz
+						</span>
+
+					</div>
+
+					<p>
+						Making every civic issue visible,<br>
+						actionable and accountable.
+					</p>
+
+					<p class="footer-small-text">
+						Empowering citizens to report problems<br>
+						and build better communities together.
+					</p>
+
+				</div>
+
+
+				<!-- QUICK LINKS -->
+				<div class="footer-column">
+
+					<h3>
+						QUICK LINKS
+					</h3>
+
+					<a href="#home">
+						Home
+					</a>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Report an Issue
+					</a>
+
+					<a href="Track_complaints_Frontend/index.html">
+						Track Complaint
+					</a>
+
+					<a href="Tenders/index.html">
+						Tenders
+					</a>
+
+					<a href="Contact Us Frontend/index.html">
+						Contact Us
+					</a>
+
+				</div>
+
+
+				<!-- CIVIC SERVICES -->
+				<div class="footer-column">
+
+					<h3>
+						CIVIC SERVICES
+					</h3>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Road & Potholes
+					</a>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Garbage & Sanitation
+					</a>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Street Lights
+					</a>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Water & Drainage
+					</a>
+
+					<a href="Report_Issue_Frontend/index.html">
+						Public Infrastructure
+					</a>
+
+				</div>
+
+
+				<!-- SUPPORT -->
+				<div class="footer-column">
+
+					<h3>
+						NEED HELP?
+					</h3>
+
+					<a href="#help">
+						FAQs
+					</a>
+
+					<a href="#help">
+						How to Report
+					</a>
+
+					<a href="#help">
+						How Tracking Works
+					</a>
+
+					<a href="Contact Us Frontend/index.html">
+						Contact Support
+					</a>
+
+
+					<div class="footer-contact">
+
+						<span>
+							Have a question?
+						</span>
+
+						<a href="mailto:support@civicbuzz.in">
+							support@civicbuzz.in
+						</a>
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<!-- STATS -->
+			<div class="footer-stats">
+
+				<div class="footer-stat">
+
+					<strong>
+						12K+
+					</strong>
+
+					<span>
+						Issues Reported
+					</span>
+
+				</div>
+
+
+				<div class="footer-stat">
+
+					<strong>
+						8K+
+					</strong>
+
+					<span>
+						Issues Resolved
+					</span>
+
+				</div>
+
+
+				<div class="footer-stat">
+
+					<strong>
+						4K+
+					</strong>
+
+					<span>
+						Active Citizens
+					</span>
+
+				</div>
+
+
+				<div class="footer-stat">
+
+					<strong>
+						50+
+					</strong>
+
+					<span>
+						Communities
+					</span>
+
+				</div>
+
+			</div>
+
+
+			<!-- BOTTOM -->
+			<div class="footer-bottom">
+
+				<div class="footer-legal">
+
+					<a href="#privacy">
+						Privacy Policy
+					</a>
+
+					<a href="#terms">
+						Terms & Conditions
+					</a>
+
+					<a href="#accessibility">
+						Accessibility
+					</a>
+
+				</div>
+
+
+				<div class="footer-social">
+
+					<a href="#" aria-label="GitHub">
+						GitHub
+					</a>
+
+					<a href="#" aria-label="LinkedIn">
+						LinkedIn
+					</a>
+
+				</div>
+
+
+				<p class="footer-copyright">
+					© 2026 CivicBuzz. All rights reserved.
+				</p>
+
+
+				<p class="footer-made">
+					Built with
+					<span>♥</span>
+					for better communities.
+				</p>
+
+			</div>
+
+		</footer>
 
 	</main>
 
 
+
+	<!-- ============================= -->
+	<!-- REPORT ISSUE MODAL -->
+	<!-- ============================= -->
+
+	<div class="modal-overlay" id="reportIssueModal" aria-hidden="true">
+
+		<div class="report-modal">
+
+			<button class="modal-close" type="button" id="closeReportModal" aria-label="Close">
+				×
+			</button>
+
+			<h2>
+				Report a Problem
+			</h2>
+
+			<p>
+				Tell us about the civic issue you found.
+			</p>
+
+
+			<div class="modal-form-group">
+
+				<label for="issueCategory">
+					Issue Category
+				</label>
+
+				<select id="issueCategory">
+
+					<option value="">
+						Select Category
+					</option>
+
+					<option value="road">
+						Road & Pothole
+					</option>
+
+					<option value="garbage">
+						Garbage
+					</option>
+
+					<option value="street-light">
+						Street Light
+					</option>
+
+					<option value="water">
+						Water Supply
+					</option>
+
+					<option value="drainage">
+						Drainage
+					</option>
+
+					<option value="electricity">
+						Electricity
+					</option>
+
+					<option value="public-property">
+						Public Property
+					</option>
+
+					<option value="other">
+						Other
+					</option>
+
+				</select>
+
+			</div>
+
+
+			<div class="modal-form-group">
+
+				<label for="issueDescription">
+					Description
+				</label>
+
+				<textarea id="issueDescription" rows="4" placeholder="Describe the problem..."></textarea>
+
+			</div>
+
+
+			<div class="modal-form-group">
+
+				<label for="issuePhoto">
+					Add Photo
+				</label>
+
+				<input type="file" id="issuePhoto" accept="image/*">
+
+			</div>
+
+
+			<div class="modal-actions">
+
+				<button type="button" class="modal-cancel-button" id="cancelReportButton">
+					Cancel
+				</button>
+
+				<button type="button" class="modal-submit-button" id="submitIssueButton">
+					Submit Issue
+				</button>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+	<!-- ============================= -->
+	<!-- COMPLAINT DETAILS MODAL -->
+	<!-- ============================= -->
+
+	<div class="modal-overlay" id="complaintDetailsModal" aria-hidden="true">
+
+		<div class="complaint-details-modal">
+
+			<button class="modal-close" type="button" id="closeComplaintModal" aria-label="Close">
+				×
+			</button>
+
+
+			<h2>
+				Complaint Details
+			</h2>
+
+
+			<div class="complaint-detail-header">
+
+				<span class="detail-issue-id">
+					CB-1024
+				</span>
+
+				<span class="status-badge status-progress">
+					In Progress
+				</span>
+
+			</div>
+
+
+			<div class="complaint-detail-grid">
+
+				<div>
+					<span class="detail-label">
+						Problem
+					</span>
+
+					<strong>
+						Road Pothole
+					</strong>
+				</div>
+
+
+				<div>
+					<span class="detail-label">
+						Location
+					</span>
+
+					<strong>
+						Patia, Bhubaneswar
+					</strong>
+				</div>
+
+
+				<div>
+					<span class="detail-label">
+						Submitted
+					</span>
+
+					<strong>
+						18 Aug 2026
+					</strong>
+				</div>
+
+
+				<div>
+					<span class="detail-label">
+						Department
+					</span>
+
+					<strong>
+						Road Maintenance
+					</strong>
+				</div>
+
+			</div>
+
+
+			<!-- Complaint Timeline -->
+
+			<div class="complaint-timeline">
+
+				<div class="timeline-item completed">
+
+					<span class="timeline-dot">
+						✓
+					</span>
+
+					<div>
+						<strong>
+							Complaint Reported
+						</strong>
+
+						<span>
+							18 Aug 2026
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="timeline-item completed">
+
+					<span class="timeline-dot">
+						✓
+					</span>
+
+					<div>
+						<strong>
+							Complaint Verified
+						</strong>
+
+						<span>
+							18 Aug 2026
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="timeline-item completed">
+
+					<span class="timeline-dot">
+						✓
+					</span>
+
+					<div>
+						<strong>
+							Department Assigned
+						</strong>
+
+						<span>
+							18 Aug 2026
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="timeline-item active">
+
+					<span class="timeline-dot">
+						•
+					</span>
+
+					<div>
+						<strong>
+							Work In Progress
+						</strong>
+
+						<span>
+							19 Aug 2026
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="timeline-item">
+
+					<span class="timeline-dot">
+						•
+					</span>
+
+					<div>
+						<strong>
+							Resolved
+						</strong>
+
+						<span>
+							Pending
+						</span>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
 	<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-	<footer class="civic-footer">
-		<div class="footer-city-bg"></div>
-
-		<div class="footer-content">
-
-			<!-- BRAND -->
-			<div class="footer-brand">
-				<div class="footer-brand-logo">
-					<img src="Assets/Logo.png" alt="CivicBuzz Logo">
-					<span>CivicBuzz</span>
-				</div>
-
-				<p>
-					Making every civic issue visible,<br>
-					actionable and accountable.
-				</p>
-
-				<p class="footer-small-text">
-					Empowering citizens to report problems<br>
-					and build better communities together.
-				</p>
-			</div>
-
-
-			<!-- QUICK LINKS -->
-			<div class="footer-column">
-				<h3>QUICK LINKS</h3>
-
-				<a href="#home">Home</a>
-			<a href="Report_Issue_Frontend/index.html">Report an Issue</a>
-
-			<!-- CIVIC SERVICES -->
-			<div class="footer-column">
-				<h3>CIVIC SERVICES</h3>
-
-				<a href="#road">Road & Potholes</a>
-				<a href="#garbage">Garbage & Sanitation</a>
-				<a href="#streetlight">Street Lights</a>
-				<a href="#water">Water & Drainage</a>
-				<a href="#infrastructure">Public Infrastructure</a>
-			</div>
-
-
-			<!-- SUPPORT -->
-			<div class="footer-column">
-				<h3>NEED HELP?</h3>
-
-				<a href="#faq">FAQs</a>
-				<a href="#how-it-works">How to Report</a>
-				<a href="#tracking">How Tracking Works</a>
-				<a href="#support">Contact Support</a>
-
-				<div class="footer-contact">
-					<span>Have a question?</span>
-					<a href="mailto:civicbuzz@gmail.com">
-						civicbuzz@gmail.com
-					</a>
-				</div>
-			</div>
-
-		</div>
-
-
-		<!-- STATS -->
-		<div class="footer-stats">
-
-			<div class="footer-stat">
-				<strong>12K+</strong>
-				<span>Issues Reported</span>
-			</div>
-
-			<div class="footer-stat">
-				<strong>8K+</strong>
-				<span>Issues Resolved</span>
-			</div>
-
-			<div class="footer-stat">
-				<strong>4K+</strong>
-				<span>Active Citizens</span>
-			</div>
-
-			<div class="footer-stat">
-				<strong>50+</strong>
-				<span>Communities</span>
-			</div>
-
-		</div>
-
-
-		<!-- BOTTOM -->
-		<div class="footer-bottom">
-
-			<div class="footer-legal">
-				<a href="#privacy">Privacy Policy</a>
-				<a href="#terms">Terms & Conditions</a>
-				<a href="#accessibility">Accessibility</a>
-			</div>
-
-			<div class="footer-social">
-				<a href="#" aria-label="GitHub">GitHub</a>
-				<a href="#" aria-label="LinkedIn">LinkedIn</a>
-			</div>
-
-			<p class="footer-copyright">
-				© 2026 CivicBuzz. All rights reserved.
-			</p>
-
-			<p class="footer-made">
-				Built with <span>♥</span> for better communities.
-			</p>
-
-		</div>
-
-	</footer>
-
+	<!-- ============================= -->
+	<!-- JAVASCRIPT -->
+	<!-- ============================= -->
 
 	<script src="navbar-loader.js"></script>
 	<script src="script.js"></script>

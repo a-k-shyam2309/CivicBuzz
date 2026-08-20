@@ -26,6 +26,53 @@
   --shadow: 0 10px 28px rgba(25, 43, 73, 0.07);
 }
 
+body.dark-mode,
+html.dark-mode {
+  --page: #0b1120;
+  --panel: #172234;
+  --soft: #1c2a40;
+  --soft-blue: rgba(53, 103, 232, 0.2);
+  --border: #2a3b53;
+  --text: #f8fafc;
+  --secondary: #94a3b8;
+  --muted: #64748b;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .filter-button,
+body.dark-mode .info-badge,
+body.dark-mode .rank {
+  background: #172234;
+  border-color: #2a3b53;
+  color: #cbd5e1;
+}
+
+body.dark-mode .card-tags span {
+  background: #0b1120;
+  border-color: #2a3b53;
+  color: #cbd5e1;
+}
+
+body.dark-mode .stage-dot,
+body.dark-mode .progress-stage.pending .stage-dot {
+  background: #172234;
+  border-color: #2a3b53;
+}
+
+body.dark-mode .vote-bar {
+  background: #2a3b53;
+}
+
+body.dark-mode .status-open {
+  background: rgba(22, 128, 74, 0.2);
+  color: #4ade80;
+}
+
+body.dark-mode .status-warning {
+  background: rgba(200, 117, 8, 0.2);
+  color: #fbbf24;
+}
+
 html {
   scroll-behavior: smooth;
 }
