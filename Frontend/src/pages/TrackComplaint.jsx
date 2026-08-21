@@ -14,73 +14,211 @@ import {
   Camera,
   ArrowRight,
   ExternalLink,
+  ChevronRight,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 import { complaintService } from '../services/complaintService';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { StatusBadge } from '../components/StatusBadge';
 import { PriorityBadge } from '../components/PriorityBadge';
 import { ResolutionModal } from '../components/ResolutionModal';
 
+const DEFAULT_DEMO_COMPLAINTS = [
+  {
+    complaint_id: 'CB-1001',
+    title: 'Severe Asphalt Pothole near Master Canteen',
+    description: 'Deep 2-foot wide pothole on Janpath Road near Master Canteen square causing heavy traffic congestion and accidents.',
+    category: 'ROAD',
+    sub_category: 'POTHOLE',
+    status: 'READY_FOR_CITIZEN_VERIFICATION',
+    severity: 'HIGH',
+    department_name: 'Roads & Potholes Department',
+    department_code: 'ROADS_AND_POTHOLES',
+    location: {
+      address: 'Janpath Road, Master Canteen, Bhubaneswar',
+      ward_name: 'Ward 12',
+      ward_id: 12,
+      latitude: 20.2961,
+      longitude: 85.8245,
+    },
+    evidence: [
+      {
+        evidence_type: 'BEFORE_IMAGE',
+        file_url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+        uploaded_by: 'Subham Samal (Citizen)',
+        timestamp: '2026-08-21T09:30:00Z',
+      },
+      {
+        evidence_type: 'AFTER_IMAGE',
+        file_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80',
+        uploaded_by: 'Ward 12 Road Remediation Crew',
+        timestamp: '2026-08-21T11:45:00Z',
+      },
+    ],
+    timeline: [
+      {
+        step: 'Complaint Submitted',
+        status: 'SUBMITTED',
+        timestamp: '2026-08-21T09:30:00Z',
+        actor_role: 'CITIZEN',
+        notes: 'Complaint filed with photo evidence and GPS coordinates.',
+      },
+      {
+        step: 'AI Triage & Classification',
+        status: 'ASSIGNED',
+        timestamp: '2026-08-21T09:31:00Z',
+        actor_role: 'AI_SYSTEM',
+        notes: 'Gemini AI classified as HIGH severity and routed to Roads Department.',
+      },
+      {
+        step: 'Field Remediation Work Done',
+        status: 'READY_FOR_CITIZEN_VERIFICATION',
+        timestamp: '2026-08-21T11:45:00Z',
+        actor_role: 'OFFICER',
+        notes: 'Asphalt cold mix and bituminous leveling completed. Awaiting citizen inspection.',
+      },
+    ],
+  },
+  {
+    complaint_id: 'CB-2042',
+    title: 'Overflowing Waste Bins near Saheed Nagar',
+    description: 'Community garbage bins overflowing near Saheed Nagar market with foul odor.',
+    category: 'SANITATION',
+    sub_category: 'OVERFLOWING_BIN',
+    status: 'IN_PROGRESS',
+    severity: 'MEDIUM',
+    department_name: 'Sanitation & Solid Waste Management',
+    department_code: 'SOLID_WASTE_MANAGEMENT',
+    location: {
+      address: 'Saheed Nagar Market, Bhubaneswar',
+      ward_name: 'Ward 30',
+      ward_id: 30,
+      latitude: 20.2912,
+      longitude: 85.8456,
+    },
+    evidence: [
+      {
+        evidence_type: 'BEFORE_IMAGE',
+        file_url: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?auto=format&fit=crop&w=800&q=80',
+        uploaded_by: 'Citizen',
+        timestamp: '2026-08-21T10:15:00Z',
+      },
+    ],
+    timeline: [
+      {
+        step: 'Grievance Registered',
+        status: 'SUBMITTED',
+        timestamp: '2026-08-21T10:15:00Z',
+        actor_role: 'CITIZEN',
+        notes: 'Sanitation complaint submitted.',
+      },
+      {
+        step: 'Sanitation Crew Dispatched',
+        status: 'IN_PROGRESS',
+        timestamp: '2026-08-21T10:45:00Z',
+        actor_role: 'OFFICER',
+        notes: 'Solid waste compactor truck en route.',
+      },
+    ],
+  },
+];
+
 export const TrackComplaint = () => {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialId = searchParams.get('id') || '';
   const { isAuthenticated, user } = useAuth();
 
   const [searchInput, setSearchInput] = useState(initialId);
   const [activeComplaint, setActiveComplaint] = useState(null);
-  const [myComplaints, setMyComplaints] = useState([]);
+  const [allGrievances, setAllGrievances] = useState(DEFAULT_DEMO_COMPLAINTS);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isResolutionModalOpen, setIsResolutionModalOpen] = useState(false);
 
-  // Fetch complaint details by ID
+  // Fetch a specific complaint by ID
   const fetchComplaint = async (idToFetch) => {
     if (!idToFetch) return;
+    const cleanId = idToFetch.trim().toUpperCase();
     setIsLoading(true);
     setError(null);
+
+    // 1. Check in local stored grievances first
+    const stored = JSON.parse(localStorage.getItem('civicbuzz_my_complaints') || '[]');
+    const localMatch = [...stored, ...allGrievances].find(
+      (c) => c.complaint_id?.toUpperCase() === cleanId
+    );
+
     try {
-      const data = await complaintService.getComplaintById(idToFetch.trim());
+      const data = await complaintService.getComplaintById(cleanId);
       setActiveComplaint(data);
-      setSearchParams({ id: idToFetch.trim() });
-    } catch (err) {
-      setError(err.message || 'Complaint not found. Please verify the ID.');
-      setActiveComplaint(null);
+      setSearchParams({ id: cleanId });
+    } catch {
+      if (localMatch) {
+        setActiveComplaint(localMatch);
+        setSearchParams({ id: cleanId });
+      } else {
+        setError(`Complaint #${cleanId} not found in database. Showing latest active complaint.`);
+        if (allGrievances.length > 0) {
+          setActiveComplaint(allGrievances[0]);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  // On initial mount or URL param change
+  // Load all user and public complaints on mount
   useEffect(() => {
-    if (initialId) {
-      fetchComplaint(initialId);
-    }
-  }, [initialId]);
+    const loadGrievancesList = async () => {
+      const localStored = JSON.parse(localStorage.getItem('civicbuzz_my_complaints') || '[]');
+      let combined = [...localStored];
 
-  // Load user's filed complaints if authenticated
-  useEffect(() => {
-    const loadMyComplaints = async () => {
-      if (isAuthenticated) {
-        try {
-          const list = await complaintService.getMyComplaints();
-          setMyComplaints(list || []);
-          if (!initialId && list && list.length > 0) {
-            setActiveComplaint(list[0]);
-            setSearchParams({ id: list[0].complaint_id });
-          }
-        } catch {
-          // Graceful fallback
+      try {
+        const publicList = await complaintService.getPublicComplaints({ limit: 10 });
+        if (publicList && publicList.length > 0) {
+          combined = [...combined, ...publicList];
+        }
+      } catch {
+        // use fallback
+      }
+
+      // De-duplicate by complaint_id
+      const seen = new Set();
+      const unique = [];
+      for (const item of [...combined, ...DEFAULT_DEMO_COMPLAINTS]) {
+        if (item?.complaint_id && !seen.has(item.complaint_id)) {
+          seen.add(item.complaint_id);
+          unique.push(item);
         }
       }
+
+      setAllGrievances(unique);
+
+      if (initialId) {
+        fetchComplaint(initialId);
+      } else if (unique.length > 0) {
+        setActiveComplaint(unique[0]);
+        setSearchParams({ id: unique[0].complaint_id });
+      }
     };
-    loadMyComplaints();
-  }, [isAuthenticated]);
+
+    loadGrievancesList();
+  }, [initialId]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchInput.trim()) {
-      fetchComplaint(searchInput);
+      fetchComplaint(searchInput.trim());
     }
+  };
+
+  const handleSelectGrievance = (c) => {
+    setActiveComplaint(c);
+    setSearchInput(c.complaint_id);
+    setSearchParams({ id: c.complaint_id });
   };
 
   const handleResolutionUpdated = (res) => {
@@ -89,311 +227,244 @@ export const TrackComplaint = () => {
     }
   };
 
+  const beforeEvidence = activeComplaint?.evidence?.find(
+    (e) => e.evidence_type === 'BEFORE_IMAGE' || e.evidence_type === 'IMAGE'
+  ) || activeComplaint?.evidence?.[0];
+
+  const afterEvidence = activeComplaint?.evidence?.find(
+    (e) => e.evidence_type === 'AFTER_IMAGE' || e.evidence_type === 'WORK_COMPLETION_IMAGE'
+  ) || activeComplaint?.evidence?.[1];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Search Bar Header */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
-        <div className="max-w-3xl space-y-4">
+      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-4">
+        <div className="max-w-3xl space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">
             <Clock className="w-3.5 h-3.5" />
-            <span>Real-Time Grievance Lifecycle Tracking</span>
+            <span>{t.trackHeaderTitle || 'Track Grievance Resolution'}</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            Track Grievance Resolution
+            {t.trackHeaderTitle || 'Live Grievance Lifecycle & Ground Verification'}
           </h1>
           <p className="text-xs text-slate-300">
-            Inspect real-time AI triage, field remediation progress, before/after evidence photos,
-            and complete ground verification.
+            {t.trackHeaderDesc || 'Inspect real-time AI triage, field remediation progress, before/after evidence photos, and complete ground verification.'}
           </p>
+        </div>
 
-          <form onSubmit={handleSearchSubmit} className="pt-2 flex items-center gap-2 max-w-md">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Enter Complaint ID (e.g. CB-1001)..."
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono uppercase"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5"
-            >
-              {isLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : 'Search'}
-            </button>
-          </form>
+        {/* Search Input Form */}
+        <form onSubmit={handleSearchSubmit} className="flex gap-2 max-w-xl">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder={t.searchPlaceholder || 'ENTER COMPLAINT ID (E.G. CB-1001)...'}
+              className="w-full pl-10 pr-4 py-3 bg-slate-800/90 border border-slate-700 rounded-2xl text-xs font-mono tracking-wider text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl shadow transition-all flex items-center gap-2 cursor-pointer"
+          >
+            {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+            <span>{t.searchBtn || 'Search'}</span>
+          </button>
+        </form>
+      </div>
+
+      {/* Grievance Quick-Select Bar */}
+      <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-emerald-600" />
+            {t.recentGrievancesTitle || 'Your Submitted & Recent Grievances:'}
+          </span>
+          <span className="text-[11px] text-slate-400">Click to inspect timeline</span>
+        </div>
+
+        <div className="flex gap-2.5 overflow-x-auto pb-1 pt-1 no-scrollbar">
+          {allGrievances.map((c) => {
+            const isSelected = activeComplaint?.complaint_id === c.complaint_id;
+            return (
+              <button
+                key={c.complaint_id}
+                type="button"
+                onClick={() => handleSelectGrievance(c)}
+                className={`flex-shrink-0 px-3.5 py-2 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                  isSelected
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-emerald-500'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-emerald-50/60 hover:border-emerald-300'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs font-bold">#{c.complaint_id}</span>
+                    <StatusBadge status={c.status} />
+                  </div>
+                  <span className={`text-[11px] block mt-0.5 max-w-[180px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                    {c.title || c.description}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {error && (
-        <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+        <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-800 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Col: My Grievances List (if authenticated) */}
-        {isAuthenticated && myComplaints.length > 0 && (
-          <div className="lg:col-span-1 space-y-3">
-            <h3 className="font-bold text-sm text-slate-800 flex items-center justify-between">
-              <span>Your Reported Grievances</span>
-              <span className="text-xs text-slate-400 font-normal">{myComplaints.length} filed</span>
-            </h3>
-
-            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
-              {myComplaints.map((c) => (
-                <div
-                  key={c.complaint_id}
-                  onClick={() => {
-                    setActiveComplaint(c);
-                    setSearchParams({ id: c.complaint_id });
-                    setSearchInput(c.complaint_id);
-                  }}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
-                    activeComplaint?.complaint_id === c.complaint_id
-                      ? 'bg-emerald-50/70 border-emerald-500 shadow-sm'
-                      : 'bg-white border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-mono font-bold text-slate-500">
-                      #{c.complaint_id}
-                    </span>
-                    <StatusBadge status={c.status} size="sm" />
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-800 line-clamp-1">{c.title}</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 truncate">
-                    {c.location?.address || 'Bhubaneswar'}
-                  </p>
+      {/* Active Complaint Inspector View */}
+      {activeComplaint && (
+        <div className="space-y-6">
+          {/* Main Card */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+            {/* Header info */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-mono font-bold px-3 py-1 bg-slate-900 text-white rounded-xl">
+                    #{activeComplaint.complaint_id}
+                  </span>
+                  <StatusBadge status={activeComplaint.status} />
+                  <PriorityBadge level={activeComplaint.severity} score={activeComplaint.priority?.score} />
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Right / Center Col: Detailed Complaint View */}
-        <div className={isAuthenticated && myComplaints.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'}>
-          {isLoading ? (
-            <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-3">
-              <RefreshCw className="w-8 h-8 text-emerald-600 animate-spin mx-auto" />
-              <p className="text-xs text-slate-500 font-semibold">Loading complaint lifecycle details...</p>
-            </div>
-          ) : activeComplaint ? (
-            <div className="space-y-6">
-              {/* Top Summary Card */}
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold px-2 py-0.5 bg-slate-100 rounded-md text-slate-700">
-                        #{activeComplaint.complaint_id}
-                      </span>
-                      <StatusBadge status={activeComplaint.status} />
-                      <PriorityBadge
-                        level={activeComplaint.priority?.level || activeComplaint.severity}
-                        score={activeComplaint.priority?.score}
-                      />
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-900 mt-2">
-                      {activeComplaint.title}
-                    </h2>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                  {activeComplaint.title || activeComplaint.description?.substring(0, 50)}
+                </h2>
+                <div className="flex items-center gap-4 text-xs text-slate-500">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{activeComplaint.location?.ward_name || 'Ward 12'}</span>
                   </div>
-
-                  {activeComplaint.qr_code_url && (
-                    <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-xs text-emerald-800">
-                      <QrCode className="w-5 h-5 text-emerald-600" />
-                      <span className="font-bold">Public QR Verified</span>
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-xs text-slate-700 leading-relaxed">
-                  {activeComplaint.description}
-                </p>
-
-                {/* Key Metadata Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-2xl text-xs">
-                  <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Category</span>
-                    <span className="font-semibold text-slate-800">{activeComplaint.category}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Ward Jurisdiction</span>
-                    <span className="font-semibold text-slate-800">
-                      {activeComplaint.location?.ward_name || `Ward ${activeComplaint.location?.ward_id || 12}`}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Assigned Dept</span>
-                    <span className="font-semibold text-blue-700">{activeComplaint.department_name}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Date Filed</span>
-                    <span className="font-semibold text-slate-800">
-                      {activeComplaint.created_at ? new Date(activeComplaint.created_at).toLocaleDateString() : 'Today'}
-                    </span>
-                  </div>
+                  <span>•</span>
+                  <span>{activeComplaint.department_name || 'Roads & Potholes'}</span>
                 </div>
               </div>
 
-              {/* CRITICAL FEATURE: Citizen Verification Action Banner */}
+              {/* Citizen Action Verification CTA */}
               {activeComplaint.status === 'READY_FOR_CITIZEN_VERIFICATION' && (
-                <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 rounded-3xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 animate-pulse">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-emerald-200 text-xs font-bold uppercase tracking-wider">
-                      <ShieldCheck className="w-4 h-4" />
-                      <span>Action Required by Complainant</span>
-                    </div>
-                    <h3 className="text-lg font-bold">Department Has Marked Work Completed</h3>
-                    <p className="text-xs text-emerald-100 max-w-xl">
-                      Please inspect the ground repair. You hold the final authority to confirm resolution
-                      or reject with a dispute reason.
-                    </p>
+                <div className="p-4 bg-blue-50/80 border-2 border-blue-200 rounded-2xl space-y-2 flex-shrink-0 text-center sm:text-left">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900">
+                    <ShieldCheck className="w-4 h-4 text-blue-600" />
+                    <span>Citizen Verification Pending!</span>
                   </div>
+                  <p className="text-[11px] text-blue-700 max-w-xs">
+                    Field work completed by department. Please physically inspect the site and confirm or dispute.
+                  </p>
                   <button
                     type="button"
                     onClick={() => setIsResolutionModalOpen(true)}
-                    className="px-6 py-3 bg-white text-emerald-900 font-extrabold text-xs rounded-xl shadow-lg hover:bg-emerald-50 transition-all flex-shrink-0"
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow transition-all cursor-pointer"
                   >
-                    Verify & Confirm Resolution
+                    Inspect & Verify Resolution
                   </button>
                 </div>
               )}
+            </div>
 
-              {/* Dispute Notice if Rejected */}
-              {activeComplaint.status === 'RESOLUTION_REJECTED' && (
-                <div className="bg-rose-50 border border-rose-200 p-5 rounded-3xl text-xs space-y-1.5">
-                  <span className="font-bold text-rose-800 flex items-center gap-1.5 text-sm">
-                    <AlertTriangle className="w-4 h-4 text-rose-600" /> Resolution Disputed & Reopened by Citizen
+            {/* Description */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                Grievance Description
+              </span>
+              <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                {activeComplaint.description}
+              </p>
+            </div>
+
+            {/* Before / After Photo Comparison Grid */}
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                {t.resolutionProofTitle || 'Department Remediation Proof (Before & After):'}
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Before Photo */}
+                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-3 space-y-2">
+                  <span className="text-[11px] font-bold text-slate-700 block">
+                    {t.beforeProof || 'Before (Reported by Citizen)'}
                   </span>
-                  <p className="text-rose-700">
-                    <strong>Dispute Reason:</strong> "{activeComplaint.dispute_reason || 'Work incomplete on site'}"
-                  </p>
-                  <p className="text-slate-500 text-[11px]">
-                    The complaint has been escalated to the Department Head and Municipal Admin. Additional crew
-                    dispatched for rework.
-                  </p>
-                </div>
-              )}
-
-              {/* Resolution Confirmed Badge & Rating */}
-              {activeComplaint.status === 'RESOLVED' && activeComplaint.resolution_verification && (
-                <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-3xl text-xs space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-emerald-900 flex items-center gap-1.5 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Citizen Confirmed Resolution
-                    </span>
-                    <div className="flex items-center gap-1 text-amber-500">
-                      {[...Array(activeComplaint.resolution_verification.rating || 5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-emerald-800 italic">
-                    "{activeComplaint.resolution_verification.comments || 'Work inspected and approved.'}"
-                  </p>
-                </div>
-              )}
-
-              {/* Evidence Gallery (Before & After Images) */}
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-                <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-emerald-600" /> Photo & Audio Evidence Trail
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                  {/* Before Evidence */}
-                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block mb-2">
-                      Before Remediation (Citizen Evidence)
-                    </span>
+                  <div className="h-48 rounded-xl overflow-hidden bg-slate-200 relative">
                     <img
-                      src={
-                        activeComplaint.evidence?.find((e) => e.evidence_type === 'BEFORE_IMAGE')
-                          ?.file_url ||
-                        'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80'
-                      }
-                      alt="Before fix"
-                      className="w-full h-44 object-cover rounded-xl shadow-inner"
+                      src={beforeEvidence?.file_url || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80'}
+                      alt="Before evidence"
+                      className="w-full h-full object-cover"
                     />
                   </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500">
+                    <span>Uploaded by Citizen</span>
+                    <span>Verified</span>
+                  </div>
+                </div>
 
-                  {/* After Evidence */}
-                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block mb-2">
-                      After Remediation (Department Proof)
-                    </span>
-                    {activeComplaint.evidence?.find((e) => e.evidence_type === 'AFTER_IMAGE') ? (
+                {/* After Photo */}
+                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-3 space-y-2">
+                  <span className="text-[11px] font-bold text-blue-900 block">
+                    {t.afterProof || 'After (Remediation by Department)'}
+                  </span>
+                  <div className="h-48 rounded-xl overflow-hidden bg-slate-200 relative flex items-center justify-center">
+                    {afterEvidence?.file_url ? (
                       <img
-                        src={
-                          activeComplaint.evidence.find((e) => e.evidence_type === 'AFTER_IMAGE')
-                            .file_url
-                        }
-                        alt="After fix"
-                        className="w-full h-44 object-cover rounded-xl shadow-inner"
+                        src={afterEvidence.file_url}
+                        alt="After evidence"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-44 rounded-xl border border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 text-xs text-center p-4">
-                        <Clock className="w-6 h-6 mb-1 text-slate-300" />
-                        <span>Awaiting field remediation and after-repair photo upload</span>
+                      <div className="text-center p-4 text-slate-400 text-xs">
+                        <Camera className="w-8 h-8 mx-auto mb-1 opacity-50" />
+                        <span>Field work in progress. Remediation proof will appear here.</span>
                       </div>
                     )}
                   </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500">
+                    <span>Field Department Crew</span>
+                    <span className="text-blue-700 font-bold">
+                      {afterEvidence?.file_url ? 'Proof Uploaded' : 'Awaiting Completion'}
+                    </span>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* Chronological Timeline */}
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-emerald-600" /> Audit Timeline
-                </h3>
+            {/* Timeline View */}
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                {t.timelineTitle || 'Audit & Remediation Timeline'}
+              </span>
 
-                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
-                  {activeComplaint.timeline?.map((step, idx) => (
-                    <div key={idx} className="relative">
-                      <div className="absolute -left-[27px] top-0.5 w-3.5 h-3.5 rounded-full bg-emerald-600 border-2 border-white shadow-xs" />
-                      <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 text-xs space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-slate-900">{step.step}</span>
-                          <span className="text-[10px] text-slate-400">
-                            {step.timestamp ? new Date(step.timestamp).toLocaleString() : ''}
-                          </span>
-                        </div>
-                        <p className="text-slate-600 text-[11px]">{step.notes}</p>
-                        <span className="text-[10px] text-emerald-700 font-semibold block">
-                          Actor: {step.actor_role}
-                        </span>
-                      </div>
+              <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                {(activeComplaint.timeline || []).map((step, idx) => (
+                  <div key={idx} className="relative space-y-1 text-xs">
+                    <div className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow" />
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-slate-900">{step.step || step.status}</span>
+                      <span className="text-[10px] text-slate-400">
+                        {step.timestamp ? new Date(step.timestamp).toLocaleString() : ''}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-slate-600">{step.notes}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          ) : (
-            <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-3">
-              <FileText className="w-10 h-10 text-slate-300 mx-auto" />
-              <h3 className="text-sm font-bold text-slate-700">No Grievance Selected</h3>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Enter a Complaint ID in the search bar above or click one of your submitted grievances.
-              </p>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Citizen Resolution Verification Modal */}
-      {activeComplaint && (
+      {/* Resolution Verification Modal */}
+      {isResolutionModalOpen && activeComplaint && (
         <ResolutionModal
           complaint={activeComplaint}
-          isOpen={isResolutionModalOpen}
           onClose={() => setIsResolutionModalOpen(false)}
-          onResolutionSuccess={handleResolutionUpdated}
+          onResolutionUpdated={handleResolutionUpdated}
         />
       )}
     </div>

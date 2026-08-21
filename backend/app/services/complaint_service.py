@@ -78,6 +78,13 @@ async def create_new_complaint(
         category=category,
     )
 
+    user_id = getattr(user, "id", 1)
+    user_name = getattr(user, "full_name", "Citizen Subham")
+    user_email = getattr(user, "email", "citizen@civicbuzz.in")
+    user_phone = getattr(user, "phone_number", None)
+    user_role_raw = getattr(user, "role", "CITIZEN")
+    user_role_str = user_role_raw.value if hasattr(user_role_raw, "value") else str(user_role_raw or "CITIZEN")
+
     # 5. Evidence Collection
     evidence_list = []
     if image_url:
@@ -90,8 +97,8 @@ async def create_new_complaint(
             "file_size_bytes": 0,
             "mime_type": "image/jpeg",
             "file_hash": "",
-            "uploaded_by": user.full_name,
-            "uploader_role": user.role.value,
+            "uploaded_by": user_name,
+            "uploader_role": user_role_str,
             "timestamp": now_iso,
             "verification_status": img_verify.get("verification_status", "VERIFIED"),
             "verification_notes": img_verify.get("notes", "Submitted by citizen"),
@@ -106,8 +113,8 @@ async def create_new_complaint(
             "file_size_bytes": 0,
             "mime_type": "audio/webm",
             "file_hash": "",
-            "uploaded_by": user.full_name,
-            "uploader_role": user.role.value,
+            "uploaded_by": user_name,
+            "uploader_role": user_role_str,
             "timestamp": now_iso,
             "verification_status": "VERIFIED",
             "verification_notes": "Citizen voice input",
@@ -135,10 +142,10 @@ async def create_new_complaint(
 
     complaint_doc = {
         "complaint_id": complaint_id,
-        "user_id": user.id,
-        "complainant_name": user.full_name,
-        "complainant_email": user.email,
-        "complainant_phone": user.phone_number,
+        "user_id": user_id,
+        "complainant_name": user_name,
+        "complainant_email": user_email,
+        "complainant_phone": user_phone,
         "is_anonymous": is_anonymous,
         "title": title,
         "description": description,

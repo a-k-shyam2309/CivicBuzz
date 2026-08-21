@@ -15,18 +15,22 @@ import {
   CheckCircle2,
   ChevronDown,
 } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout, switchDemoRole, isAdmin, isOfficer } = useAuth();
   const { notifications, unreadCount, markAsRead } = useNotifications();
+  const { language, changeLanguage, t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [demoMenuOpen, setDemoMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
@@ -37,12 +41,12 @@ export const Navbar = () => {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Report Issue', path: '/report-issue' },
-    { name: 'Track Grievances', path: '/track' },
-    { name: 'Public Feed', path: '/public-issues' },
-    { name: 'Projects & Budget', path: '/budgeting' },
-    { name: 'Tenders', path: '/tenders' },
+    { name: t.home || 'Home', path: '/' },
+    { name: t.reportIssue || 'Report Issue', path: '/report-issue' },
+    { name: t.trackGrievances || 'Track Grievances', path: '/track' },
+    { name: t.publicFeed || 'Public Feed', path: '/public-issues' },
+    { name: t.projectsBudget || 'Projects & Budget', path: '/budgeting' },
+    { name: t.tenders || 'Tenders', path: '/tenders' },
   ];
 
   return (
@@ -112,12 +116,72 @@ export const Navbar = () => {
 
           {/* Right Action Bar */}
           <div className="flex items-center gap-3">
+            {/* Multilingual Language Switcher (EN / HI / OR) */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-300 transition-all cursor-pointer"
+                title="Change Platform Language"
+              >
+                <Globe className="w-3.5 h-3.5 text-emerald-600" />
+                <span>
+                  {language === 'hi' ? 'हिन्दी' : language === 'or' ? 'ଓଡ଼ିଆ' : 'English'}
+                </span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-fadeIn">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 px-2 py-1 block">
+                    Select Language
+                  </span>
+                  <button
+                    onClick={() => {
+                      changeLanguage('en');
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
+                      language === 'en' ? 'bg-emerald-50 text-emerald-800 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>English (US/IN)</span>
+                    {language === 'en' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  </button>
+                  <button
+                    onClick={() => {
+                      changeLanguage('hi');
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
+                      language === 'hi' ? 'bg-emerald-50 text-emerald-800 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>हिन्दी (Hindi)</span>
+                    {language === 'hi' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  </button>
+                  <button
+                    onClick={() => {
+                      changeLanguage('or');
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center justify-between ${
+                      language === 'or' ? 'bg-emerald-50 text-emerald-800 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>ଓଡ଼ିଆ (Odia)</span>
+                    {language === 'or' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Quick Demo Role Switcher */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setDemoMenuOpen(!demoMenuOpen)}
-                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 transition-all"
+                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 transition-all cursor-pointer"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>Role: {user?.role || 'CITIZEN'}</span>

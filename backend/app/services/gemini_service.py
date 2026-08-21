@@ -217,7 +217,17 @@ def _generate_offline_chatbot_reply(
     msg_lower = user_message.lower()
 
     # 1. Citizen Ground Verification
-    if any(w in msg_lower for w in ["verification", "verify", "ground", "physical", "inspect", "dispute", "rating", "resolved", "reopen", "samadhan"]):
+    if any(w in msg_lower for w in ["verification", "verify", "ground", "physical", "inspect", "dispute", "rating", "resolved", "reopen", "samadhan", "pramana"]):
+        if language == "or" or "ଓଡ଼ିଆ" in user_message or "ସତ୍ୟାପନ" in user_message:
+            return (
+                "**ସିଭିକ୍‌ବଜ୍‌ରେ ନାଗରିକ ସ୍ଥଳ ସତ୍ୟାପନ (Citizen Ground Verification) କିପରି କାର୍ଯ୍ୟ କରେ:**\n\n"
+                "1. **ମରାମତି କାର୍ଯ୍ୟ**: ବିଭାଗୀୟ କର୍ମଚାରୀ ସମସ୍ୟାର ସମାଧାନ କରି 'Before & After' ଫଟୋ ପ୍ରମାଣ ଅପଲୋଡ୍ କରନ୍ତି।\n"
+                "2. **ସତ୍ୟାପନ ଅପେକ୍ଷା**: ଅଭିଯୋଗର ସ୍ଥିତି `READY_FOR_CITIZEN_VERIFICATION` କୁ ପରିବର୍ତ୍ତିତ ହୁଏ (ସରକାରୀ ବିଭାଗ ନିଜେ ଏହାକୁ ବନ୍ଦ କରିପାରିବେ ନାହିଁ!)।\n"
+                "3. **ସ୍ଥଳ ନିରୀକ୍ଷଣ**: ଆପଣ ଯାଞ୍ଚ କରିବା ପାଇଁ ଏକ ସୂଚନା ପାଇବେ।\n"
+                "4. **ନାଗରିକ ନିଷ୍ପତ୍ତି**:\n"
+                "   - **Problem Resolved**: ୧-୫ ଷ୍ଟାର୍ ରେଟିଂ ଦେଇ ସମାଧାନ ପ୍ରମାଣିତ କରନ୍ତୁ (`RESOLVED`), ଯାହାଦ୍ୱାରା ଏକ ପବ୍ଲିକ୍ QR କୋଡ୍ ଜାରି ହୁଏ।\n"
+                "   - **Not Resolved Properly**: ଅସନ୍ତୋଷର କାରଣ ଲେଖି ଅଭିଯୋଗକୁ ପୁନଃ ଖୋଲନ୍ତୁ (`RESOLUTION_REJECTED`), ଯାହା ତୁରନ୍ତ ଉଚ୍ଚ ଅଧିକାରୀଙ୍କ ନିକଟକୁ ଯାଏ।"
+            )
         if language == "hi":
             return (
                 "**सिविकबज़ पर नागरिक सत्यापन (Citizen Verification) कैसे काम करता है:**\n\n"
@@ -239,7 +249,17 @@ def _generate_offline_chatbot_reply(
         )
 
     # 2. Grievance Reporting / Potholes / Garbage / Streetlights
-    if any(w in msg_lower for w in ["report", "submit", "file", "pothole", "road", "garbage", "waste", "streetlight", "drain", "waterlog", "shikayat", "kaise"]):
+    if any(w in msg_lower for w in ["report", "submit", "file", "pothole", "road", "garbage", "waste", "streetlight", "drain", "waterlog", "shikayat", "kaise", "abhijoga"]):
+        if language == "or" or "ଅଭିଯୋଗ" in user_message:
+            return (
+                "**ଭୁବନେଶ୍ୱର ପୌର ନିଗମରେ ଅଭିଯୋଗ ଦାଖଲ କରିବା ପଦ୍ଧତି:**\n\n"
+                "1. ଉପରେ ଥିବା **'Report Issue (ଅଭିଯୋଗ କରନ୍ତୁ)'** ବଟନ୍ ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।\n"
+                "2. ଶ୍ରେଣୀ ଚୟନ କରନ୍ତୁ (ଯଥା: ରାସ୍ତା ଖାଲ, ଆବର୍ଜନା, ଷ୍ଟ୍ରିଟ୍ ଲାଇଟ୍, ଜଳ ନିଷ୍କାସନ)।\n"
+                "3. ସମସ୍ୟା ବିଷୟରେ ଲେଖନ୍ତୁ କିମ୍ବା ଓଡ଼ିଆରେ ଭଏସ୍ ନୋଟ୍ ରେକର୍ଡ କରନ୍ତୁ।\n"
+                "4. ଫଟୋ ପ୍ରମାଣ ଅପଲୋଡ୍ କରନ୍ତୁ (SHA-256 ଦ୍ୱାରା ପ୍ରମାଣିତ)।\n"
+                "5. ଭୁବନେଶ୍ୱର ମ୍ୟାପ୍‌ରେ ୱାର୍ଡ ପିନ୍ କରନ୍ତୁ କିମ୍ବା GPS ବ୍ୟବହାର କରନ୍ତୁ।\n"
+                "6. **Submit** କରନ୍ତୁ — Gemini AI ଏହାକୁ ସମ୍ପୃକ୍ତ ବିଭାଗକୁ ତୁରନ୍ତ ପଠାଇଦେବ!"
+            )
         if language == "hi":
             return (
                 "**सिविकबज़ पर नागरिक समस्या रिपोर्ट कैसे करें:**\n\n"
@@ -251,17 +271,25 @@ def _generate_offline_chatbot_reply(
                 "6. सबमिट करें — जेमिनी AI समस्या का विश्लेषण करके इसे संबंधित विभाग को अग्रेषित कर देगा!"
             )
         return (
-            "**How to Report a Civic Grievance on CivicBuzz:**\n\n"
+            "**How to Report a Civic Grievance on CivicBuzz (Bhubaneswar):**\n\n"
             "1. Click **'Report Issue'** in the navigation bar.\n"
             "2. Select your grievance category (Roads, Sanitation, Lighting, Drainage, Parks).\n"
-            "3. Describe the problem or record a multilingual voice note.\n"
+            "3. Describe the problem or record a multilingual voice note (English, Hindi, or Odia).\n"
             "4. Attach photo evidence (verified with SHA-256 cryptographic checksum).\n"
-            "5. Select your location using **'Use My Current Location'** (GPS) or pinpoint on the interactive map.\n"
+            "5. Select your location on the **Bhubaneswar Interactive Map** or use GPS.\n"
             "6. Click **Submit** — Gemini AI will classify urgency and route the ticket to your municipal ward department within seconds!"
         )
 
     # 3. Participatory Budgeting & Voting
-    if any(w in msg_lower for w in ["budget", "participatory", "vote", "voting", "project", "ranking", "tender", "paisa", "fund"]):
+    if any(w in msg_lower for w in ["budget", "participatory", "vote", "voting", "project", "ranking", "tender", "paisa", "fund", "bajet"]):
+        if language == "or":
+            return (
+                "**ସିଭିକ୍‌ବଜ୍ ଅଂଶଗ୍ରହଣକାରୀ ବଜେଟ୍ (Participatory Budgeting):**\n\n"
+                "- ନାଗରିକମାନେ ନିଜ ୱାର୍ଡର ପ୍ରକଳ୍ପ (ଯଥା: ଡ୍ରେନେଜ୍, ରାସ୍ତା ନିର୍ମାଣ, ସୋଲାର ଲାଇଟ୍) ଉପରେ ସିଧାସଳଖ ଭୋଟ୍ ଦିଅନ୍ତି।\n"
+                "- ପ୍ରତି ନାଗରିକ ୧ ଭୋଟ୍ ନିୟମ ଦ୍ୱାରା ସ୍ୱଚ୍ଛତା ବଜାୟ ରହେ।\n"
+                "- ସର୍ବାଧିକ ଭୋଟ୍ ପାଇଥିବା ପ୍ରକଳ୍ପ ପାଇଁ BMC ବଜେଟ୍ ମଞ୍ଜୁର କରି ସରକାରୀ ଟେଣ୍ଡର ଜାରି କରେ।\n"
+                "- ଭୋଟ୍ ଦେବା ପାଇଁ **'Projects & Budget'** ପୃଷ୍ଠା ପରିଦର୍ଶନ କରନ୍ତୁ!"
+            )
         if language == "hi":
             return (
                 "**सहभागी बजट (Participatory Budgeting) के बारे में:**\n\n"
@@ -279,29 +307,65 @@ def _generate_offline_chatbot_reply(
         )
 
     # 4. Tracking Grievance Progress
-    if any(w in msg_lower for w in ["track", "status", "check", "cb-", "progress", "stithi"]):
+    if any(w in msg_lower for w in ["track", "status", "check", "cb-", "progress", "stithi", "janiba"]):
         if referenced_ids:
             cid = referenced_ids[0]
+            if language == "or":
+                return f"ଅଭିଯୋଗ **#{cid}** ର ପ୍ରକୃତ ସମୟ ସ୍ଥିତି 'Track Grievances' ପେଜ୍‌ରେ ଦେଖିପାରିବେ। ଏଥିରେ ବିଭାଗୀୟ କାର୍ଯ୍ୟ ଏବଂ Before/After ଫଟୋ ଯାଞ୍ଚ କରିପାରିବେ।"
+            if language == "hi":
+                return f"शिकायत **#{cid}** की वास्तविक समय स्थिति 'Track Grievances' पेज पर उपलब्ध है। आप विभाग की प्रगति और Before/After फोटो देख सकते हैं।"
             return f"Grievance **#{cid}** is actively being tracked. You can view its real-time audit timeline, assigned department, and ground verification controls under the **'Track Grievances'** page."
+        if language == "or":
+            return "ଆପଣ **'Track Grievances'** ପୃଷ୍ଠାରେ ଆପଣଙ୍କର ସମସ୍ତ ଦାଖଲ ହୋଇଥିବା ଅଭିଯୋଗ ଯାଞ୍ଚ କରିପାରିବେ। କେବଳ ଅଭିଯୋଗ ନମ୍ବର (ଯଥା: `CB-1001`) ଲେଖନ୍ତୁ।"
         return (
             "You can track all your submitted complaints under the **'Track Grievances'** page. "
             "Simply enter your Complaint ID (e.g. `CB-1001`) to inspect real-time AI triage, field crew progress, before/after evidence, and ground verification status."
         )
 
-    # 5. Hindi Greetings / General
+    # 5. BMC Helpline & Emergency
+    if any(w in msg_lower for w in ["helpline", "emergency", "bmc", "phone", "contact", "sahajya"]):
+        if language == "or":
+            return (
+                "**ଭୁବନେଶ୍ୱର ମ୍ୟୁନିସିପାଲ୍ କର୍ପୋରେସନ୍ (BMC) ହେଲ୍ପଲାଇନ୍ ନମ୍ବର:**\n\n"
+                "• **BMC ଟୋଲ୍-ଫ୍ରି କଣ୍ଟ୍ରୋଲ୍ ରୁମ୍ (୨୪x୭)**: `1800-345-0061`\n"
+                "• **ରାସ୍ତା ମରାମତି ଏମର୍ଜେନ୍ସି**: `1912`\n"
+                "• **ସଫେଇ ଓ ଆବର୍ଜନା ନିଷ୍କାସନ**: `0674-2431253`\n"
+                "• **ଇମେଲ୍**: `grievances@civicbuzz.odisha.gov.in`"
+            )
+        return (
+            "**Bhubaneswar Municipal Corporation (BMC) Helplines:**\n\n"
+            "• **BMC 24x7 Toll-Free Control Room**: `1800-345-0061`\n"
+            "• **Road Remediation Emergency**: `1912`\n"
+            "• **Solid Waste & Sanitation**: `0674-2431253`\n"
+            "• **Email**: `grievances@civicbuzz.odisha.gov.in`"
+        )
+
+    # 6. Odia Greetings & General Overview
+    if language == "or" or any(w in msg_lower for w in ["namaskar", "odia", "kemiti"]):
+        return (
+            "ନମସ୍କାର! ମୁଁ ସିଭିକ୍‌ବଜ୍ AI ସହାୟକ। 🙏 ମୁଁ ଆପଣଙ୍କୁ ନିମ୍ନଲିଖିତ ବିଷୟରେ ସାହାଯ୍ୟ କରିପାରିବି:\n\n"
+            "• **ଅଭିଯୋଗ ଦାଖଲ**: ଫଟୋ ଓ ଭୁବନେଶ୍ୱର GPS ସହିତ ଅଭିଯୋଗ କିପରି କରିବେ।\n"
+            "• **ସ୍ଥଳ ସତ୍ୟାପନ**: କାର୍ଯ୍ୟ ସମାପ୍ତ ହେବା ପରେ କିପରି ଯାଞ୍ଚ କରିବେ।\n"
+            "• **ଟ୍ରାକିଂ**: ଅଭିଯୋଗର ସ୍ଥିତି ଏବଂ ସମୟସୀମା ଯାଞ୍ଚ।\n"
+            "• **ଅଂଶଗ୍ରହଣକାରୀ ବଜେଟ୍**: ନୂତନ ପ୍ରକଳ୍ପ ପାଇଁ ଭୋଟ୍ ଦେବା।\n\n"
+            "ଆଜି ମୁଁ ଆପଣଙ୍କୁ କିପରି ସାହାଯ୍ୟ କରିପାରିବି?"
+        )
+
+    # 7. Hindi Greetings / General
     if language == "hi" or any(w in msg_lower for w in ["namaste", "hindi", "kya", "madad"]):
         return (
             "नमस्ते! मैं सिविकबज़ AI सहायक हूँ। 🙏 मैं आपकी नागरिक समस्याओं को रिपोर्ट करने, शिकायत की स्थिति ट्रैक करने, "
             "नागरिक सत्यापन को समझने और सहभागी बजट में मतदान करने में मदद कर सकता हूँ। आप मुझसे क्या पूछना चाहते हैं?"
         )
 
-    # 6. Default Helpful Overview
+    # 8. Default Overview
     return (
         "Hello! I am your CivicBuzz AI Assistant. I can assist you with:\n\n"
-        "• **Reporting Issues**: How to submit grievances with photo & GPS evidence.\n"
-        "• **Ground Verification**: How citizens verify repairs before tickets are closed.\n"
-        "• **Tracking**: Checking real-time complaint timelines and department assignments.\n"
-        "• **Participatory Budgeting**: Voting on public community projects and tenders.\n\n"
+        "• **Reporting Issues**: Submitting grievances with photo & Bhubaneswar GPS evidence.\n"
+        "• **Ground Verification**: How citizens inspect and verify repairs before tickets close.\n"
+        "• **Tracking**: Checking real-time complaint timelines and department work.\n"
+        "• **Participatory Budgeting**: Voting on community proposals and municipal tenders.\n"
+        "• **BMC Helplines**: Toll-free emergency contacts (`1800-345-0061`).\n\n"
         "How can I assist you today?"
     )
 
