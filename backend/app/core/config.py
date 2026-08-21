@@ -38,7 +38,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: Optional[str] = None
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_MODEL: str = "gemini-1.5-flash"
 
     # Storage & Evidence
     STORAGE_PROVIDER: str = "local"  # 'local', 'cloudinary', 's3'

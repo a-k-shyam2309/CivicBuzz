@@ -8,10 +8,14 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserRegisterRequest(BaseModel):
     email: EmailStr
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=6)
     full_name: str = Field(..., min_length=2)
     phone_number: Optional[str] = None
     role: Optional[str] = "CITIZEN"
+    aadhaar_number: Optional[str] = None
+    is_aadhaar_verified: Optional[bool] = False
+    aadhaar_masked: Optional[str] = None
+    department_code: Optional[str] = None
 
 
 class UserLoginRequest(BaseModel):

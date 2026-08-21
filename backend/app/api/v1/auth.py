@@ -58,8 +58,20 @@ async def register(
         raise DuplicateResourceException("An account with this email already exists.")
 
     role_val = UserRole.CITIZEN
-    if payload.role and payload.role.upper() == "ADMIN":
-        role_val = UserRole.ADMIN
+    if payload.role:
+        r = payload.role.upper().strip()
+        if r in ["ADMIN", "SUPER_ADMIN", "MUNICIPAL_ADMIN"]:
+            role_val = UserRole.ADMIN
+        elif r in ["OFFICER", "DEPARTMENT_OFFICER", "DEPARTMENT_HEAD"]:
+            role_val = UserRole.OFFICER
+
+    is_aadhaar_ver = bool(payload.is_aadhaar_verified)
+    aadhaar_mask = payload.aadhaar_masked
+    if payload.aadhaar_number:
+        clean_adh = str(payload.aadhaar_number).replace("-", "").replace(" ", "").strip()
+        if len(clean_adh) >= 4:
+            aadhaar_mask = f"XXXX-XXXX-{clean_adh[-4:]}"
+            is_aadhaar_ver = True
 
     user_uid = f"USR-{payload.email.split('@')[0].upper()[:8]}-{datetime.now().strftime('%M%S')}"
 
@@ -71,7 +83,9 @@ async def register(
         phone_number=payload.phone_number,
         role=role_val,
         is_active=True,
-        is_verified=False,
+        is_verified=is_aadhaar_ver,
+        is_aadhaar_verified=is_aadhaar_ver,
+        aadhaar_masked=aadhaar_mask,
     )
     db.add(new_user)
     await db.commit()
@@ -87,7 +101,7 @@ async def register(
         entity_id=str(new_user.id),
         actor_id=str(new_user.id),
         actor_role=new_user.role.value,
-        metadata={"email": new_user.email, "role": new_user.role.value},
+        metadata={"email": new_user.email, "role": new_user.role.value, "is_aadhaar_verified": is_aadhaar_ver},
     )
 
     data = TokenResponse(
@@ -123,9 +137,13 @@ async def login(
             detail="Account is disabled. Please contact municipal support.",
         )
 
-    # If user selected Admin role in frontend switch, ensure they have administrative permissions
-    if payload.role and payload.role.lower() == "admin" and user.role not in [UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OFFICER]:
-        # Promote in hackathon demo if admin requested on special email, else allow role verification
+    # Dynamic role promotion for demo accounts
+    req_role = (payload.role or "citizen").lower().strip()
+    if req_role in ["officer", "department_head"] and user.role not in [UserRole.OFFICER, UserRole.DEPARTMENT_HEAD, UserRole.ADMIN, UserRole.SUPER_ADMIN]:
+        if "officer" in user.email.lower() or "dept" in user.email.lower():
+            user.role = UserRole.OFFICER
+            await db.commit()
+    elif req_role in ["admin", "super_admin"] and user.role not in [UserRole.ADMIN, UserRole.SUPER_ADMIN]:
         if "admin" in user.email.lower():
             user.role = UserRole.ADMIN
             await db.commit()

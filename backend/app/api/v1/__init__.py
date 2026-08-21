@@ -14,6 +14,7 @@ from app.api.v1.votes import router as votes_router
 from app.api.v1.tenders import router as tenders_router
 from app.api.v1.public import router as public_router
 from app.api.v1.admin import router as admin_router
+from app.api.v1.department import router as department_router
 from app.api.v1.contact import router as contact_router
 from app.api.v1.notifications import router as notifications_router
 
@@ -30,5 +31,6 @@ api_router.include_router(votes_router)
 api_router.include_router(tenders_router)
 api_router.include_router(public_router)
 api_router.include_router(admin_router)
+api_router.include_router(department_router)
 api_router.include_router(contact_router)
 api_router.include_router(notifications_router)

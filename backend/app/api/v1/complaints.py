@@ -85,6 +85,65 @@ async def create_complaint(
     )
 
 
+@router.get("", response_model=APIResponse[List[Dict[str, Any]]])
+async def list_complaints(
+    category: Optional[str] = None,
+    ward_id: Optional[int] = None,
+    status: Optional[str] = None,
+    department_code: Optional[str] = None,
+    priority: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = Query(50, ge=1, le=200),
+    skip: int = Query(0, ge=0),
+    current_user: Optional[User] = Depends(get_optional_user),
+    mongo_db: AsyncIOMotorDatabase = Depends(get_mongo_db),
+):
+    """
+    List civic grievances with filtering support.
+    Sanitizes privacy for public/anonymous records.
+    """
+    query: Dict[str, Any] = {}
+    if category:
+        query["category"] = category.upper()
+    if ward_id:
+        query["location.ward_id"] = ward_id
+    if status:
+        query["status"] = status.upper()
+    if department_code:
+        query["department_code"] = department_code.upper()
+    if priority:
+        query["priority.level"] = priority.upper()
+    if search:
+        query["$or"] = [
+            {"title": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}},
+            {"complaint_id": {"$regex": search, "$options": "i"}},
+        ]
+
+    cursor = mongo_db.complaints.find(query).sort("created_at", -1).skip(skip).limit(limit)
+    docs = await cursor.to_list(length=limit)
+
+    is_privileged = current_user and current_user.role in [
+        UserRole.ADMIN,
+        UserRole.SUPER_ADMIN,
+        UserRole.DEPARTMENT_HEAD,
+        UserRole.OFFICER,
+    ]
+
+    results = []
+    for d in docs:
+        d_copy = dict(d)
+        d_copy.pop("_id", None)
+        if not is_privileged and (not current_user or current_user.id != d_copy.get("user_id")):
+            if d_copy.get("is_anonymous", True):
+                d_copy["complainant_name"] = "Anonymous Citizen"
+                d_copy["complainant_email"] = None
+                d_copy["complainant_phone"] = None
+        results.append(d_copy)
+
+    return APIResponse(data=results)
+
+
 @router.get("/my/list", response_model=APIResponse[List[Dict[str, Any]]])
 async def get_my_complaints(
     current_user: User = Depends(get_current_user),
@@ -147,6 +206,58 @@ async def get_complaint_detail(
     """Fetch complaint details with privacy sanitization."""
     doc = await get_complaint_by_id(complaint_id, mongo_db, current_user)
     return APIResponse(data=doc)
+
+
+@router.patch("/{complaint_id}", response_model=APIResponse[Dict[str, Any]])
+async def update_complaint(
+    complaint_id: str,
+    payload: ComplaintStatusUpdateRequest,
+    current_user: User = Depends(require_officer),
+    mongo_db: AsyncIOMotorDatabase = Depends(get_mongo_db),
+):
+    """
+    Update complaint status or add officer progress notes.
+    CRITICAL RULE: Officers/Departments CANNOT directly mark as RESOLVED.
+    """
+    new_status = payload.status.upper() if payload.status else None
+
+    if new_status == "RESOLVED":
+        raise UnauthorizedException(
+            "Departments and Officers cannot mark complaints as RESOLVED. "
+            "Please use /submit-resolution to mark work completed; the citizen must verify resolution."
+        )
+
+    doc = await mongo_db.complaints.find_one({"complaint_id": complaint_id})
+    if not doc:
+        raise EntityNotFoundException("Complaint", complaint_id)
+
+    from datetime import datetime, timezone
+    timestamp = datetime.now(timezone.utc).isoformat()
+
+    updates: Dict[str, Any] = {"updated_at": timestamp}
+    if new_status:
+        updates["status"] = new_status
+
+    timeline_entry = {
+        "step": f"Status updated to {new_status or doc.get('status')}",
+        "status": new_status or doc.get("status"),
+        "timestamp": timestamp,
+        "actor_role": current_user.role.value,
+        "notes": payload.notes or "Status update by department officer.",
+    }
+
+    await mongo_db.complaints.update_one(
+        {"complaint_id": complaint_id},
+        {
+            "$set": updates,
+            "$push": {"timeline": timeline_entry},
+        },
+    )
+
+    return APIResponse(
+        message=f"Complaint #{complaint_id} updated successfully.",
+        data={"complaint_id": complaint_id, "status": new_status or doc.get("status")},
+    )
 
 
 @router.post("/{complaint_id}/submit-resolution", response_model=APIResponse[Dict[str, Any]])

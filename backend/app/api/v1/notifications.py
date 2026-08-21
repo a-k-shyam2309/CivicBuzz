@@ -27,6 +27,7 @@ async def get_user_notifications(
 
 
 @router.post("/{notification_id}/read", response_model=APIResponse[Dict[str, Any]])
+@router.patch("/{notification_id}/read", response_model=APIResponse[Dict[str, Any]])
 async def mark_notification_read(
     notification_id: str,
     current_user: User = Depends(get_current_user),

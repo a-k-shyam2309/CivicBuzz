@@ -117,3 +117,35 @@ async def test_citizen_dispute_and_reopen(client):
     )
     assert reject_resp.status_code == 200
     assert reject_resp.json()["data"]["status"] == "RESOLUTION_REJECTED"
+
+
+@pytest.mark.asyncio
+async def test_department_cannot_directly_set_resolved(client):
+    adm_login = await client.post("/api/v1/auth/login", json={
+        "email": "admin@civicbuzz.in",
+        "password": "Admin@123",
+        "role": "admin",
+    })
+    adm_token = adm_login.json()["data"]["access_token"]
+
+    # Submit complaint
+    create_resp = await client.post(
+        "/api/v1/complaints",
+        json={
+            "description": "Streetlight flickering and off on Janpath road.",
+            "latitude": 20.2961,
+            "longitude": 85.8245,
+        },
+        headers={"Authorization": f"Bearer {adm_token}"},
+    )
+    cid = create_resp.json()["data"]["complaint_id"]
+
+    # Attempt to directly mark status = RESOLVED via PATCH
+    patch_resp = await client.patch(
+        f"/api/v1/complaints/{cid}",
+        json={"status": "RESOLVED", "notes": "Officer trying to bypass citizen check"},
+        headers={"Authorization": f"Bearer {adm_token}"},
+    )
+    # Must be rejected (401 or 403 or error)
+    assert patch_resp.status_code in [400, 401, 403]
+
