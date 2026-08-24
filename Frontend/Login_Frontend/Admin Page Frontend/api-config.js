@@ -5,8 +5,8 @@
  */
 
 var API_CONFIG = window.API_CONFIG || {
-  BASE_URL: "http://localhost:8000/api/v1",
-  TIMEOUT_MS: 3000,
+  BASE_URL: "https://civicbuzz-backend-deel.onrender.com/api/v1",
+  TIMEOUT_MS: 10000,
 };
 window.API_CONFIG = API_CONFIG;
 
