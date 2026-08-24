@@ -802,23 +802,77 @@ body.dark-mode .view-all-button {
 	font-weight: 700;
 }
 
-.total-card .summary-number { color: #246bfd; }
-.total-card .summary-icon { background: #eaf1ff; color: #246bfd; }
-.progress-card .summary-number { color: #ed9d13; }
-.progress-card .summary-icon { background: #fff4dc; color: #ed9d13; }
-.resolved-card .summary-number { color: #16a765; }
-.resolved-card .summary-icon { background: #e5f8ee; color: #16a765; }
-.rejected-card .summary-number { color: #dc3434; }
-.rejected-card .summary-icon { background: #ffe8e8; color: #dc3434; }
+.total-card .summary-number {
+	color: #246bfd;
+}
 
-body.dark-mode .total-card .summary-number { color: #f5c542; }
-body.dark-mode .total-card .summary-icon { background: #3e351b; color: #f5c542; }
-body.dark-mode .progress-card .summary-number { color: #f5c542; }
-body.dark-mode .progress-card .summary-icon { background: #3e351b; color: #f5c542; }
-body.dark-mode .resolved-card .summary-number { color: #64d99a; }
-body.dark-mode .resolved-card .summary-icon { background: #173d31; color: #64d99a; }
-body.dark-mode .rejected-card .summary-number { color: #ff7777; }
-body.dark-mode .rejected-card .summary-icon { background: #452525; color: #ff7777; }
+.total-card .summary-icon {
+	background: #eaf1ff;
+	color: #246bfd;
+}
+
+.progress-card .summary-number {
+	color: #ed9d13;
+}
+
+.progress-card .summary-icon {
+	background: #fff4dc;
+	color: #ed9d13;
+}
+
+.resolved-card .summary-number {
+	color: #16a765;
+}
+
+.resolved-card .summary-icon {
+	background: #e5f8ee;
+	color: #16a765;
+}
+
+.rejected-card .summary-number {
+	color: #dc3434;
+}
+
+.rejected-card .summary-icon {
+	background: #ffe8e8;
+	color: #dc3434;
+}
+
+body.dark-mode .total-card .summary-number {
+	color: #f5c542;
+}
+
+body.dark-mode .total-card .summary-icon {
+	background: #3e351b;
+	color: #f5c542;
+}
+
+body.dark-mode .progress-card .summary-number {
+	color: #f5c542;
+}
+
+body.dark-mode .progress-card .summary-icon {
+	background: #3e351b;
+	color: #f5c542;
+}
+
+body.dark-mode .resolved-card .summary-number {
+	color: #64d99a;
+}
+
+body.dark-mode .resolved-card .summary-icon {
+	background: #173d31;
+	color: #64d99a;
+}
+
+body.dark-mode .rejected-card .summary-number {
+	color: #ff7777;
+}
+
+body.dark-mode .rejected-card .summary-icon {
+	background: #452525;
+	color: #ff7777;
+}
 
 /* =========================================================
    RECENT COMPLAINTS TABLE
@@ -879,15 +933,45 @@ body.dark-mode .complaints-table thead {
 	font-weight: 700;
 }
 
-.status-progress { background: #fff3d8; color: #d88b08; }
-.status-resolved { background: #e3f8eb; color: #159957; }
-.status-rejected { background: #ffe6e6; color: #d83333; }
-.status-open { background: #e8f0ff; color: #246bfd; }
+.status-progress {
+	background: #fff3d8;
+	color: #d88b08;
+}
 
-body.dark-mode .status-progress { background: #3d3419; color: #f5c542; }
-body.dark-mode .status-resolved { background: #173d31; color: #69dca0; }
-body.dark-mode .status-rejected { background: #452525; color: #ff7777; }
-body.dark-mode .status-open { background: #172f55; color: #80aaff; }
+.status-resolved {
+	background: #e3f8eb;
+	color: #159957;
+}
+
+.status-rejected {
+	background: #ffe6e6;
+	color: #d83333;
+}
+
+.status-open {
+	background: #e8f0ff;
+	color: #246bfd;
+}
+
+body.dark-mode .status-progress {
+	background: #3d3419;
+	color: #f5c542;
+}
+
+body.dark-mode .status-resolved {
+	background: #173d31;
+	color: #69dca0;
+}
+
+body.dark-mode .status-rejected {
+	background: #452525;
+	color: #ff7777;
+}
+
+body.dark-mode .status-open {
+	background: #172f55;
+	color: #80aaff;
+}
 
 .view-complaint-button {
 	width: 36px;
@@ -1103,9 +1187,11 @@ body.dark-mode .track-search-icon {
 	0% {
 		box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
 	}
+
 	70% {
 		box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
 	}
+
 	100% {
 		box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
 	}
@@ -1287,12 +1373,29 @@ body.dark-mode .track-search-icon {
 	line-height: 1;
 }
 
-.civic-marker-pin.cat-roads { background: #ef4444; }
-.civic-marker-pin.cat-lights { background: #f59e0b; }
-.civic-marker-pin.cat-water { background: #0284c7; }
-.civic-marker-pin.cat-sanitation { background: #10b981; }
-.civic-marker-pin.cat-parks { background: #16a34a; }
-.civic-marker-pin.cat-infra { background: #8b5cf6; }
+.civic-marker-pin.cat-roads {
+	background: #ef4444;
+}
+
+.civic-marker-pin.cat-lights {
+	background: #f59e0b;
+}
+
+.civic-marker-pin.cat-water {
+	background: #0284c7;
+}
+
+.civic-marker-pin.cat-sanitation {
+	background: #10b981;
+}
+
+.civic-marker-pin.cat-parks {
+	background: #16a34a;
+}
+
+.civic-marker-pin.cat-infra {
+	background: #8b5cf6;
+}
 
 /* User Geolocation Pulse Marker */
 .user-geo-pulse {
@@ -1309,9 +1412,11 @@ body.dark-mode .track-search-icon {
 	0% {
 		box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
 	}
+
 	70% {
 		box-shadow: 0 0 0 16px rgba(37, 99, 235, 0);
 	}
+
 	100% {
 		box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
 	}
@@ -1649,9 +1754,11 @@ body.dark-mode .track-search-icon {
 	.nearby-content {
 		grid-template-columns: 1fr;
 	}
+
 	.nearby-map-wrapper {
 		height: 340px;
 	}
+
 	.nearby-list-wrapper {
 		height: 360px;
 	}
@@ -2141,12 +2248,15 @@ body.dark-mode .toast {
 	.client-dashboard {
 		width: calc(100% - 32px);
 	}
+
 	.summary-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
+
 	.nearby-content {
 		grid-template-columns: 1fr;
 	}
+
 	.footer-content {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 40px;
@@ -2157,6 +2267,7 @@ body.dark-mode .toast {
 	.nav-links {
 		display: none;
 	}
+
 	.navbar.menu-open .nav-links {
 		display: flex;
 		flex-direction: column;
@@ -2170,13 +2281,16 @@ body.dark-mode .toast {
 		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 		align-items: stretch;
 	}
+
 	.mobile-menu-btn {
 		display: flex;
 	}
+
 	.hero-slider {
 		height: 70vh !important;
 		min-height: 450px !important;
 	}
+
 	.hero-content {
 		left: 40px;
 		width: 75%;
@@ -2187,88 +2301,58 @@ body.dark-mode .toast {
 	.navbar {
 		padding: 0 16px;
 	}
+
 	.client-dashboard {
 		width: calc(100% - 20px);
 		padding-top: 16px;
 	}
+
 	.hero-slider {
 		height: 65vh !important;
 		min-height: 400px !important;
 	}
+
 	.hero-content {
 		left: 20px;
 		right: 20px;
 		width: auto;
 	}
+
 	.hero-content h1 {
 		font-size: 28px;
 	}
+
 	.hero-content p {
 		font-size: 14px;
 	}
+
 	.summary-grid {
 		grid-template-columns: 1fr 1fr;
 		gap: 10px;
 	}
+
 	.track-complaint-section {
 		flex-direction: column;
 		padding: 20px;
 		gap: 16px;
 	}
+
 	.track-illustration {
 		display: none;
 	}
+
 	.footer-content {
 		grid-template-columns: 1fr;
 		gap: 30px;
 	}
+
 	.footer-stats {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 20px 0;
 	}
+
 	.footer-bottom {
 		flex-direction: column;
 		text-align: center;
 	}
-}
-
-/* =====================================================
-   CITIZEN VERIFICATION BANNER & MODAL STYLES
-   ===================================================== */
-.verification-alert-banner {
-	animation: pulseBanner 2.5s infinite alternate ease-in-out;
-}
-
-@keyframes pulseBanner {
-	0% { box-shadow: 0 4px 14px rgba(245, 158, 11, 0.1); }
-	100% { box-shadow: 0 6px 22px rgba(245, 158, 11, 0.22); }
-}
-
-.star-item {
-	transition: transform 0.15s ease, color 0.15s ease;
-	user-select: none;
-}
-.star-item:hover {
-	transform: scale(1.25);
-}
-
-.verify-cta-btn {
-	background: linear-gradient(135deg, #059669 0%, #047857 100%);
-	color: #fff !important;
-	border: none;
-	padding: 4px 10px;
-	border-radius: 6px;
-	font-size: 11px;
-	font-weight: 700;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	text-decoration: none;
-	box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
-	transition: transform 0.15s ease;
-}
-.verify-cta-btn:hover {
-	transform: translateY(-1px);
-	box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
 }

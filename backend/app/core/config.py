@@ -3,9 +3,12 @@ CivicBuzz Application Configuration
 Loads environment variables and sets sensible defaults for all services.
 """
 
+import os
 from typing import List, Optional, Union
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class Settings(BaseSettings):
@@ -42,7 +45,7 @@ class Settings(BaseSettings):
 
     # Storage & Evidence
     STORAGE_PROVIDER: str = "local"  # 'local', 'cloudinary', 's3'
-    UPLOAD_DIR: str = "uploads"
+    UPLOAD_DIR: str = os.path.join(_BACKEND_DIR, "uploads")
     MAX_UPLOAD_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB
     ALLOWED_IMAGE_MIME_TYPES: List[str] = [
         "image/jpeg",
