@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: civicbuzz-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=development
+      - POSTGRES_URL=postgresql+asyncpg://postgres:postgres@db:5432/civicbuzz
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_DB_NAME=civicbuzz
+      - JWT_SECRET_KEY=civicbuzz-super-secure-production-jwt-secret-key-32chars
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500,http://127.0.0.1:8000
+    depends_on:
+      - db
+      - mongo
+    volumes:
+      - ./backend/uploads:/app/uploads
+
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: civicbuzz-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=civicbuzz
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7.0
+    container_name: civicbuzz-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  pgdata:
+  mongodata:
