@@ -111,10 +111,11 @@ function applyFilters() {
 
     // Status filter
     if (currentStatusFilter !== 'ALL') {
-      if (currentStatusFilter === 'RESOLVED' && s !== 'RESOLVED') return false;
-      if (currentStatusFilter === 'SUBMITTED' && s !== 'SUBMITTED') return false;
+      if (currentStatusFilter === 'READY_FOR_CITIZEN_VERIFICATION' && s !== 'READY_FOR_CITIZEN_VERIFICATION') return false;
+      if (currentStatusFilter === 'RESOLVED' && s !== 'RESOLVED' && s !== 'VERIFIED') return false;
+      if (currentStatusFilter === 'SUBMITTED' && s !== 'SUBMITTED' && s !== 'PENDING') return false;
       if (currentStatusFilter === 'ASSIGNED' && s !== 'ASSIGNED') return false;
-      if (currentStatusFilter === 'IN_PROGRESS' && (s === 'RESOLVED' || s === 'REJECTED')) return false;
+      if (currentStatusFilter === 'IN_PROGRESS' && !['IN_PROGRESS', 'PROGRESS'].includes(s)) return false;
     }
 
     // Search query filter
@@ -200,7 +201,7 @@ function renderComplaintCards() {
     const isInProgress = ['IN_PROGRESS', 'READY_FOR_CITIZEN_VERIFICATION', 'RESOLVED'].includes(statusVal);
     const isAssigned = ['ASSIGNED', 'IN_PROGRESS', 'READY_FOR_CITIZEN_VERIFICATION', 'RESOLVED'].includes(statusVal);
 
-    const statusBadgeClass = isResolved ? 'chip-status-resolved' : statusVal === 'IN_PROGRESS' ? 'chip-status-progress' : 'chip-status-reported';
+    const statusBadgeClass = isResolved ? 'chip-status-resolved' : (isReadyForVerify ? 'chip-status-verification' : (statusVal === 'IN_PROGRESS' ? 'chip-status-progress' : 'chip-status-reported'));
     const statusDisplayText = isReadyForVerify ? 'Ready for Verification' : statusVal.replace(/_/g, ' ');
 
     const wardName = c.ward_label || c.ward || c.location?.ward_name || 'Ward 12 · Janpath';
@@ -259,6 +260,11 @@ function renderComplaintCards() {
             🏛️ ${dept} &middot; ⏱️ SLA: ${c.sla_hours || 48}h
           </div>
           <div style="display:flex; gap:8px; align-items:center;">
+            ${isReadyForVerify ? `
+              <a href="details.html?id=${encodeURIComponent(c.complaint_id)}" onclick="event.stopPropagation()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; text-decoration:none; border-radius:6px; padding:5px 12px; font-size:11.5px; font-weight:700; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 6px rgba(5,150,105,0.3);" title="Verify on-site resolution">
+                ✓ Verify Fix
+              </a>
+            ` : ''}
             <button onclick="event.stopPropagation(); upvoteComplaint('${c.complaint_id}')" style="background:rgba(217, 119, 6, 0.1); color:#B45309; border:1px solid rgba(217, 119, 6, 0.3); border-radius:6px; padding:5px 10px; font-size:11.5px; font-weight:700; cursor:pointer;" title="Upvote issue urgency">
               👍 Upvote (<span id="upvote_cnt_${c.complaint_id}">${upvotes}</span>)
             </button>

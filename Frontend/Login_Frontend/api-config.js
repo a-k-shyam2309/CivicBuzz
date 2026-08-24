@@ -947,11 +947,39 @@ const ComplaintStore = {
     const item = list.find((c) => c.complaint_id === complaintId || c.complaint_id === `#${complaintId}` || c.complaint_id?.replace("#", "") === complaintId?.replace("#", ""));
     if (!item) return null;
 
-    item.status = newStatus.toUpperCase();
+    const normalizedStatus = newStatus.toUpperCase();
+    item.status = normalizedStatus;
     const now = new Date().toISOString();
-    if (newStatus.toUpperCase() === "RESOLVED" || newStatus.toUpperCase() === "VERIFIED") {
+
+    if (normalizedStatus === "READY_FOR_CITIZEN_VERIFICATION") {
+      item.ready_for_citizen_verification = true;
+      item.citizen_confirmed_resolved = false;
+      if (typeof NotificationStore !== "undefined" && NotificationStore.add) {
+        NotificationStore.add({
+          complaint_id: String(item.complaint_id || "").replace("#", ""),
+          title: `🔔 Grievance #${String(item.complaint_id || "").replace("#", "")} Ready for Verification`,
+          message: `Municipal repairs for "${item.title || "your reported issue"}" are completed. Please inspect on-site and confirm resolution.`,
+          type: "READY_FOR_VERIFICATION",
+          status: "READY_FOR_CITIZEN_VERIFICATION"
+        });
+      }
+    } else if (normalizedStatus === "RESOLVED" || normalizedStatus === "VERIFIED") {
       item.resolved_at = now;
       item.is_overdue = false;
+      item.citizen_confirmed_resolved = true;
+      item.ready_for_citizen_verification = false;
+      if (typeof NotificationStore !== "undefined" && NotificationStore.add) {
+        NotificationStore.add({
+          complaint_id: String(item.complaint_id || "").replace("#", ""),
+          title: `🎉 Grievance #${String(item.complaint_id || "").replace("#", "")} Resolved & Closed`,
+          message: `Citizen verification confirmed! Grievance "${item.title || "reported issue"}" is now officially closed.`,
+          type: "RESOLVED",
+          status: "RESOLVED"
+        });
+      }
+    } else if (normalizedStatus === "RESOLUTION_REJECTED") {
+      item.citizen_confirmed_resolved = false;
+      item.ready_for_citizen_verification = false;
     }
 
     if (!item.timeline) item.timeline = [];
@@ -961,6 +989,90 @@ const ComplaintStore = {
       timestamp: now,
       notes: notes || `Updated by Administrator.`
     });
+
+    this.saveAll(list);
+    return item;
+  },
+
+  verifyResolution(complaintId, rating = 5, comments = "", citizenName = "Citizen") {
+    const list = this.getAll();
+    const item = list.find((c) => {
+      const cId = String(c.complaint_id || c.id || "").trim().replace("#", "").toLowerCase();
+      const targetId = String(complaintId || "").trim().replace("#", "").toLowerCase();
+      return cId === targetId || cId.endsWith(targetId) || targetId.endsWith(cId);
+    });
+    if (!item) return null;
+
+    const now = new Date().toISOString();
+    item.status = "RESOLVED";
+    item.citizen_confirmed_resolved = true;
+    item.ready_for_citizen_verification = false;
+    item.resolved_at = now;
+    item.is_overdue = false;
+    item.resolution_verification = {
+      verified_by: citizenName,
+      rating: Number(rating) || 5,
+      comments: comments || "Citizen verified on-site fix.",
+      resolved: true,
+      verified_at: now
+    };
+
+    if (!item.timeline) item.timeline = [];
+    item.timeline.push({
+      step: "Citizen Confirmed Resolution",
+      status: "RESOLVED",
+      timestamp: now,
+      actor_role: "CITIZEN",
+      notes: `Citizen verified repair (${rating}/5 ⭐). Feedback: '${comments || "Satisfactory work confirmed."}'`
+    });
+
+    if (typeof NotificationStore !== "undefined" && NotificationStore.add) {
+      NotificationStore.add({
+        complaint_id: String(item.complaint_id || "").replace("#", ""),
+        title: `🎉 Grievance #${String(item.complaint_id || "").replace("#", "")} Resolution Confirmed`,
+        message: `You confirmed resolution for "${item.title}". Public transparency QR audit trail published.`,
+        type: "RESOLVED",
+        status: "RESOLVED"
+      });
+    }
+
+    this.saveAll(list);
+    return item;
+  },
+
+  rejectResolution(complaintId, reason = "", citizenName = "Citizen") {
+    const list = this.getAll();
+    const item = list.find((c) => {
+      const cId = String(c.complaint_id || c.id || "").trim().replace("#", "").toLowerCase();
+      const targetId = String(complaintId || "").trim().replace("#", "").toLowerCase();
+      return cId === targetId || cId.endsWith(targetId) || targetId.endsWith(cId);
+    });
+    if (!item) return null;
+
+    const now = new Date().toISOString();
+    item.status = "RESOLUTION_REJECTED";
+    item.citizen_confirmed_resolved = false;
+    item.ready_for_citizen_verification = false;
+    item.dispute_reason = reason;
+
+    if (!item.timeline) item.timeline = [];
+    item.timeline.push({
+      step: "Citizen Disputed Resolution",
+      status: "RESOLUTION_REJECTED",
+      timestamp: now,
+      actor_role: "CITIZEN",
+      notes: `Citizen rejected resolution: '${reason || "Repair work incomplete."}'. Escalated for department rework.`
+    });
+
+    if (typeof NotificationStore !== "undefined" && NotificationStore.add) {
+      NotificationStore.add({
+        complaint_id: String(item.complaint_id || "").replace("#", ""),
+        title: `⚠️ Grievance #${String(item.complaint_id || "").replace("#", "")} Reopened for Rework`,
+        message: `Dispute recorded for "${item.title}". Department notified for immediate rework.`,
+        type: "REJECTED",
+        status: "RESOLUTION_REJECTED"
+      });
+    }
 
     this.saveAll(list);
     return item;
@@ -2943,7 +3055,7 @@ const CivicBuzzAPI = {
       return { data: doc };
     },
     async verifyResolution(id, rating = 5, comments = "") {
-      ComplaintStore.updateStatus(id, "RESOLVED", `Citizen verified resolution (Rating: ${rating}/5). Comments: ${comments}`);
+      ComplaintStore.verifyResolution(id, rating, comments);
       try {
         await CivicBuzzAPI.request(`/complaints/${id}/verify-resolution?rating=${rating}&comments=${encodeURIComponent(comments)}`, {
           method: "POST",
@@ -2952,7 +3064,7 @@ const CivicBuzzAPI = {
       return { message: "Resolution verified." };
     },
     async rejectResolution(id, reason = "") {
-      ComplaintStore.updateStatus(id, "IN_PROGRESS", `Citizen disputed resolution: ${reason}`);
+      ComplaintStore.rejectResolution(id, reason);
       try {
         await CivicBuzzAPI.request(`/complaints/${id}/reject-resolution?reason=${encodeURIComponent(reason)}`, {
           method: "POST",
@@ -3192,7 +3304,7 @@ const CivicBuzzAPI = {
     },
     async complaintAction(complaintId, action, departmentCode = null, notes = "") {
       let targetStatus = "PENDING";
-      if (action === "RESOLVE") targetStatus = "RESOLVED";
+      if (action === "RESOLVE") targetStatus = "READY_FOR_CITIZEN_VERIFICATION";
       else if (action === "ASSIGN") targetStatus = "ASSIGNED";
       else if (action === "REJECT") targetStatus = "REJECTED";
 

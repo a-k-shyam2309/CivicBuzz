@@ -351,33 +351,67 @@
 			const prog = complaints.filter(c => ["IN_PROGRESS", "PROGRESS", "ASSIGNED"].includes(c.status)).length;
 			const resolved = complaints.filter(c => ["RESOLVED", "VERIFIED"].includes(c.status)).length;
 			const pending = complaints.filter(c => ["SUBMITTED", "PENDING"].includes(c.status)).length;
+			const readyForVerifyList = complaints.filter(c => c.status === "READY_FOR_CITIZEN_VERIFICATION");
 
 			if (totalEl) totalEl.textContent = total;
 			if (progEl) progEl.textContent = prog;
 			if (resEl) resEl.textContent = resolved;
 			if (pendEl) pendEl.textContent = pending;
 
+			// Verification Alert Banner Check
+			const verifyBanner = document.getElementById("citizenVerificationBanner");
+			const verifyBadge = document.getElementById("verificationCountBadge");
+			const verifyText = document.getElementById("verificationBannerText");
+			const btnVerifyBanner = document.getElementById("btnOpenVerificationModal");
+
+			if (verifyBanner) {
+				if (readyForVerifyList.length > 0) {
+					verifyBanner.style.display = "block";
+					if (verifyBadge) verifyBadge.textContent = readyForVerifyList.length;
+					const firstComp = readyForVerifyList[0];
+					const firstId = String(firstComp.complaint_id || "").replace("#", "");
+					if (verifyText) {
+						verifyText.innerHTML = `Municipal department has completed repairs for <strong>#${firstId} ("${escapeHtml(firstComp.title || "Civic Issue")}")</strong>. Physical inspection and sign-off is required before the ticket can be closed.`;
+					}
+					if (btnVerifyBanner) {
+						btnVerifyBanner.onclick = () => openCitizenVerificationModal(firstComp);
+					}
+				} else {
+					verifyBanner.style.display = "none";
+				}
+			}
+
 			// Populate Recent Complaints Table
 			const tableBody = document.querySelector(".complaints-table tbody");
 			if (tableBody) {
-				tableBody.innerHTML = complaints.slice(0, 5).map(c => {
-					const cid = c.complaint_id || "CB-1024";
-					const statusClass = c.status === "RESOLVED" || c.status === "VERIFIED" ? "status-resolved" : (c.status === "IN_PROGRESS" ? "status-progress" : "status-pending");
-					const statusLabel = c.status === "READY_FOR_CITIZEN_VERIFICATION" ? "Ready for Verification" : (c.status || "Submitted").replace(/_/g, " ");
+				tableBody.innerHTML = complaints.slice(0, 6).map(c => {
+					const cid = String(c.complaint_id || "CB-1024").replace("#", "");
+					const isReady = c.status === "READY_FOR_CITIZEN_VERIFICATION";
+					const statusClass = c.status === "RESOLVED" || c.status === "VERIFIED" ? "status-resolved" : (isReady ? "status-verification" : (c.status === "IN_PROGRESS" ? "status-progress" : "status-pending"));
+					const statusLabel = isReady ? "Ready for Verification" : (c.status || "Submitted").replace(/_/g, " ");
 					const dateStr = (c.created_at || "18 Aug 2026").slice(0, 10);
 					const loc = c.location?.ward_name || c.approximate_location || c.ward || "Janpath, Ward 12";
 
 					return `
 						<tr>
 							<td><strong>#${cid}</strong></td>
-							<td>${c.title}</td>
-							<td><span class="location-text">📍 ${loc}</span></td>
-							<td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+							<td>${escapeHtml(c.title || "Civic Issue")}</td>
+							<td><span class="location-text">📍 ${escapeHtml(loc)}</span></td>
+							<td>
+								<span class="status-badge ${statusClass}">${statusLabel}</span>
+							</td>
 							<td>${dateStr}</td>
 							<td>
-								<button class="view-complaint-button" type="button" data-issue="${cid}" aria-label="View #${cid}" onclick="window.location.href='Track_complaints_Frontend/details.html?id=${encodeURIComponent(cid)}'">
-									👁
-								</button>
+								<div style="display:flex; gap:6px; align-items:center;">
+									${isReady ? `
+										<button class="verify-cta-btn" type="button" data-issue="${cid}" onclick='openCitizenVerificationModalById("${cid}")'>
+											✓ Verify
+										</button>
+									` : ''}
+									<button class="view-complaint-button" type="button" data-issue="${cid}" aria-label="View #${cid}" onclick="window.location.href='Track_complaints_Frontend/details.html?id=${encodeURIComponent(cid)}'">
+										👁
+									</button>
+								</div>
 							</td>
 						</tr>
 					`;
@@ -893,15 +927,146 @@
 		} catch (_) {}
 	}
 
+	// =====================================================
+	// CITIZEN RESOLUTION VERIFICATION MODAL LOGIC
+	// =====================================================
+	let currentVerifyingComplaint = null;
+
+	window.openCitizenVerificationModalById = function(cid) {
+		const cleanId = String(cid).replace("#", "");
+		const allComps = window.ComplaintStore?.getAll ? window.ComplaintStore.getAll() : complaintsList;
+		const found = allComps.find(c => String(c.complaint_id || c.id || "").replace("#", "") === cleanId);
+		if (found) {
+			openCitizenVerificationModal(found);
+		} else {
+			window.location.href = `Track_complaints_Frontend/details.html?id=${encodeURIComponent(cleanId)}`;
+		}
+	};
+
+	function openCitizenVerificationModal(c) {
+		currentVerifyingComplaint = c;
+		const modal = document.getElementById("citizenVerifyModal");
+		if (!modal || !c) return;
+
+		const cid = String(c.complaint_id || c.id || "CB-1045").replace("#", "");
+		document.getElementById("verifyModalComplaintId").value = cid;
+		document.getElementById("modalVerifyCid").textContent = `#${cid}`;
+		document.getElementById("modalVerifyHeading").textContent = c.title || "Civic Grievance";
+		document.getElementById("modalVerifyDesc").textContent = c.work_description || c.description || "Remediation completed by municipal unit. Complainant verification required.";
+
+		const fallbackBefore = window.ComplaintStore?.getCategoryFallback ? window.ComplaintStore.getCategoryFallback(c.category) : "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80";
+		const beforeImg = document.getElementById("modalVerifyBeforeImg");
+		if (beforeImg) {
+			beforeImg.src = (c.image_url && !c.image_url.includes("1584992236310")) ? c.image_url : fallbackBefore;
+		}
+
+		const afterImg = document.getElementById("modalVerifyAfterImg");
+		if (afterImg) {
+			afterImg.src = c.after_image_url || c.resolution_image_url || "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=600&q=80";
+		}
+
+		setModalStarRating(5);
+		const commentBox = document.getElementById("verifyFeedbackComments");
+		if (commentBox) commentBox.value = "";
+
+		modal.style.display = "flex";
+	}
+
+	function closeCitizenVerificationModal() {
+		const modal = document.getElementById("citizenVerifyModal");
+		if (modal) modal.style.display = "none";
+	}
+
+	function setModalStarRating(rating) {
+		const valInput = document.getElementById("verifyStarRatingValue");
+		if (valInput) valInput.value = rating;
+
+		const ratingText = document.getElementById("starRatingText");
+		const labels = {
+			1: "1 / 5 Stars — Poor Work (Dispute Recommended)",
+			2: "2 / 5 Stars — Unsatisfactory",
+			3: "3 / 5 Stars — Acceptable / Fair",
+			4: "4 / 5 Stars — Good Work",
+			5: "5 / 5 Stars — Excellent Work & Fix"
+		};
+		if (ratingText) ratingText.textContent = labels[rating] || `${rating} / 5 Stars`;
+
+		const stars = document.querySelectorAll("#starRatingContainer .star-item");
+		stars.forEach((s) => {
+			const r = Number(s.dataset.rating);
+			s.style.color = r <= rating ? "#f59e0b" : "#cbd5e1";
+		});
+	}
+
+	function setupCitizenVerificationModal() {
+		const closeBtn = document.getElementById("btnCloseCitizenVerifyModal");
+		if (closeBtn) closeBtn.onclick = closeCitizenVerificationModal;
+
+		const stars = document.querySelectorAll("#starRatingContainer .star-item");
+		stars.forEach(star => {
+			star.onclick = () => {
+				const r = Number(star.dataset.rating) || 5;
+				setModalStarRating(r);
+			};
+		});
+
+		const btnConfirm = document.getElementById("btnConfirmInModal");
+		if (btnConfirm) {
+			btnConfirm.onclick = async () => {
+				const cid = document.getElementById("verifyModalComplaintId")?.value;
+				if (!cid) return;
+				const rating = Number(document.getElementById("verifyStarRatingValue")?.value) || 5;
+				const comments = document.getElementById("verifyFeedbackComments")?.value?.trim() || "Citizen on-site inspection confirmed.";
+
+				try {
+					if (window.CivicBuzzAPI?.complaints?.verifyResolution) {
+						await window.CivicBuzzAPI.complaints.verifyResolution(cid, rating, comments);
+					} else if (window.ComplaintStore?.verifyResolution) {
+						window.ComplaintStore.verifyResolution(cid, rating, comments);
+					}
+				} catch (_) {}
+
+				closeCitizenVerificationModal();
+				showToast(`✓ Resolution confirmed! Grievance #${cid} verified and officially closed.`);
+				loadHomeComplaints();
+				loadNearbyComplaints();
+			};
+		}
+
+		const btnDispute = document.getElementById("btnDisputeInModal");
+		if (btnDispute) {
+			btnDispute.onclick = async () => {
+				const cid = document.getElementById("verifyModalComplaintId")?.value;
+				if (!cid) return;
+				const comments = document.getElementById("verifyFeedbackComments")?.value?.trim() || "Repair work incomplete upon citizen on-site inspection.";
+
+				try {
+					if (window.CivicBuzzAPI?.complaints?.rejectResolution) {
+						await window.CivicBuzzAPI.complaints.rejectResolution(cid, comments);
+					} else if (window.ComplaintStore?.rejectResolution) {
+						window.ComplaintStore.rejectResolution(cid, comments);
+					}
+				} catch (_) {}
+
+				closeCitizenVerificationModal();
+				showToast(`Dispute logged. Grievance #${cid} reopened for rework.`);
+				loadHomeComplaints();
+				loadNearbyComplaints();
+			};
+		}
+	}
+
 	// Initialize dashboard features on DOM ready
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", () => {
 			initNearbyMap();
 			loadHomeComplaints();
+			setupCitizenVerificationModal();
 		});
 	} else {
 		initNearbyMap();
 		loadHomeComplaints();
+		setupCitizenVerificationModal();
 	}
 
 	console.log("CivicBuzz Client Dashboard loaded with Live Interactive Map Radar.");

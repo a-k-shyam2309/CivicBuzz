@@ -1016,11 +1016,16 @@
       this.src = fallbackImg;
     };
 
+    const deptPhotoBox = document.getElementById('deptPhotoBox');
     const deptImg = document.getElementById('dDeptImg');
     if (c.after_image_url || c.resolution_image_url) {
-      deptImg.src = c.after_image_url || c.resolution_image_url;
+      if (deptImg) deptImg.src = c.after_image_url || c.resolution_image_url;
+      if (deptPhotoBox) deptPhotoBox.style.display = 'block';
+    } else if (isReadyForVerify || isResolved) {
+      if (deptImg) deptImg.src = 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80';
+      if (deptPhotoBox) deptPhotoBox.style.display = 'block';
     } else {
-      deptImg.src = 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80';
+      if (deptPhotoBox) deptPhotoBox.style.display = 'none';
     }
 
     const verificationBox = document.getElementById('verificationActionBox');
@@ -1178,8 +1183,8 @@
       try {
         if (window.CivicBuzzAPI?.complaints?.verifyResolution) {
           await window.CivicBuzzAPI.complaints.verifyResolution(cid, 5, 'Citizen on-site inspection verified.');
-        } else if (window.ComplaintStore?.updateStatus) {
-          window.ComplaintStore.updateStatus(cid, 'RESOLVED', 'Citizen physically verified resolution (Rating: 5/5).');
+        } else if (window.ComplaintStore?.verifyResolution) {
+          window.ComplaintStore.verifyResolution(cid, 5, 'Citizen on-site inspection verified.');
         }
         showToast('✓ Resolution confirmed! This grievance is now publicly marked RESOLVED.');
         loadComplaintDetails();
@@ -1201,8 +1206,8 @@
       try {
         if (window.CivicBuzzAPI?.complaints?.rejectResolution) {
           await window.CivicBuzzAPI.complaints.rejectResolution(cid, reason);
-        } else if (window.ComplaintStore?.updateStatus) {
-          window.ComplaintStore.updateStatus(cid, 'IN_PROGRESS', `Citizen disputed resolution: ${reason}`);
+        } else if (window.ComplaintStore?.rejectResolution) {
+          window.ComplaintStore.rejectResolution(cid, reason);
         }
         showToast('Dispute recorded. Issue reopened for department rework.');
         loadComplaintDetails();

@@ -1040,11 +1040,16 @@
       this.src = fallbackImg;
     };
 
+    const deptPhotoBox = document.getElementById('deptPhotoBox');
     const deptImg = document.getElementById('dDeptImg');
     if (c.after_image_url || c.resolution_image_url) {
-      deptImg.src = c.after_image_url || c.resolution_image_url;
+      if (deptImg) deptImg.src = c.after_image_url || c.resolution_image_url;
+      if (deptPhotoBox) deptPhotoBox.style.display = 'block';
+    } else if (isReadyForVerify || isResolved) {
+      if (deptImg) deptImg.src = 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80';
+      if (deptPhotoBox) deptPhotoBox.style.display = 'block';
     } else {
-      deptImg.src = 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80';
+      if (deptPhotoBox) deptPhotoBox.style.display = 'none';
     }
 
     const verificationBox = document.getElementById('verificationActionBox');
@@ -1053,7 +1058,7 @@
     }
 
     // Render Citizen On-Site Public Verification QR Code
-    const isResolvedOrVerified = rawStatus.includes('resolv') || rawStatus.includes('verif') || isReadyForVerify;
+    const isResolvedOrVerified = statusVal.toLowerCase().includes('resolv') || statusVal.toLowerCase().includes('verif') || isReadyForVerify;
     const citizenQrBox = document.getElementById('citizenResolvedQrBox');
     const citizenQrImg = document.getElementById('dResolvedQrImg');
     if (citizenQrBox && citizenQrImg) {
@@ -1078,11 +1083,11 @@
         if (btnDownload) {
           btnDownload.onclick = () => {
             const a = document.createElement('a');
-            a.href = citizenQrImg.src;
+            a.href = qrApiUrl;
             a.download = `CivicBuzz-Verification-QR-${cid}.png`;
             a.target = '_blank';
             a.click();
-            showToast('📥 Verification QR saved!');
+            showToast('📥 QR Code downloaded!');
           };
         }
       } else {

@@ -4483,6 +4483,9 @@ body.dark-theme .brand-mark {
 .status-badge.progress,
 .status-badge.in-progress,
 .status-badge.in { background: var(--purple-soft); color: var(--purple); }
+.status-badge.ready_for_citizen_verification,
+.status-badge.ready-for-verification,
+.status-badge.verification { background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); }
 .status-badge.resolved { background: var(--green-soft); color: var(--green); }
 .status-badge.verified,
 .status-badge.closed { background: rgba(16, 185, 129, 0.15); color: #059669; }

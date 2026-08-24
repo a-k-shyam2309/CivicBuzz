@@ -1424,23 +1424,55 @@ function openIssueDetails(issueData) {
       pPri.className = `priority-badge ${(issueData.priority || "high").toLowerCase()}`;
       pPri.textContent = issueData.priority || "High";
     }
-    if (pSt) {
-      pSt.className = `status-badge ${(issueData.status || "pending").toLowerCase()}`;
-      pSt.textContent = issueData.status || "Pending";
-    }
-    if (pAss) pAss.textContent = issueData.dept || "Roads & Potholes Department";
-    if (pDesc) pDesc.textContent = issueData.desc || "Reported civic issue awaiting verification and triage.";
-
-    // Populate AI Triage Audit Fields
-    const pAiSummary = $("#panelAiSummary");
-    const pAiUrgency = $("#panelAiUrgencyChip");
-    const pAiSla = $("#panelAiSla");
-    const pAiPbBadge = $("#panelAiPbBadge");
-
     let matchDoc = null;
     if (window.ComplaintStore?.getAll) {
       const allComps = window.ComplaintStore.getAll();
       matchDoc = allComps.find(c => (c.complaint_id || "").replace("#", "") === currentActiveIssueId);
+    }
+
+    const currentStatus = (matchDoc?.status || issueData.status || "pending").toUpperCase();
+    if (pSt) {
+      if (currentStatus === "READY_FOR_CITIZEN_VERIFICATION") {
+        pSt.className = "status-badge ready_for_citizen_verification verification";
+        pSt.textContent = "Ready for Verification";
+      } else if (currentStatus === "RESOLVED" || currentStatus === "VERIFIED") {
+        pSt.className = "status-badge resolved";
+        pSt.textContent = "Resolved ✓";
+      } else if (currentStatus === "IN_PROGRESS" || currentStatus === "PROGRESS") {
+        pSt.className = "status-badge in-progress";
+        pSt.textContent = "In Progress";
+      } else if (currentStatus === "REJECTED") {
+        pSt.className = "status-badge rejected";
+        pSt.textContent = "Rejected";
+      } else {
+        pSt.className = "status-badge pending";
+        pSt.textContent = "Pending";
+      }
+    }
+
+    const verRep = $("#verRep");
+    if (verRep) {
+      if (currentStatus === "RESOLVED" || currentStatus === "VERIFIED") {
+        verRep.textContent = "Verified by Citizen ✓";
+        verRep.className = "ver-badge verified";
+      } else if (currentStatus === "READY_FOR_CITIZEN_VERIFICATION") {
+        verRep.textContent = "Awaiting Verification ⏳";
+        verRep.className = "ver-badge pending";
+      } else {
+        verRep.textContent = "Unverified";
+        verRep.className = "ver-badge";
+      }
+    }
+
+    const resolveBtn = $("#resolveIssueBtn");
+    if (resolveBtn) {
+      if (currentStatus === "READY_FOR_CITIZEN_VERIFICATION") {
+        resolveBtn.textContent = "⏳ Awaiting Verification";
+      } else if (currentStatus === "RESOLVED" || currentStatus === "VERIFIED") {
+        resolveBtn.textContent = "✓ Resolved & Verified";
+      } else {
+        resolveBtn.textContent = "✓ Mark Resolved";
+      }
     }
 
     if (pAiSummary) {
@@ -1637,24 +1669,59 @@ function openIssueDetails(issueData) {
     loadLiveComplaints();
   });
 
-  $("#resolveIssueBtn")?.addEventListener("click", async () => {
-    if (!currentActiveIssueId) return;
-    const cleanId = currentActiveIssueId.replace("#", "");
-    const title = $("#panelTitle")?.textContent || "Reported Issue";
+  const resModal = $("#resolutionModal");
+  const resForm = $("#resolutionForm");
+  const closeResModalBtn = $("#closeResolutionModal");
+  const cancelResModalBtn = $("#cancelResolutionModal");
 
-    // 1. Update Complaint Store
+  function openResolutionModal(cleanId, issueTitle) {
+    if (!resModal) return;
+    const idInput = $("#resolutionIssueId");
+    const descInput = $("#resolutionWorkDesc");
+    const imgInput = $("#resolutionAfterImage");
+    if (idInput) idInput.value = cleanId;
+    if (descInput) descInput.value = `Field repairs completed for "${issueTitle}". Surface restored and verified safe for public access.`;
+    if (imgInput) imgInput.value = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80";
+    resModal.hidden = false;
+    resModal.classList.add("active");
+  }
+
+  function closeResolutionModal() {
+    if (!resModal) return;
+    resModal.hidden = true;
+    resModal.classList.remove("active");
+  }
+
+  closeResModalBtn?.addEventListener("click", closeResolutionModal);
+  cancelResModalBtn?.addEventListener("click", closeResolutionModal);
+
+  resForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const cleanId = $("#resolutionIssueId")?.value || (currentActiveIssueId ? currentActiveIssueId.replace("#", "") : "");
+    if (!cleanId) return;
+    const title = $("#panelTitle")?.textContent || "Reported Issue";
+    const workDesc = $("#resolutionWorkDesc")?.value?.trim() || "Remediation completed by department.";
+    const afterImg = $("#resolutionAfterImage")?.value?.trim() || "";
+
+    closeResolutionModal();
+
+    // 1. Update Complaint Store to READY_FOR_CITIZEN_VERIFICATION
     if (window.ComplaintStore?.update) {
       window.ComplaintStore.update(cleanId, {
-        status: "RESOLVED",
-        resolved_at: new Date().toISOString(),
-        progress_percentage: 100
+        status: "READY_FOR_CITIZEN_VERIFICATION",
+        ready_for_citizen_verification: true,
+        citizen_confirmed_resolved: false,
+        after_image_url: afterImg,
+        resolution_image_url: afterImg,
+        work_description: workDesc,
+        progress_percentage: 95
       });
       window.ComplaintStore.addTimelineEvent(cleanId, {
-        action: "Marked Resolved",
-        notes: "Remediation completed by municipal department. Citizen verification QR code generated.",
+        action: "Work Completed by Department",
+        notes: `${workDesc} — Awaiting citizen physical verification.`,
         actor: "Admin (Aditya Kumar Shyam)",
         role: "Administrator",
-        status: "RESOLVED"
+        status: "READY_FOR_CITIZEN_VERIFICATION"
       });
     }
 
@@ -1662,36 +1729,62 @@ function openIssueDetails(issueData) {
     if (window.NotificationStore?.add) {
       window.NotificationStore.add({
         complaint_id: cleanId,
-        title: `🎉 Grievance #${cleanId} Resolved!`,
-        message: `Municipal repairs for "${title}" are completed. Please scan the QR code to verify on-site.`,
-        type: "RESOLVED",
-        status: "RESOLVED"
+        title: `🔔 Grievance #${cleanId} Ready for Verification`,
+        message: `Municipal repairs for "${title}" are completed. Please inspect on-site and confirm resolution.`,
+        type: "READY_FOR_VERIFICATION",
+        status: "READY_FOR_CITIZEN_VERIFICATION"
       });
     }
 
+    // 3. Dispatch to backend
     if (window.CivicBuzzAPI?.admin?.complaintAction) {
       try {
-        await window.CivicBuzzAPI.admin.complaintAction(cleanId, "RESOLVE");
+        await window.CivicBuzzAPI.admin.complaintAction(cleanId, "RESOLVE", null, workDesc);
       } catch (_) {}
     }
 
-    showToast(`✓ Issue #${cleanId} marked as Resolved! QR verification code generated & citizen notified.`);
-    renderResolvedQrCode(cleanId, "RESOLVED");
+    showToast(`✓ Issue #${cleanId} marked as Work Completed! Citizen notified to verify resolution.`);
+    renderResolvedQrCode(cleanId, "READY_FOR_CITIZEN_VERIFICATION");
 
     const pSt = $("#panelStatus");
     if (pSt) {
-      pSt.className = "status-badge resolved";
-      pSt.textContent = "Resolved";
+      pSt.className = "status-badge ready_for_citizen_verification verification";
+      pSt.textContent = "Ready for Verification";
     }
     const verRep = $("#verRep");
     if (verRep) {
-      verRep.textContent = "Verified ✓";
-      verRep.className = "ver-badge verified";
+      verRep.textContent = "Awaiting Verification ⏳";
+      verRep.className = "ver-badge pending";
+    }
+
+    const resolveBtn = $("#resolveIssueBtn");
+    if (resolveBtn) {
+      resolveBtn.textContent = "⏳ Awaiting Citizen Verification";
     }
 
     renderRealMetricsAndStats();
     updateTrendChart($("#trendRange")?.value || "week");
     loadLiveComplaints();
+  });
+
+  $("#resolveIssueBtn")?.addEventListener("click", async () => {
+    if (!currentActiveIssueId) return;
+    const cleanId = currentActiveIssueId.replace("#", "");
+    const title = $("#panelTitle")?.textContent || "Reported Issue";
+
+    const matchDoc = window.ComplaintStore?.getById ? window.ComplaintStore.getById(cleanId) : null;
+    const curStatus = (matchDoc?.status || "").toUpperCase();
+
+    if (curStatus === "READY_FOR_CITIZEN_VERIFICATION") {
+      showToast(`⏳ Issue #${cleanId} is currently waiting for citizen on-site verification.`);
+      return;
+    }
+    if (curStatus === "RESOLVED" || curStatus === "VERIFIED") {
+      showToast(`✓ Issue #${cleanId} is already verified and confirmed resolved.`);
+      return;
+    }
+
+    openResolutionModal(cleanId, title);
   });
 
   async function loadLiveComplaints() {

@@ -119,14 +119,13 @@ a {
 .brand {
 	display: flex;
 	align-items: center;
-	gap: 10px;
 	text-decoration: none;
 	flex-shrink: 0;
 }
 
 .brand-mark {
-	width: 44px;
-	height: 44px;
+	width: 64px;
+	height: 64px;
 	border-radius: 10px;
 	display: flex;
 	align-items: center;
@@ -2231,4 +2230,45 @@ body.dark-mode .toast {
 		flex-direction: column;
 		text-align: center;
 	}
+}
+
+/* =====================================================
+   CITIZEN VERIFICATION BANNER & MODAL STYLES
+   ===================================================== */
+.verification-alert-banner {
+	animation: pulseBanner 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseBanner {
+	0% { box-shadow: 0 4px 14px rgba(245, 158, 11, 0.1); }
+	100% { box-shadow: 0 6px 22px rgba(245, 158, 11, 0.22); }
+}
+
+.star-item {
+	transition: transform 0.15s ease, color 0.15s ease;
+	user-select: none;
+}
+.star-item:hover {
+	transform: scale(1.25);
+}
+
+.verify-cta-btn {
+	background: linear-gradient(135deg, #059669 0%, #047857 100%);
+	color: #fff !important;
+	border: none;
+	padding: 4px 10px;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 700;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	text-decoration: none;
+	box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+	transition: transform 0.15s ease;
+}
+.verify-cta-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
 }

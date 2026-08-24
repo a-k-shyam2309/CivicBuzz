@@ -1115,6 +1115,56 @@
 	</aside>
 
 	<!-- =========================================================
+	     MODAL: SUBMIT RESOLUTION FOR CITIZEN VERIFICATION
+	     ========================================================= -->
+	<div class="modal-overlay" id="resolutionModal" hidden>
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="resolutionModalTitle" style="max-width:560px;">
+			<div class="modal-header">
+				<div>
+					<p class="eyebrow" style="color:var(--emerald-dark, #059669);"><i class="fa-solid fa-clipboard-check"></i> RESOLUTION WORKFLOW</p>
+					<h2 id="resolutionModalTitle">Submit Work for Citizen Verification</h2>
+				</div>
+				<button class="close-button" id="closeResolutionModal" aria-label="Close">×</button>
+			</div>
+
+			<div style="background:rgba(59, 130, 246, 0.08); border-left:4px solid #3b82f6; padding:12px 14px; border-radius:8px; margin-bottom:16px; font-size:12.5px; color:var(--ink); line-height:1.45;">
+				<strong style="color:#2563eb; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+					<i class="fa-solid fa-shield-halved"></i> Civic Verification Policy
+				</strong>
+				In accordance with CivicBuzz transparency rules, the Admin cannot directly close a complaint. This action transitions the status to <strong>Ready for Citizen Verification</strong>. The reporting citizen will inspect the site and confirm or dispute resolution.
+			</div>
+
+			<form id="resolutionForm">
+				<input type="hidden" id="resolutionIssueId" value="" />
+				
+				<div class="form-group" style="margin-bottom:14px;">
+					<label for="resolutionWorkDesc" style="font-weight:600; font-size:13px; margin-bottom:6px; display:block;">
+						Remediation Work Description *
+					</label>
+					<textarea id="resolutionWorkDesc" rows="3" placeholder="Detail the physical repairs completed (e.g., Pothole filled with cold asphalt mix, leveled and steam-rolled)..." required style="width:100%; border-radius:8px; border:1px solid var(--border); padding:10px 12px; font-size:13px; font-family:inherit; background:var(--surface); color:var(--ink); resize:vertical;"></textarea>
+				</div>
+
+				<div class="form-group" style="margin-bottom:16px;">
+					<label for="resolutionAfterImage" style="font-weight:600; font-size:13px; margin-bottom:6px; display:block;">
+						After-Repair Photographic Proof URL (Optional)
+					</label>
+					<input id="resolutionAfterImage" type="url" placeholder="https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80" style="width:100%; height:42px; border-radius:8px; border:1px solid var(--border); padding:0 12px; font-size:13px; background:var(--surface); color:var(--ink);" />
+					<small style="color:var(--text-secondary); font-size:11.5px; margin-top:4px; display:block;">
+						Provide photo proof URL or leave default municipal completion evidence.
+					</small>
+				</div>
+
+				<div class="modal-actions" style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; border-top:1px solid var(--border); padding-top:14px;">
+					<button type="button" class="btn btn-secondary" id="cancelResolutionModal">Cancel</button>
+					<button type="submit" class="btn btn-primary" id="confirmSubmitResolutionBtn" style="background:#059669; border-color:#059669; color:#fff;">
+						✓ Submit &amp; Notify Citizen
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- =========================================================
 	     MODAL: ADD DEPARTMENT
 	     ========================================================= -->
 	<div class="modal-overlay" id="departmentModal" hidden>

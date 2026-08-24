@@ -24,7 +24,7 @@ from app.schemas.evidence import (
     DepartmentCreateRequest,
     DepartmentResponse,
 )
-from app.services.audit_service import record_audit_event
+from app.services.audit_service import record_audit_event, NotificationService
 from app.services.qr_service import generate_qr_code_image
 
 router = APIRouter(prefix="/admin", tags=["Administrator Dashboard"])
@@ -382,7 +382,7 @@ async def create_department(
 @router.post("/complaints/{complaint_id}/action", response_model=APIResponse[Dict[str, Any]])
 async def perform_complaint_action(
     complaint_id: str,
-    action: str = Query(..., description="Action: ASSIGN, REJECT, IN_PROGRESS, RESOLVE"),
+    action: str = Query(..., description="Action: ASSIGN, REJECT, IN_PROGRESS, RESOLVE, CLOSE"),
     department_code: Optional[str] = Query(None),
     notes: Optional[str] = Query(None),
     mongo_db: AsyncIOMotorDatabase = Depends(get_mongo_db),
@@ -396,11 +396,15 @@ async def perform_complaint_action(
     timestamp = datetime.now(timezone.utc).isoformat()
     action_upper = action.upper()
 
+    if action_upper == "CLOSE" and not doc.get("citizen_confirmed_resolved"):
+        raise ValidationException("Complaint cannot be closed without citizen verification and confirmation of resolution.")
+
     status_map = {
         "ASSIGN": "ASSIGNED",
         "IN_PROGRESS": "IN_PROGRESS",
         "RESOLVE": "READY_FOR_CITIZEN_VERIFICATION",
         "REJECT": "REJECTED",
+        "CLOSE": "CLOSED",
     }
     new_status = status_map.get(action_upper, "ASSIGNED")
 
@@ -413,17 +417,21 @@ async def perform_complaint_action(
             dept_name = dept.name
 
     timeline_entry = {
-        "step": f"Admin Action: {action_upper.replace('_', ' ').title()}",
+        "step": "Work Completed (Awaiting Citizen Verification)" if action_upper == "RESOLVE" else f"Admin Action: {action_upper.replace('_', ' ').title()}",
         "status": new_status,
         "timestamp": timestamp,
         "actor_role": "ADMIN",
-        "notes": notes or f"Administrative triage: {action_upper} applied.",
+        "notes": notes or ("Remediation completed by department. Awaiting citizen physical verification." if action_upper == "RESOLVE" else f"Administrative triage: {action_upper} applied."),
     }
 
     update_fields: Dict[str, Any] = {
         "status": new_status,
         "updated_at": timestamp,
     }
+    if action_upper == "RESOLVE":
+        update_fields["ready_for_citizen_verification"] = True
+        update_fields["citizen_confirmed_resolved"] = False
+
     if department_code:
         update_fields["department_code"] = department_code
         update_fields["department_name"] = dept_name
@@ -436,6 +444,18 @@ async def perform_complaint_action(
         },
     )
 
+    if action_upper == "RESOLVE":
+        user_id = doc.get("user_id", 0)
+        ward_name = doc.get("location", {}).get("ward_name", "Ward")
+        title = doc.get("title", "Civic Grievance")
+        await NotificationService.notify_resolution_ready(
+            mongo_db=mongo_db,
+            user_id=user_id,
+            complaint_id=complaint_id,
+            title=title,
+            ward_name=ward_name,
+        )
+
     await record_audit_event(
         mongo_db=mongo_db,
         action=f"ADMIN_COMPLAINT_{action_upper}",
@@ -447,6 +467,6 @@ async def perform_complaint_action(
     )
 
     return APIResponse(
-        message=f"Complaint #{complaint_id} updated to {new_status}.",
+        message=f"Complaint #{complaint_id} updated to {new_status}." if action_upper != "RESOLVE" else f"Complaint #{complaint_id} marked as work completed. Citizen notified for verification.",
         data={"complaint_id": complaint_id, "status": new_status, "department_name": dept_name},
     )

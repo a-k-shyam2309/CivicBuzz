@@ -283,6 +283,7 @@ h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; }
 .chip-status-reported { background: var(--amber-soft); color: var(--amber); }
 .chip-status-acknowledged { background: var(--blue-soft); color: #1d4ed8; }
 .chip-status-progress { background: var(--amber-soft); color: var(--amber); }
+.chip-status-verification { background: rgba(147, 51, 234, 0.15); color: #7c3aed; border: 1px solid rgba(147, 51, 234, 0.3); font-weight: 700; }
 .chip-status-resolved { background: var(--green-soft); color: var(--green); }
 
 .tracker { display: flex; align-items: flex-start; margin-top: 16px; }
