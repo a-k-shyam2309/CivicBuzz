@@ -8,7 +8,7 @@
 	"use strict";
 
 	// API Configuration
-	const API_BASE = "http://localhost:8000/api/v1";
+	const API_BASE = (window.API_CONFIG && window.API_CONFIG.BASE_URL) ? window.API_CONFIG.BASE_URL : "https://civicbuzz-backend-deel.onrender.com/api/v1";
 
 	// Application State
 	const state = {
