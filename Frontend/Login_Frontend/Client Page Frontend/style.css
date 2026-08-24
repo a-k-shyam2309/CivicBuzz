@@ -119,14 +119,13 @@ a {
 .brand {
 	display: flex;
 	align-items: center;
-	gap: 10px;
 	text-decoration: none;
 	flex-shrink: 0;
 }
 
 .brand-mark {
-	width: 44px;
-	height: 44px;
+	width: 64px;
+	height: 64px;
 	border-radius: 10px;
 	display: flex;
 	align-items: center;
