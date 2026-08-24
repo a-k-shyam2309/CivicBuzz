@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="CivicBuzz Geospatial Incident Map and Hotspots Intelligence Dashboard" />
+	<title>CivicBuzz • Map & Hotspots Intelligence</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		referrerpolicy="no-referrer" />
+
+	<!-- Leaflet CSS for Map Rendering -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+	<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+	<div class="app-shell">
+		<!-- Sidebar Navigation (Same as Admin Portal) -->
+		<aside class="sidebar" id="sidebar" aria-label="Admin navigation">
+			<div class="brand">
+				<div class="brand-mark">
+					<img src="../Assets/Logo.png" alt="CivicBuzz Logo">
+				</div>
+				<span class="brand-name">CivicBuzz</span>
+			</div>
+
+			<nav class="main-nav">
+				<a class="nav-link" href="../index.html#dashboard" data-section="Dashboard">
+					<span>⌂</span> <span data-i18n="Dashboard">Dashboard</span>
+				</a>
+				<a class="nav-link" href="../index.html#issue-queue" data-section="Issue Queue">
+					<span>☷</span> <span data-i18n="Issue Queue">Issue Queue</span> <b class="nav-count" id="sidebarIssueCount">16</b>
+				</a>
+				<a class="nav-link active" href="index.html" data-section="Map & Hotspots">
+					<span>⌖</span> <span data-i18n="Map & Hotspots">Map &amp; Hotspots</span>
+				</a>
+				<a class="nav-link" href="../index.html#departments" data-section="Departments">
+					<span>♜</span> <span data-i18n="Departments">Departments</span>
+				</a>
+				<a class="nav-link" href="../index.html#budgeting" data-section="Budgeting">
+					<span>◴</span> <span data-i18n="Budgeting">Budgeting</span>
+				</a>
+				<a class="nav-link" href="../Analytics/index.html" data-section="Analytics">
+					<span>◫</span> <span data-i18n="Analytics">Analytics</span>
+				</a>
+			</nav>
+
+			<div class="sidebar-bottom">
+				<div class="admin-mini">
+					<span class="avatar-small">AK</span>
+					<span>
+						<strong>Aditya Kumar Shyam</strong>
+						<small>Super Administrator</small>
+					</span>
+					<button class="more-button" aria-label="Account options">⋯</button>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Main Workspace Area -->
+		<div class="main-layout">
+			<!-- Topbar -->
+			<header class="topbar">
+				<div class="breadcrumb" aria-label="Breadcrumb">
+					<span>ADMIN</span>
+					<span>•</span>
+					<strong id="breadcrumbCurrent" data-i18n="Map & Hotspots">Map & Hotspots</strong>
+				</div>
+
+				<div class="topbar-actions">
+					<!-- Topbar Search & Suggestions -->
+					<div class="search-box-container">
+						<label class="search-box" for="mapSearchInput">
+							<i class="fa-solid fa-magnifying-glass"></i>
+							<input id="mapSearchInput" type="search" placeholder="Search hotspots, wards, track IDs..."
+								data-i18n-placeholder="searchPlaceholder" autocomplete="off" />
+							<kbd>⌘ K</kbd>
+						</label>
+						<div id="searchSuggestions" class="search-suggestions" hidden></div>
+					</div>
+
+					<!-- Language Selector -->
+					<div class="language-selector" id="languageSelector">
+						<button class="language-button" id="languageButton" type="button" aria-haspopup="true"
+							aria-expanded="false" aria-label="Select language">
+							<span class="language-icon" aria-hidden="true">🌐</span>
+							<span class="language-current" id="currentLanguageText">English</span>
+							<span class="language-arrow" aria-hidden="true">▾</span>
+						</button>
+						<div class="language-dropdown" id="languageDropdown" role="menu" aria-label="Language options">
+							<button class="language-option active" type="button" role="menuitem" data-lang="en">
+								<span class="lang-text">English</span>
+								<span class="lang-check" aria-hidden="true">✓</span>
+							</button>
+							<button class="language-option" type="button" role="menuitem" data-lang="hi">
+								<span class="lang-text">हिन्दी</span>
+								<span class="lang-check" aria-hidden="true">✓</span>
+							</button>
+						</div>
+					</div>
+
+					<!-- Notifications Dropdown -->
+					<div class="notification-wrapper" id="notificationWrapper">
+						<button class="icon-button notification" id="notificationButton" type="button"
+							aria-label="Notifications" aria-expanded="false" aria-controls="notificationDropdown"
+							onclick="window.toggleNotificationMenu(event)">
+							<i class="fa-regular fa-bell"></i> <b class="notif-badge" id="notifBadge">3</b>
+						</button>
+
+						<div class="notification-dropdown" id="notificationDropdown" aria-hidden="true">
+							<div class="notification-dropdown-header">
+								<div class="notif-header-title">
+									<strong data-i18n="Notifications">Notifications</strong>
+									<span class="notif-count-pill" id="notifCountPill">3 New</span>
+								</div>
+								<button type="button" class="notif-mark-read" id="notifMarkAllRead"
+									onclick="window.markAllNotificationsRead(event)">
+									Mark all read
+								</button>
+							</div>
+
+							<div class="notification-list" id="notificationList">
+								<div class="notification-item unread" data-action="issue" data-id="CB-12480"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12480')">
+									<span class="notif-item-icon icon-danger">🚨</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>SLA Critical Alert</strong>
+											<time>10m ago</time>
+										</div>
+										<p>#CB-12480 (Dangerous Pothole) SLA threshold reached in Ward 12.</p>
+									</div>
+								</div>
+
+								<div class="notification-item unread" data-action="issue" data-id="CB-12481"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12481')">
+									<span class="notif-item-icon icon-info">🤖</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>AI Routing Stream</strong>
+											<time>25m ago</time>
+										</div>
+										<p>#CB-12481 routed to Sanitation & Solid Waste Department.</p>
+									</div>
+								</div>
+
+								<div class="notification-item unread" data-action="issue" data-id="CB-12479"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12479')">
+									<span class="notif-item-icon icon-success">✓</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>Citizen Verification</strong>
+											<time>1h ago</time>
+										</div>
+										<p>#CB-12479 (Street Light) verified resolved by 2 nearby residents.</p>
+									</div>
+								</div>
+
+								<div class="notification-item" data-action="budgeting"
+									onclick="window.handleNotifClick(event, 'budgeting')">
+									<span class="notif-item-icon icon-tender">🏛️</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>Tender Milestone</strong>
+											<time>3h ago</time>
+										</div>
+										<p>Ward 15 Road Patching tender moved to bid evaluation phase.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="notification-footer">
+								<button type="button" class="notif-view-all"
+									onclick="window.handleNotifClick(event, 'issuequeue')">
+									View all system alerts & queue →
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Account Profile Dropdown -->
+					<div class="profile-wrapper" id="profileWrapper">
+						<button class="profile-btn" id="profileButton" type="button" aria-label="Open profile menu"
+							aria-expanded="false" aria-controls="profileDropdown"
+							onclick="window.toggleProfileMenu(event)">
+							AK
+						</button>
+
+						<div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+							<div class="profile-dropdown-header">
+								<div class="profile-avatar-large" id="topbarAvatarLarge">AK</div>
+								<div class="profile-dropdown-user-info">
+									<strong id="headerProfileName">Aditya Kumar Shyam</strong>
+									<button class="user-id-button" type="button" id="userIdButton"
+										title="Click to copy Admin ID" onclick="window.copyAdminId(event)">
+										<span class="user-id-icon" aria-hidden="true">🆔</span>
+										<span class="user-id-text" id="userIdText">ADMIN-001</span>
+										<span class="copy-badge">Copy</span>
+									</button>
+									<small id="headerProfileRole" class="badge-role-pill">Super Administrator</small>
+								</div>
+							</div>
+
+							<!-- Account Details Section -->
+							<div class="dropdown-account-details">
+								<div class="dropdown-detail-row">
+									<span>Jurisdiction:</span>
+									<strong id="headerJurisdiction">Bhubaneswar Central Ward</strong>
+								</div>
+								<div class="dropdown-detail-row">
+									<span>Account Status:</span>
+									<strong class="text-success">Active & Verified ✓</strong>
+								</div>
+							</div>
+
+							<div class="profile-menu-divider"></div>
+
+							<button type="button" class="profile-menu-item" data-action="profile"
+								onclick="window.handleProfileAction(event, 'profile')">
+								<i class="fa-regular fa-user" aria-hidden="true"></i>
+								<span data-i18n="myProfile">My Profile</span>
+							</button>
+
+							<button type="button" class="profile-menu-item" id="profileThemeToggle" data-action="theme"
+								aria-pressed="false" onclick="window.handleProfileAction(event, 'theme')">
+								<i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+								<span id="themeLabel" data-i18n="darkMode">Dark Mode</span>
+								<span class="theme-switch" id="themeSwitch" aria-hidden="true">
+									<span></span>
+								</span>
+							</button>
+
+							<div class="profile-menu-divider"></div>
+
+							<button type="button" class="profile-menu-item logout-item" data-action="logout"
+								onclick="window.handleProfileAction(event, 'logout')">
+								<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+								<span data-i18n="logout">Logout</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<!-- Page Content: Map & Hotspots -->
+			<main class="page-content">
+				<!-- Heading -->
+				<div class="dashboard-heading flex-heading">
+					<div>
+						<p class="eyebrow" data-i18n="GEOSPATIAL INTELLIGENCE">GEOSPATIAL INTELLIGENCE & TRIAGE</p>
+						<h1><span data-i18n="Geospatial Incident Map & Hotspots">Geospatial Incident Map &
+								Hotspots</span> <span class="sparkle">✦</span></h1>
+						<p
+							data-i18n="Real-time spatial distribution, AI grievance clustering, and ward-level intensity tracking.">
+							Real-time spatial distribution, AI grievance clustering, and ward-level intensity tracking.
+						</p>
+					</div>
+					<div class="header-actions">
+						<button type="button" class="btn btn-secondary" id="btnRecenterMap">
+							<i class="fa-solid fa-location-crosshairs"></i> <span data-i18n="Recenter View">Recenter
+								View</span>
+						</button>
+						<button type="button" class="btn btn-primary" id="btnToggleHeatmap">
+							<i class="fa-solid fa-fire-flame-curved"></i> <span id="heatmapToggleText"
+								data-i18n="Toggle Heatmap">Toggle Heatmap</span>
+						</button>
+					</div>
+				</div>
+
+				<!-- Spatial Metric Summary Cards (7 Sequence Standard) -->
+				<section class="issue-summary-grid">
+					<div class="summary-card total-card">
+						<div class="summary-icon">🗺️</div>
+						<div class="summary-content">
+							<span data-i18n="Spatial Incidents">Spatial Incidents</span>
+							<strong id="statTotalPins">6</strong>
+							<small data-i18n="Live mapped issues">Live mapped issues</small>
+						</div>
+					</div>
+
+					<div class="summary-card pending-card">
+						<div class="summary-icon">🔥</div>
+						<div class="summary-content">
+							<span data-i18n="Active Hotspots">Active Hotspots</span>
+							<strong id="statActiveHotspots">4</strong>
+							<small data-i18n="High density clusters">High density clusters</small>
+						</div>
+					</div>
+
+					<div class="summary-card progress-card">
+						<div class="summary-icon">⚡</div>
+						<div class="summary-content">
+							<span data-i18n="24h Velocity">24h Velocity</span>
+							<strong id="statVelocity">+38</strong>
+							<small data-i18n="New reports today">New reports today</small>
+						</div>
+					</div>
+
+					<div class="summary-card resolved-card">
+						<div class="summary-icon">🏛️</div>
+						<div class="summary-content">
+							<span data-i18n="Monitored Wards">Monitored Wards</span>
+							<strong id="statWardsCount">24</strong>
+							<small data-i18n="Citywide coverage">Citywide coverage</small>
+						</div>
+					</div>
+
+					<div class="summary-card verified-card">
+						<div class="summary-icon">🛡️</div>
+						<div class="summary-content">
+							<span data-i18n="Verified Zones">Verified Zones</span>
+							<strong id="statVerifiedZones">88%</strong>
+							<small data-i18n="Citizen audit accuracy">Citizen audit accuracy</small>
+						</div>
+					</div>
+
+					<div class="summary-card priority-card">
+						<div class="summary-icon">🚨</div>
+						<div class="summary-content">
+							<span data-i18n="Critical Hazards">Critical Hazards</span>
+							<strong id="statCriticalPins">2</strong>
+							<small data-i18n="Immediate SLA risk">Immediate SLA risk</small>
+						</div>
+					</div>
+				</section>
+
+				<!-- Main Interactive Map Section -->
+				<div class="map-workspace-grid">
+					<!-- Left Main Map Column -->
+					<div class="map-primary-column">
+						<!-- Map Controls Bar -->
+						<div class="map-filters-bar">
+							<div class="map-filter-item">
+								<label for="mapWardFilter" data-i18n="Ward / Area">Ward / Area</label>
+								<select id="mapWardFilter">
+									<option value="all" data-i18n="All Wards (Citywide)">All Wards (Citywide)</option>
+									<option value="Ward 12">Ward 12 (Janpath Corridor)</option>
+									<option value="Ward 15">Ward 15 (Nehru Park)</option>
+									<option value="Ward 09">Ward 09 (BTM / Sector 5)</option>
+									<option value="Ward 08">Ward 08 (Sector 4)</option>
+									<option value="Ward 04">Ward 04 (Green View)</option>
+								</select>
+							</div>
+
+							<div class="map-filter-item">
+								<label for="mapCategoryFilter" data-i18n="Category">Category</label>
+								<select id="mapCategoryFilter">
+									<option value="all" data-i18n="All Categories">All Categories</option>
+									<option value="roads_potholes" data-i18n="Roads & Potholes">🛣️ Roads & Potholes
+									</option>
+									<option value="water_supply" data-i18n="Water Supply">🚰 Water Supply</option>
+									<option value="garbage_sanitation" data-i18n="Garbage & Sanitation">🗑️ Garbage &
+										Sanitation</option>
+									<option value="streetlights" data-i18n="Street Lighting">💡 Street Lighting</option>
+									<option value="drainage" data-i18n="Drainage & Sewerage">🌊 Drainage & Sewerage
+									</option>
+								</select>
+							</div>
+
+							<div class="map-filter-item">
+								<label for="mapStatusFilter" data-i18n="Status">Status</label>
+								<select id="mapStatusFilter">
+									<option value="all" data-i18n="All Status">All Status</option>
+									<option value="pending" data-i18n="Pending">Pending</option>
+									<option value="in progress" data-i18n="In Progress">In Progress</option>
+									<option value="resolved" data-i18n="Resolved">Resolved</option>
+									<option value="verified" data-i18n="Verified">Verified</option>
+									<option value="rejected" data-i18n="Rejected">Rejected</option>
+								</select>
+							</div>
+
+							<div class="map-filter-item layer-buttons">
+								<label data-i18n="Map Style">Map Style</label>
+								<div class="style-btn-group">
+									<button type="button" class="layer-btn active" id="btnLayerStreet"
+										title="Google Street Map">Default</button>
+									<button type="button" class="layer-btn" id="btnLayerSatellite"
+										title="Google Satellite Hybrid">Satellite</button>
+									<button type="button" class="layer-btn" id="btnLayerHotspots"
+										title="Heatmap Density Zones">Heat</button>
+									<button type="button" class="layer-btn" id="btnLayerClusters"
+										title="Ward Clusters">Clusters</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Map Canvas Container (Authentic Google Maps UI) -->
+						<div class="map-frame-card" id="mapFrameCard">
+							<div id="incidentMap" class="incident-map-canvas"></div>
+
+							<!-- Floating Map Legend (Severity & Hotspot Zones) -->
+							<div class="map-legend-box" id="mapLegend">
+								<div class="legend-header">
+									<h4 data-i18n="Incident Severity & Category">Incident Severity &amp; Hotspots</h4>
+									<span class="legend-badge">Live Triage</span>
+								</div>
+								<div class="legend-items">
+									<div class="legend-row">
+										<span class="legend-dot dot-critical"></span>
+										<span class="legend-name" data-i18n="Critical Emergency">Critical Emergency / Rank 1</span>
+										<span class="legend-color-pill pill-critical">#ef4444</span>
+									</div>
+									<div class="legend-row">
+										<span class="legend-dot dot-high"></span>
+										<span class="legend-name" data-i18n="High Priority">High Priority / Rank 2</span>
+										<span class="legend-color-pill pill-high">#f97316</span>
+									</div>
+									<div class="legend-row">
+										<span class="legend-dot dot-medium"></span>
+										<span class="legend-name" data-i18n="Medium Priority">Medium Priority / Rank 3</span>
+										<span class="legend-color-pill pill-medium">#3b82f6</span>
+									</div>
+									<div class="legend-row">
+										<span class="legend-dot dot-resolved"></span>
+										<span class="legend-name" data-i18n="Resolved / Verified">Resolved / Rank 4</span>
+										<span class="legend-color-pill pill-resolved">#22c55e</span>
+									</div>
+									<div class="legend-row">
+										<span class="legend-dot dot-rejected"></span>
+										<span class="legend-name" data-i18n="Rejected">Rejected / Low Risk</span>
+										<span class="legend-color-pill pill-rejected">#64748b</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Google Maps Custom Floating Controls (Top/Right) -->
+							<div class="google-map-controls-cluster">
+								<div class="google-control-pill">
+									<button type="button" class="google-ctrl-btn" id="btnGoogleZoomIn" title="Zoom in">
+										<i class="fa-solid fa-plus"></i>
+									</button>
+									<button type="button" class="google-ctrl-btn" id="btnGoogleZoomOut" title="Zoom out">
+										<i class="fa-solid fa-minus"></i>
+									</button>
+								</div>
+								<div class="google-control-pill">
+									<button type="button" class="google-ctrl-btn" id="btnGoogleRecenter" title="Recenter on Bhubaneswar City Center">
+										<i class="fa-solid fa-crosshairs"></i>
+									</button>
+									<button type="button" class="google-ctrl-btn" id="btnGoogleFullscreen" title="Toggle Fullscreen Map">
+										<i class="fa-solid fa-expand" id="fullscreenIcon"></i>
+									</button>
+								</div>
+							</div>
+
+							<!-- Google Maps Bottom Attribution Footer Bar -->
+							<div class="google-maps-footer-bar">
+								<div class="google-maps-branding">
+									<span class="google-letter g-blue">G</span>
+									<span class="google-letter o-red">o</span>
+									<span class="google-letter o-yellow">o</span>
+									<span class="google-letter g-blue">g</span>
+									<span class="google-letter l-green">l</span>
+									<span class="google-letter e-red">e</span>
+								</div>
+								<div class="google-maps-footer-meta">
+									<span class="footer-coord-badge" id="mapCoordsBadge">Lat: 20.2961 · Lng: 85.8245 · Zoom: 13</span>
+									<span class="footer-divider">•</span>
+									<span>Keyboard shortcuts</span>
+									<span class="footer-divider">•</span>
+									<span>Map data ©2026 Google</span>
+									<span class="footer-divider">•</span>
+									<span class="footer-link">Terms</span>
+									<span class="footer-divider">•</span>
+									<span class="footer-link">Report a map error</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Right Sidebar: Hotspot Analytics & Ranked Intelligence -->
+					<div class="map-sidebar-column">
+						<!-- Hotspot Ranking Card -->
+						<div class="hotspot-panel-card">
+							<div class="hotspot-panel-header">
+								<div>
+									<h3 data-i18n="Ranked Hotspot Zones">Ranked Hotspot Zones</h3>
+									<p data-i18n="High-density citizen report clusters">High-density citizen report
+										clusters</p>
+								</div>
+								<span class="hotspot-pulse-badge">LIVE 4</span>
+							</div>
+
+							<div class="hotspot-list" id="hotspotList">
+								<!-- Dynamically populated hotspot cards -->
+							</div>
+						</div>
+
+						<!-- Ward Intensity Breakdown Card -->
+						<div class="hotspot-panel-card">
+							<div class="hotspot-panel-header">
+								<div>
+									<h3 data-i18n="Ward Load Distribution">Ward Load Distribution</h3>
+									<p data-i18n="Grievance density by administrative ward">Grievance density by ward
+									</p>
+								</div>
+							</div>
+
+							<div class="ward-density-list">
+								<div class="ward-density-item">
+									<div class="ward-density-header">
+										<strong>Ward 12 (Janpath Central)</strong>
+										<span class="density-val">42% (18 issues)</span>
+									</div>
+									<div class="density-bar">
+										<div class="density-fill" style="width: 42%; background: #ef4444;"></div>
+									</div>
+								</div>
+
+								<div class="ward-density-item">
+									<div class="ward-density-header">
+										<strong>Ward 15 (Nehru Park Zone)</strong>
+										<span class="density-val">28% (12 issues)</span>
+									</div>
+									<div class="density-bar">
+										<div class="density-fill" style="width: 28%; background: #f59e0b;"></div>
+									</div>
+								</div>
+
+								<div class="ward-density-item">
+									<div class="ward-density-header">
+										<strong>Ward 09 (BTM 5th Cross)</strong>
+										<span class="density-val">18% (9 issues)</span>
+									</div>
+									<div class="density-bar">
+										<div class="density-fill" style="width: 18%; background: #3b82f6;"></div>
+									</div>
+								</div>
+
+								<div class="ward-density-item">
+									<div class="ward-density-header">
+										<strong>Ward 04 (Green View Block)</strong>
+										<span class="density-val">12% (6 issues)</span>
+									</div>
+									<div class="density-bar">
+										<div class="density-fill" style="width: 12%; background: #10b981;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+
+	<!-- Slide-out Issue Details Panel -->
+	<div class="details-panel-overlay" id="issuePanelOverlay"></div>
+	<div class="issue-details-panel" id="issueDetailsPanel">
+		<div class="details-panel-header">
+			<div class="details-panel-title">
+				<span class="panel-badge" id="panelIssueId">#CB-12480</span>
+				<h2 id="panelIssueTitle">Damaged Road & Potholes near Metro Station</h2>
+			</div>
+			<button class="close-panel-btn" id="closeIssuePanel" aria-label="Close panel">✕</button>
+		</div>
+
+		<div class="details-panel-body">
+			<div class="panel-info-grid">
+				<div class="info-item">
+					<label data-i18n="User ID">Reported By (UID)</label>
+					<span id="panelUserId">CIT-2041</span>
+				</div>
+				<div class="info-item">
+					<label data-i18n="Date">Reported Date</label>
+					<span id="panelDate">18 Aug 2026</span>
+				</div>
+				<div class="info-item">
+					<label data-i18n="Location">Location / Ward</label>
+					<span id="panelLocation">Janpath Road, Ward 12</span>
+				</div>
+				<div class="info-item">
+					<label data-i18n="Category">Category</label>
+					<span id="panelCategory">🛣️ Roads & Potholes</span>
+				</div>
+				<div class="info-item">
+					<label data-i18n="Priority">Priority</label>
+					<span id="panelPriority" class="priority-badge critical">Critical</span>
+				</div>
+				<div class="info-item">
+					<label data-i18n="Status">Status</label>
+					<span id="panelStatus" class="status-badge pending">Pending</span>
+				</div>
+			</div>
+
+			<div class="panel-section">
+				<label data-i18n="Assigned Department">Assigned Department</label>
+				<span id="panelAssigned" style="font-weight:700; color:var(--blue);">Roads & Potholes Department</span>
+			</div>
+
+			<div class="panel-section">
+				<label data-i18n="Description">Grievance Description</label>
+				<p id="panelDescription">Multiple deep potholes near Metro Pillar #42 causing heavy vehicular congestion
+					and dangerous waterlogging during monsoon showers.</p>
+			</div>
+
+			<div class="panel-section">
+				<label data-i18n="Citizen Verification Status">Citizen Verification Status</label>
+				<div class="citizen-verification-box">
+					<div class="citizen-row">
+						<span>Citizen Quorum (≥40% required):</span>
+						<strong id="panelVerRate">65% Verified (3/4 Citizens)</strong>
+					</div>
+					<div class="citizen-row">
+						<span>Audit Result:</span>
+						<span class="ver-badge verified" id="verRep">Verified ✓</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="details-panel-footer">
+			<button type="button" class="panel-action-btn assign" id="assignIssueBtn" data-i18n="Assign">
+				<i class="fa-solid fa-user-plus"></i> Assign Dept
+			</button>
+			<button type="button" class="panel-action-btn reject" id="rejectIssueBtn" data-i18n="Reject">
+				<i class="fa-solid fa-ban"></i> Reject
+			</button>
+			<button type="button" class="panel-action-btn resolve" id="resolveIssueBtn" data-i18n="Resolve">
+				<i class="fa-solid fa-check"></i> Resolve
+			</button>
+		</div>
+	</div>
+
+	<!-- Global Toast Notifications -->
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+	<!-- Profile Modal -->
+	<div class="modal-overlay" id="profileModal" hidden>
+		<div class="modal profile-dialog-modal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+			<div class="modal-header">
+				<div>
+					<p class="eyebrow">ADMINISTRATION</p>
+					<h2 id="profileModalTitle">Administrator Profile</h2>
+				</div>
+				<button class="close-button" id="closeProfileModal" aria-label="Close">×</button>
+			</div>
+
+			<div class="profile-modal-body">
+				<div class="profile-modal-top">
+					<div class="profile-modal-avatar" id="modalAvatarLarge">AK</div>
+					<div class="profile-modal-info">
+						<h3 id="modalProfileFullName">Aditya Kumar Shyam</h3>
+						<p class="badge-role" id="modalProfileRole">Super Administrator</p>
+						<small id="modalProfileEmail">admin@civicbuzz.in</small>
+					</div>
+				</div>
+
+				<div class="profile-modal-grid">
+					<div class="profile-field">
+						<span>Admin ID</span>
+						<strong id="modalProfileUid">ADMIN-001</strong>
+					</div>
+					<div class="profile-field">
+						<span>Account Status</span>
+						<strong class="text-success">Active & Verified ✓</strong>
+					</div>
+					<div class="profile-field">
+						<span>Jurisdiction</span>
+						<strong>Bhubaneswar Central Ward</strong>
+					</div>
+				</div>
+
+				<div class="modal-actions" style="margin-top: 20px;">
+					<button type="button" class="btn btn-secondary" id="closeProfileModalBtn">Close</button>
+					<button type="button" class="btn btn-primary" id="modalLogoutBtn"
+						style="background:#e53e3e;border-color:#e53e3e;">Logout</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Leaflet JS -->
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<!-- Shared API Config & Data -->
+	<script src="../../api-config.js"></script>
+	<script src="../api-config.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+# Environments & Secrets
+.env
+.env.local
+.env.*.local
+*.env
+backend/.env
+frontend/.env
+.venv/
+backend/.venv/
+venv/
+env/
+.venv*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+frontend/dist/
+frontend/node_modules/
+
+# Databases & Uploads
+*.sqlite
+*.sqlite3
+*.db
+backend/civicbuzz.db
+civicbuzz.db
+
+# OS & IDE
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

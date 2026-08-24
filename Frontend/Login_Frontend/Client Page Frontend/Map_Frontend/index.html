@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivicBuzz — Bhubaneswar Live Civic Map & Hotspots Dashboard</title>
+  <meta name="description" content="Explore live civic issues, road hazards, street lighting, sanitation, and water pipeline grievances across Bhubaneswar municipal wards on an interactive GIS map.">
+
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Leaflet CSS for interactive GIS maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Base & Map Styles -->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-language="en">
+
+  <!-- =========================================================
+       PAGE WRAPPER
+       ========================================================= -->
+  <main class="map-dashboard-layout" id="mainDashboard">
+
+    <!-- PAGE HERO & STATS HUD -->
+    <header class="map-page-header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="eyebrow-badge">
+            <span class="pulse-dot"></span>
+            <span data-i18n="CIVIC GEOLOCATION & HOTSPOTS">CIVIC GEOLOCATION & HOTSPOTS</span>
+            <span class="city-tag">Bhubaneswar (BMC)</span>
+          </div>
+          <h1 class="page-title" data-i18n="Bhubaneswar Live Civic Map">Bhubaneswar Live Civic Map</h1>
+          <p class="page-subtitle" data-i18n="Interactive geographic dashboard of reported civic issues, real-time hotspot clusters, and ward resolution progress across Bhubaneswar.">
+            Interactive geographic dashboard of reported civic issues, real-time hotspot clusters, and ward resolution progress across Bhubaneswar.
+          </p>
+        </div>
+
+        <!-- Quick Header Action Buttons -->
+        <div class="header-actions">
+          <button class="btn btn-primary" id="openReportSpotModal" type="button">
+            <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+            <span data-i18n="Report Issue Here">Report Issue Here</span>
+          </button>
+
+          <button class="btn btn-secondary" id="btnLocateMeHeader" type="button" title="Center on your GPS position">
+            <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
+            <span data-i18n="Locate Me">Locate Me</span>
+          </button>
+
+          <button class="btn btn-ghost" id="btnResetViewHeader" type="button" title="Reset map to full Bhubaneswar view">
+            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+            <span data-i18n="Reset View">Reset View</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time Statistics HUD Metric Cards -->
+      <div class="stats-hud" aria-label="Bhubaneswar Civic Statistics Overview">
+        <div class="stat-card" data-stat="hotspots">
+          <div class="stat-icon-wrapper icon-danger">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statActiveHotspots">24</span>
+            <span class="stat-label" data-i18n="Active Hotspots">Active Hotspots</span>
+          </div>
+        </div>
+
+        <div class="stat-card" data-stat="critical">
+          <div class="stat-icon-wrapper icon-warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statCriticalIssues">7</span>
+            <span class="stat-label" data-i18n="Critical Attention">Critical Attention</span>
+          </div>
+        </div>
+
+        <div class="stat-card" data-stat="inprogress">
+          <div class="stat-icon-wrapper icon-primary">
+            <i class="fa-solid fa-person-digging"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statInProgress">11</span>
+            <span class="stat-label" data-i18n="In Progress">In Progress</span>
+          </div>
+        </div>
+
+        <div class="stat-card" data-stat="resolved">
+          <div class="stat-icon-wrapper icon-success">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statResolved">48</span>
+            <span class="stat-label" data-i18n="Resolved (7 Days)">Resolved (7 Days)</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================================================
+         MAP & SIDEBAR WORKSPACE
+         ========================================================= -->
+    <div class="dashboard-workspace">
+
+      <!-- LEFT CONTROL & GRIEVANCE FEED SIDEBAR -->
+      <aside class="dashboard-sidebar" id="dashboardSidebar" aria-label="Map Controls and Issue Feed">
+        
+        <!-- Sidebar Toggle on Mobile -->
+        <div class="sidebar-mobile-handle" id="sidebarMobileToggle" aria-expanded="true">
+          <div class="handle-bar"></div>
+          <span class="handle-text">Filters & Issue Feed (<span id="feedCountBadge">10</span>)</span>
+          <i class="fa-solid fa-chevron-up"></i>
+        </div>
+
+        <div class="sidebar-inner">
+          
+          <!-- CITY SELECTOR PILL (Future Extensible Architecture) -->
+          <div class="city-selector-bar">
+            <div class="current-city-badge" id="citySelector">
+              <span class="city-icon">📍</span>
+              <div class="city-meta">
+                <strong id="activeCityName">Bhubaneswar, Odisha</strong>
+                <small id="activeWardZone">Smart City GIS • 15 Wards</small>
+              </div>
+            </div>
+            <span class="live-pill"><span class="live-dot"></span> LIVE</span>
+          </div>
+
+          <!-- SEARCH BAR -->
+          <div class="search-box-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+            <input type="text" id="mapSearchInput" class="map-search-input" placeholder="Search issues, landmarks, wards..." data-i18n-placeholder="Search issues, landmarks, wards..." aria-label="Search issues by keyword, ward, or ID">
+            <button class="clear-search-btn" id="clearSearchBtn" type="button" aria-label="Clear search" hidden>
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- CATEGORY FILTER CHIPS -->
+          <div class="filter-section">
+            <div class="filter-section-title">
+              <span data-i18n="Category Filter">Category Filter</span>
+              <button class="btn-text-reset" id="resetCategoryFilters" type="button">Reset</button>
+            </div>
+            <div class="category-chips-grid" id="categoryChips">
+              <button class="cat-chip active" data-category="ALL" type="button">
+                <i class="fa-solid fa-layer-group"></i>
+                <span data-i18n="All Categories">All Categories</span>
+                <span class="chip-count" id="countCatAll">10</span>
+              </button>
+              <button class="cat-chip" data-category="ROADS" type="button">
+                <span class="chip-color-dot dot-roads"></span>
+                <i class="fa-solid fa-road"></i>
+                <span data-i18n="Roads & Potholes">Roads & Potholes</span>
+                <span class="chip-count" id="countCatRoads">2</span>
+              </button>
+              <button class="cat-chip" data-category="LIGHTING" type="button">
+                <span class="chip-color-dot dot-lighting"></span>
+                <i class="fa-solid fa-lightbulb"></i>
+                <span data-i18n="Street Lighting">Street Lighting</span>
+                <span class="chip-count" id="countCatLighting">2</span>
+              </button>
+              <button class="cat-chip" data-category="SANITATION" type="button">
+                <span class="chip-color-dot dot-sanitation"></span>
+                <i class="fa-solid fa-trash-can"></i>
+                <span data-i18n="Waste & Sanitation">Waste & Sanitation</span>
+                <span class="chip-count" id="countCatSanitation">2</span>
+              </button>
+              <button class="cat-chip" data-category="WATER" type="button">
+                <span class="chip-color-dot dot-water"></span>
+                <i class="fa-solid fa-faucet-drip"></i>
+                <span data-i18n="Water & Drainage">Water & Drainage</span>
+                <span class="chip-count" id="countCatWater">2</span>
+              </button>
+              <button class="cat-chip" data-category="PARKS" type="button">
+                <span class="chip-color-dot dot-parks"></span>
+                <i class="fa-solid fa-tree"></i>
+                <span data-i18n="Parks & Trees">Parks & Trees</span>
+                <span class="chip-count" id="countCatParks">1</span>
+              </button>
+              <button class="cat-chip" data-category="INFRASTRUCTURE" type="button">
+                <span class="chip-color-dot dot-infra"></span>
+                <i class="fa-solid fa-building-shield"></i>
+                <span data-i18n="Encroachment">Encroachment</span>
+                <span class="chip-count" id="countCatInfra">1</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ADVANCED FILTER DROPDOWNS -->
+          <div class="filters-row">
+            <div class="filter-field">
+              <label for="wardSelect" data-i18n="Ward Filter">Ward / Area</label>
+              <div class="select-wrapper">
+                <select id="wardSelect" aria-label="Filter by Ward">
+                  <option value="ALL" data-i18n="All Bhubaneswar Wards">All Bhubaneswar Wards (15)</option>
+                  <option value="1">Ward 1 — Patia & KIIT Area</option>
+                  <option value="2">Ward 2 — Chandrasekharpur</option>
+                  <option value="3">Ward 3 — Jayadev Vihar & IRC</option>
+                  <option value="4">Ward 4 — Nayapalli & CRPF</option>
+                  <option value="5">Ward 5 — Saheed Nagar</option>
+                  <option value="6">Ward 6 — Master Canteen</option>
+                  <option value="7">Ward 7 — Khandagiri & Jagamara</option>
+                  <option value="8">Ward 8 — Old Town & Lingaraj</option>
+                  <option value="9">Ward 9 — Rasulgarh & Bomikhal</option>
+                  <option value="10">Ward 10 — Mancheswar Ind.</option>
+                  <option value="11">Ward 11 — Laxmisagar</option>
+                  <option value="12">Ward 12 — Pokhariput & Airport</option>
+                  <option value="13">Ward 13 — Baramunda ISBT</option>
+                  <option value="14">Ward 14 — Infocity & DLF</option>
+                  <option value="15">Ward 15 — Unit-9 & Satya Nagar</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+              </div>
+            </div>
+
+            <div class="filter-field">
+              <label for="statusSelect" data-i18n="Status Filter">Status</label>
+              <div class="select-wrapper">
+                <select id="statusSelect" aria-label="Filter by Status">
+                  <option value="ALL" data-i18n="All Statuses">All Statuses</option>
+                  <option value="REPORTED" data-i18n="Reported">Reported</option>
+                  <option value="IN_PROGRESS" data-i18n="In Progress">In Progress</option>
+                  <option value="RESOLVED" data-i18n="Resolved">Resolved</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+              </div>
+            </div>
+
+            <div class="filter-field">
+              <label for="prioritySelect" data-i18n="Priority">Priority</label>
+              <div class="select-wrapper">
+                <select id="prioritySelect" aria-label="Filter by Priority">
+                  <option value="ALL" data-i18n="All Priorities">All Priorities</option>
+                  <option value="CRITICAL" data-i18n="Critical">Critical</option>
+                  <option value="HIGH" data-i18n="High">High</option>
+                  <option value="MEDIUM" data-i18n="Medium">Medium</option>
+                  <option value="LOW" data-i18n="Low">Low</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- ISSUE FEED HEADER -->
+          <div class="feed-header">
+            <div>
+              <h2 class="feed-title" data-i18n="Live Grievance Feed">Live Grievance Feed</h2>
+              <span class="feed-subtitle" data-i18n="Click on any marker or card to inspect details">Click on any marker or card to inspect details</span>
+            </div>
+            <span class="results-count-pill"><strong id="resultsCount">10</strong> issues</span>
+          </div>
+
+          <!-- SCROLLABLE GRIEVANCE ISSUE CARDS CONTAINER -->
+          <div class="issue-cards-feed" id="issueCardsFeed" tabindex="0" role="region" aria-label="Scrollable list of civic issues">
+            <!-- Dynamically populated by script.js -->
+            <div class="feed-loading-state">
+              <div class="spinner"></div>
+              <span>Loading Bhubaneswar geospatial data...</span>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- CENTRAL MAP CONTAINER -->
+      <section class="map-view-panel" aria-label="Interactive Map of Bhubaneswar">
+        
+        <!-- Interactive Leaflet Canvas Container -->
+        <div id="bhubaneswarMap" class="bhubaneswar-map-canvas" role="application" aria-label="Map showing civic issues across Bhubaneswar"></div>
+
+        <!-- FLOATING MAP CONTROLS & TOOLBARS -->
+        <div class="floating-map-controls">
+          
+          <!-- Base Map Layer Switcher -->
+          <div class="map-control-group glass-panel">
+            <button class="map-btn active" id="btnLayerStreet" type="button" title="Standard Google Street Map View">
+              <i class="fa-solid fa-map"></i>
+              <span class="tooltip">Street View</span>
+            </button>
+            <button class="map-btn" id="btnLayerSatellite" type="button" title="Google Satellite Imagery View">
+              <i class="fa-solid fa-satellite"></i>
+              <span class="tooltip">Satellite</span>
+            </button>
+          </div>
+
+          <!-- Map Overlays (Wards & Hotspots) -->
+          <div class="map-control-group glass-panel">
+            <button class="map-btn active" id="btnToggleWards" type="button" title="Toggle Municipal Ward Boundaries">
+              <i class="fa-solid fa-draw-polygon"></i>
+              <span class="tooltip">Ward Boundaries</span>
+            </button>
+            <button class="map-btn active" id="btnToggleHotspots" type="button" title="Toggle Glowing Beacon Hotspots">
+              <i class="fa-solid fa-bullseye"></i>
+              <span class="tooltip">Hotspot Radar</span>
+            </button>
+          </div>
+
+          <!-- Navigation & Positioning -->
+          <div class="map-control-group glass-panel">
+            <button class="map-btn" id="btnLocateMeFloat" type="button" title="Center on your GPS location">
+              <i class="fa-solid fa-location-crosshairs"></i>
+              <span class="tooltip">Locate Me</span>
+            </button>
+            <button class="map-btn" id="btnResetBoundsFloat" type="button" title="Reset Zoom to Bhubaneswar">
+              <i class="fa-solid fa-expand"></i>
+              <span class="tooltip">Reset View</span>
+            </button>
+            <button class="map-btn" id="btnDropPinMode" type="button" title="Click anywhere to report an issue">
+              <i class="fa-solid fa-map-pin"></i>
+              <span class="tooltip">Drop Pin & Report</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- MAP LEGEND -->
+        <div class="map-legend glass-panel">
+          <div class="legend-header">
+            <strong>Category Legend</strong>
+            <button class="legend-toggle" id="legendToggleBtn" type="button" aria-label="Toggle Legend">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="legend-body" id="legendBody">
+            <div class="legend-item"><span class="legend-color legend-roads"></span> <span>Roads & Potholes</span></div>
+            <div class="legend-item"><span class="legend-color legend-lighting"></span> <span>Street Lighting</span></div>
+            <div class="legend-item"><span class="legend-color legend-sanitation"></span> <span>Sanitation & Dumps</span></div>
+            <div class="legend-item"><span class="legend-color legend-water"></span> <span>Water & Drainage</span></div>
+            <div class="legend-item"><span class="legend-color legend-parks"></span> <span>Parks & Greenery</span></div>
+            <div class="legend-item"><span class="legend-color legend-infra"></span> <span>Encroachment</span></div>
+          </div>
+        </div>
+
+        <!-- Google Maps Bottom Attribution Footer Bar -->
+        <div class="google-attribution-bar">
+          <div class="google-logo-text">
+            <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+          </div>
+          <div class="google-terms-links">
+            <span class="terms-hide-sm">Keyboard shortcuts</span>
+            <span>Map data &copy;2026</span>
+            <span class="terms-link">Terms</span>
+            <span class="terms-link">Report a map error</span>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================
+       ISSUE DETAIL FLYOUT DRAWER / MODAL
+       ========================================================= -->
+  <div class="drawer-backdrop" id="issueDrawerBackdrop" aria-hidden="true"></div>
+  <aside class="issue-detail-drawer" id="issueDetailDrawer" aria-label="Detailed Issue Information" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-topline">
+        <span class="category-pill" id="drawerCategoryBadge">ROADS</span>
+        <span class="priority-pill" id="drawerPriorityBadge">CRITICAL</span>
+        <span class="issue-id-tag" id="drawerIssueId">#CB-BHUB-1042</span>
+      </div>
+      <button class="drawer-close-btn" id="closeIssueDrawer" type="button" aria-label="Close Issue Details">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drawer-body" id="drawerBodyContent">
+      <!-- Title & Main Info -->
+      <h3 class="drawer-title" id="drawerTitle">Deep crater-sized pothole near KIIT Square</h3>
+      <p class="drawer-desc" id="drawerDesc">
+        Multiple severe potholes causing severe vehicle damage and traffic congestion during evening hours near KIIT Campus 6 road.
+      </p>
+
+      <!-- Photo Preview (if available) -->
+      <div class="drawer-image-container" id="drawerImageWrapper">
+        <img src="" alt="Civic Issue Evidence Photo" id="drawerImage" onerror="this.parentElement.style.display='none'">
+        <span class="image-source-badge">Verified Evidence</span>
+      </div>
+
+      <!-- Location Details Card -->
+      <div class="drawer-card location-card">
+        <div class="card-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div class="card-text">
+          <strong id="drawerLocation">KIIT Square, Patia Main Road</strong>
+          <span id="drawerWard">Ward 1 (Patia & KIIT) • North Zone</span>
+          <small class="mono-coords" id="drawerCoords">20.3533° N, 85.8189° E</small>
+        </div>
+      </div>
+
+      <!-- Department & SLA Card -->
+      <div class="drawer-card dept-card">
+        <div class="card-icon"><i class="fa-solid fa-building-columns"></i></div>
+        <div class="card-text">
+          <span class="card-label" data-i18n="Responsible Department">Responsible Department</span>
+          <strong id="drawerDept">BMC Works & Road Division</strong>
+          <small id="drawerReportedDate">Reported 18 hours ago</small>
+        </div>
+      </div>
+
+      <!-- Interactive Progress Stepper -->
+      <div class="drawer-section">
+        <h4 class="section-heading-sm">Resolution Lifecycle</h4>
+        <div class="tracker-steps" id="drawerTracker">
+          <div class="track-step is-complete">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <div class="step-label">Reported</div>
+          </div>
+          <div class="track-step is-complete">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <div class="step-label">Verified</div>
+          </div>
+          <div class="track-step is-current">
+            <div class="step-circle"><span class="step-dot"></span></div>
+            <div class="step-label">In Progress</div>
+          </div>
+          <div class="track-step is-upcoming">
+            <div class="step-circle">4</div>
+            <div class="step-label">Resolved</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citizen Engagement & Upvotes -->
+      <div class="drawer-section engagement-section">
+        <div class="upvote-box">
+          <div>
+            <strong id="drawerUpvotesCount">42</strong>
+            <span>Citizens experiencing this issue</span>
+          </div>
+          <button class="btn btn-upvote" id="btnDrawerUpvote" type="button">
+            <i class="fa-solid fa-thumbs-up"></i>
+            <span id="drawerUpvoteLabel" data-i18n="Upvote Issue">Upvote Issue</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="drawer-actions">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block" id="btnGetDirections">
+          <i class="fa-solid fa-diamond-turn-right"></i>
+          <span data-i18n="Get Directions">Get Directions</span>
+        </a>
+
+        <button class="btn btn-secondary btn-block" id="btnShareIssue" type="button">
+          <i class="fa-solid fa-share-nodes"></i>
+          <span data-i18n="Share Grievance">Share Grievance</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- =========================================================
+       QUICK REPORT MODAL (Pin-drop or Quick Report)
+       ========================================================= -->
+  <div class="modal-backdrop" id="quickReportModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle">
+      
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow">BHUBANESWAR CITIZEN GRIEVANCE</span>
+          <h3 id="modalReportTitle">Report Civic Issue</h3>
+        </div>
+        <button class="modal-close-btn" id="closeReportModal" type="button" aria-label="Close form">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="quickReportForm" novalidate>
+        
+        <div class="form-group">
+          <label for="reportCategory">Issue Category *</label>
+          <select id="reportCategory" name="category" required>
+            <option value="">Select issue category</option>
+            <option value="ROADS">🚧 Road Hazard / Pothole / Sidewalk</option>
+            <option value="LIGHTING">💡 Street Light Out / Pole Sparking</option>
+            <option value="SANITATION">🗑️ Garbage Dump / Uncollected Waste</option>
+            <option value="WATER">💧 Water Pipeline Leak / Open Drain</option>
+            <option value="PARKS">🌳 Fallen Tree / Park Maintenance</option>
+            <option value="INFRASTRUCTURE">🏗️ Encroachment / Construction Debris</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reportTitle">Brief Title *</label>
+          <input type="text" id="reportTitle" name="title" placeholder="e.g. Broken streetlight on Master Canteen road" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reportDesc">Description *</label>
+          <textarea id="reportDesc" name="description" rows="3" placeholder="Describe the issue, landmark, and severity..." required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reportWard">Ward / Area</label>
+            <select id="reportWard" name="ward">
+              <option value="Ward 1 (Patia)">Ward 1 (Patia & KIIT)</option>
+              <option value="Ward 2 (Chandrasekharpur)">Ward 2 (Chandrasekharpur)</option>
+              <option value="Ward 3 (Jayadev Vihar)">Ward 3 (Jayadev Vihar)</option>
+              <option value="Ward 4 (Nayapalli)">Ward 4 (Nayapalli & CRPF)</option>
+              <option value="Ward 5 (Saheed Nagar)">Ward 5 (Saheed Nagar)</option>
+              <option value="Ward 6 (Master Canteen)">Ward 6 (Master Canteen)</option>
+              <option value="Ward 7 (Khandagiri)">Ward 7 (Khandagiri)</option>
+              <option value="Ward 8 (Old Town)">Ward 8 (Old Town)</option>
+              <option value="Ward 9 (Rasulgarh)">Ward 9 (Rasulgarh)</option>
+              <option value="Ward 14 (Infocity)">Ward 14 (Infocity & DLF)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reportPriority">Urgency Level</label>
+            <select id="reportPriority" name="priority">
+              <option value="HIGH">High (Within 48h)</option>
+              <option value="CRITICAL">Critical (Immediate hazard)</option>
+              <option value="MEDIUM">Medium (Within 5 days)</option>
+              <option value="LOW">Low (Routine maintenance)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reportCoords">GPS Coordinates (Auto-detected)</label>
+          <input type="text" id="reportCoords" name="coords" value="20.2961, 85.8245" readonly class="readonly-input">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="cancelReportForm" type="button">Cancel</button>
+          <button class="btn btn-primary" type="submit" id="submitReportBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Grievance</span>
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Small toast container used by CivicBuzzNavbar -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Project Configuration & App Scripts -->
+  <script src="../../api-config.js"></script>
+  <script>
+    if (typeof window.CivicBuzzAPI === "undefined") {
+      document.write('<script src="../../../api-config.js"><\/script>');
+    }
+  </script>
+  <script src="script.js"></script>
+  <script src="../navbar-loader.js"></script>
+</body>
+</html>

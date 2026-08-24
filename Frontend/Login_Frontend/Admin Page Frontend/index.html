@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="CivicBuzz administrator dashboard" />
+	<title>CivicBuzz Admin Portal</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Admin navigation">
+			<div class="brand">
+				<div class="brand-mark">
+					<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+				</div>
+				<span class="brand-name">CivicBuzz</span>
+			</div>
+
+			<nav class="main-nav">
+				<a class="nav-link active" href="#dashboard" data-section="Dashboard">
+					<span>⌂</span> Dashboard
+				</a>
+				<a class="nav-link" href="#issue-queue" data-section="Issue Queue">
+					<span>☷</span> Issue Queue <b class="nav-count" id="sidebarIssueCount">16</b>
+				</a>
+				<a class="nav-link" href="Map & Hotspots/index.html" data-section="Map & Hotspots">
+					<span>⌖</span> Map &amp; Hotspots
+				</a>
+				<a class="nav-link" href="#departments" data-section="Departments">
+					<span>♜</span> Departments
+				</a>
+				<a class="nav-link" href="#budgeting" data-section="Budgeting">
+					<span>◴</span> Budgeting
+				</a>
+				<a class="nav-link" href="Analytics/index.html" data-section="Analytics">
+					<span>◫</span> Analytics
+				</a>
+			</nav>
+		</aside>
+
+		<main class="main-content">
+			<header class="topbar">
+				<button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false">
+					☰
+				</button>
+
+				<div class="breadcrumb">
+					<span>Admin Portal</span>
+					<i>/</i>
+					<strong id="breadcrumbCurrent">Dashboard</strong>
+				</div>
+
+				<div class="topbar-actions">
+					<div class="search-box-container">
+						<label class="search-box" for="dashboardSearch">
+							<span>⌕</span>
+							<input id="dashboardSearch" type="search"
+								placeholder="Search issues, locations, departments..." autocomplete="off" />
+							<kbd>⌘ K</kbd>
+						</label>
+						<div id="searchSuggestions" class="search-suggestions" hidden></div>
+					</div>
+
+					<!-- Language Selector -->
+					<div class="language-selector">
+						<button class="language-button" type="button" id="languageButton" aria-haspopup="true"
+							aria-expanded="false" title="Select Language">
+							<span class="language-icon">🌐</span>
+							<span class="language-current" id="languageCurrent">English</span>
+							<span class="language-arrow">▾</span>
+						</button>
+
+						<div class="language-dropdown" id="languageDropdown" role="menu">
+							<button class="language-option active" type="button" data-language="en" role="menuitem">
+								<span class="language-option-icon">🇬🇧</span>
+								<span>English</span>
+								<span class="language-check" aria-hidden="true">✓</span>
+							</button>
+
+							<button class="language-option" type="button" data-language="hi" role="menuitem">
+								<span class="language-option-icon">🇮🇳</span>
+								<span>हिन्दी</span>
+								<span class="language-check" aria-hidden="true">✓</span>
+							</button>
+						</div>
+					</div>
+
+					<div class="notification-wrapper" id="notificationWrapper">
+						<button class="icon-button notification" id="notificationButton" type="button"
+							aria-label="Notifications" aria-expanded="false" aria-controls="notificationDropdown"
+							onclick="window.toggleNotificationMenu(event)">
+							<i class="fa-regular fa-bell"></i> <b class="notif-badge" id="notifBadge">3</b>
+						</button>
+
+						<div class="notification-dropdown" id="notificationDropdown" aria-hidden="true">
+							<div class="notification-dropdown-header">
+								<div class="notif-header-title">
+									<strong data-i18n="Notifications">Notifications</strong>
+									<span class="notif-count-pill" id="notifCountPill">3 New</span>
+								</div>
+								<button type="button" class="notif-mark-read" id="notifMarkAllRead"
+									onclick="window.markAllNotificationsRead(event)">
+									Mark all read
+								</button>
+							</div>
+
+							<div class="notification-list" id="notificationList">
+								<div class="notification-item unread" data-action="issue" data-id="CB-12480"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12480')">
+									<span class="notif-item-icon icon-danger">🚨</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>SLA Critical Alert</strong>
+											<time>10m ago</time>
+										</div>
+										<p>#CB-12480 (Dangerous Pothole) SLA threshold reached in Ward 12.</p>
+									</div>
+								</div>
+
+								<div class="notification-item unread" data-action="issue" data-id="CB-12481"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12481')">
+									<span class="notif-item-icon icon-info">🤖</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>AI Routing Stream</strong>
+											<time>25m ago</time>
+										</div>
+										<p>#CB-12481 routed to Sanitation & Solid Waste Department.</p>
+									</div>
+								</div>
+
+								<div class="notification-item unread" data-action="issue" data-id="CB-12479"
+									onclick="window.handleNotifClick(event, 'issue', 'CB-12479')">
+									<span class="notif-item-icon icon-success">✓</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>Citizen Verification</strong>
+											<time>1h ago</time>
+										</div>
+										<p>#CB-12479 (Street Light) verified resolved by 2 nearby residents.</p>
+									</div>
+								</div>
+
+								<div class="notification-item" data-action="budgeting"
+									onclick="window.handleNotifClick(event, 'budgeting')">
+									<span class="notif-item-icon icon-tender">🏛️</span>
+									<div class="notif-item-body">
+										<div class="notif-item-title">
+											<strong>Tender Milestone</strong>
+											<time>3h ago</time>
+										</div>
+										<p>Ward 15 Road Patching tender moved to bid evaluation phase.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="notification-footer">
+								<button type="button" class="notif-view-all"
+									onclick="window.handleNotifClick(event, 'issuequeue')">
+									View all system alerts & queue →
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="profile-wrapper" id="profileWrapper">
+						<button class="profile-btn" id="profileButton" type="button" aria-label="Open profile menu"
+							aria-expanded="false" aria-controls="profileDropdown"
+							onclick="window.toggleProfileMenu(event)">
+							AK
+						</button>
+
+						<div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+							<div class="profile-dropdown-header">
+								<div class="profile-avatar-large" id="topbarAvatarLarge">AK</div>
+								<div class="profile-dropdown-user-info">
+									<strong id="headerProfileName">Aditya Kumar Shyam</strong>
+									<button class="user-id-button" type="button" id="userIdButton"
+										title="Click to copy Admin ID" onclick="window.copyAdminId(event)">
+										<span class="user-id-icon" aria-hidden="true">🆔</span>
+										<span class="user-id-text" id="userIdText">ADMIN-001</span>
+										<span class="copy-badge">Copy</span>
+									</button>
+									<small id="headerProfileRole" class="badge-role-pill">Super Administrator</small>
+								</div>
+							</div>
+
+							<!-- Account Details Section -->
+							<div class="dropdown-account-details">
+								<div class="dropdown-detail-row">
+									<span>Jurisdiction:</span>
+									<strong id="headerJurisdiction">Bhubaneswar Central Ward</strong>
+								</div>
+								<div class="dropdown-detail-row">
+									<span>Account Status:</span>
+									<strong class="text-success">Active & Verified ✓</strong>
+								</div>
+							</div>
+
+							<div class="profile-menu-divider"></div>
+
+							<button type="button" class="profile-menu-item" data-action="profile"
+								onclick="window.handleProfileAction(event, 'profile')">
+								<i class="fa-regular fa-user" aria-hidden="true"></i>
+								<span data-i18n="myProfile">My Profile</span>
+							</button>
+
+							<button type="button" class="profile-menu-item" id="profileThemeToggle" data-action="theme"
+								aria-pressed="false" onclick="window.handleProfileAction(event, 'theme')">
+								<i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+								<span id="themeLabel" data-i18n="darkMode">Dark Mode</span>
+								<span class="theme-switch" id="themeSwitch" aria-hidden="true">
+									<span></span>
+								</span>
+							</button>
+
+							<div class="profile-menu-divider"></div>
+
+							<button type="button" class="profile-menu-item logout-item" data-action="logout"
+								onclick="window.handleProfileAction(event, 'logout')">
+								<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+								<span data-i18n="logout">Logout</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<!-- =========================================================
+			     SECTION 1: DASHBOARD OVERVIEW
+			     ========================================================= -->
+			<section class="admin-view" id="section-dashboard">
+				<div class="dashboard-heading">
+					<div>
+						<p class="eyebrow">TUESDAY, 18 AUGUST 2026</p>
+						<h1>Good morning, Admin <span>✦</span></h1>
+						<p>Here is what is happening across your city today.</p>
+					</div>
+				</div>
+
+				<section class="metrics" aria-label="Issue statistics">
+					<article class="metric-card blue-card">
+						<div class="metric-icon">▤</div>
+						<div>
+							<p data-i18n="Issues Reported">Issues Reported</p>
+							<h2 id="metricReported">0</h2>
+							<small class="positive" id="metricReportedSub">● <em>Live tracker</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card green-card">
+						<div class="metric-icon">✓</div>
+						<div>
+							<p data-i18n="Issues Resolved">Issues Resolved</p>
+							<h2 id="metricResolved">0</h2>
+							<small class="positive" id="metricResolvedSub">● <em>Resolution rate</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card amber-card">
+						<div class="metric-icon">◷</div>
+						<div>
+							<p data-i18n="Open Issues">Open Issues</p>
+							<h2 id="metricOpen">0</h2>
+							<small class="negative" id="metricOpenSub">● <em>Active in queue</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+
+					<article class="metric-card red-card">
+						<div class="metric-icon">!</div>
+						<div>
+							<p data-i18n="Overdue">Overdue</p>
+							<h2 id="metricOverdue">0</h2>
+							<small class="negative" id="metricOverdueSub">● <em>Urgent attention</em></small>
+						</div>
+						<span class="metric-menu">•••</span>
+					</article>
+				</section>
+
+				<section class="dashboard-grid overview-row">
+					<article class="panel trend-panel">
+						<div class="panel-header">
+							<div>
+								<h2>Reported vs Resolved Trend</h2>
+								<div class="legend">
+									<span class="blue-dot"></span> Reported
+									<span class="green-dot"></span> Resolved
+								</div>
+							</div>
+
+							<select id="trendRange" aria-label="Trend date range">
+								<option value="week">Last 7 days</option>
+								<option value="month">Last 30 days</option>
+								<option value="quarter">This quarter</option>
+							</select>
+						</div>
+
+						<div class="chart-wrap">
+							<div class="y-axis" id="trendYAxis">
+								<span>0</span>
+								<span>0</span>
+								<span>0</span>
+								<span>0</span>
+								<span>0</span>
+							</div>
+
+							<svg class="line-chart" id="lineChart" viewBox="0 0 730 190" role="img"
+								aria-label="Reported and resolved issues chart">
+								<g class="chart-grid">
+									<line x1="0" y1="12" x2="730" y2="12" />
+									<line x1="0" y1="54" x2="730" y2="54" />
+									<line x1="0" y1="96" x2="730" y2="96" />
+									<line x1="0" y1="138" x2="730" y2="138" />
+									<line x1="0" y1="180" x2="730" y2="180" />
+								</g>
+
+								<polyline id="reportedLine" class="reported-line" points="10,180 720,180" />
+								<polyline id="resolvedLine" class="resolved-line" points="10,180 720,180" />
+
+								<g id="reportedPoints" class="reported-points"></g>
+								<g id="resolvedPoints" class="resolved-points"></g>
+							</svg>
+
+							<div class="x-axis" id="chartLabels">
+							</div>
+
+							<div id="chartTooltip" class="chart-tooltip" style="display: none;"></div>
+						</div>
+					</article>
+
+					<article class="panel alerts-panel">
+						<div class="panel-header">
+							<h2>Priority Alerts</h2>
+							<button class="text-button" data-nav-target="#issue-queue">
+								View all
+							</button>
+						</div>
+
+						<div class="alert-list">
+							<article class="alert-item">
+								<span class="alert-icon road">⌁</span>
+								<div>
+									<h3>Pothole on MG Road</h3>
+									<p>Near Metro Station, MG Road</p>
+								</div>
+								<span class="status-pill overdue">Overdue</span>
+								<time>2h ago</time>
+							</article>
+
+							<article class="alert-item">
+								<span class="alert-icon garbage">♜</span>
+								<div>
+									<h3>Garbage Overflow</h3>
+									<p>Sector 15, Nehru Park</p>
+								</div>
+								<span class="status-pill overdue">Overdue</span>
+								<time>4h ago</time>
+							</article>
+
+							<article class="alert-item">
+								<span class="alert-icon water">◒</span>
+								<div>
+									<h3>Water Leakage</h3>
+									<p>Block A, Green View Apartments</p>
+								</div>
+								<span class="status-pill attention">High</span>
+								<time>6h ago</time>
+							</article>
+						</div>
+
+						<button class="view-queue" data-nav-target="#issue-queue">
+							View priority queue <span>→</span>
+						</button>
+					</article>
+				</section>
+
+				<section class="dashboard-grid operations-row">
+					<article class="panel map-panel" id="map">
+						<div class="panel-header">
+							<h2>Live Issue Map</h2>
+							<button class="text-button" data-toast="Hotspots updated with live ward data">View full map
+								↗</button>
+						</div>
+
+						<div class="abstract-map" aria-label="Map showing reported issue hotspots">
+							<span class="river river-one"></span>
+							<span class="river river-two"></span>
+
+							<span class="road road-one"></span>
+							<span class="road road-two"></span>
+							<span class="road road-three"></span>
+							<span class="road road-four"></span>
+							<span class="road road-five"></span>
+
+							<span class="map-label label-a">Indiranagar</span>
+							<span class="map-label label-b">Koramangala</span>
+							<span class="map-label label-c">HSR Layout</span>
+
+							<button class="pin green-pin" style="left: 15%; top: 24%"
+								aria-label="4 resolved issues">●</button>
+							<button class="pin red-pin" style="left: 50%; top: 18%"
+								aria-label="7 urgent issues">●</button>
+							<button class="pin red-pin" style="left: 78%; top: 29%"
+								aria-label="5 urgent issues">●</button>
+							<button class="pin amber-pin" style="left: 61%; top: 53%"
+								aria-label="3 open issues">●</button>
+							<button class="pin red-pin" style="left: 27%; top: 69%"
+								aria-label="6 urgent issues">●</button>
+							<button class="pin green-pin" style="left: 66%; top: 74%"
+								aria-label="6 resolved issues">●</button>
+							<button class="pin amber-pin" style="left: 45%; top: 83%"
+								aria-label="2 open issues">●</button>
+
+							<div class="map-key">
+								<span><i class="red-dot"></i> Urgent</span>
+								<span><i class="amber-dot"></i> Open</span>
+								<span><i class="green-dot"></i> Resolved</span>
+							</div>
+						</div>
+					</article>
+
+					<article class="panel routing-panel" id="queue">
+						<div class="panel-header">
+							<div>
+								<h2>AI Routing Queue</h2>
+								<p>Reports awaiting department assignment</p>
+							</div>
+							<button class="text-button" data-nav-target="#issue-queue">
+								View all
+							</button>
+						</div>
+
+						<div class="routing-table" role="table">
+							<div class="table-head" role="row">
+								<span>Issue</span>
+								<span>Duplicate match</span>
+								<span>Suggested department</span>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb pothole-thumb">⌁</span>
+									<span>
+										<b>Pothole on 5th Main St</b>
+										<small>HSR Layout · #CB-12481</small>
+									</span>
+								</div>
+								<strong class="match high">92%</strong>
+								<button class="department-chip" data-toast="Assigned to Roads & Potholes">
+									Roads &amp; Potholes <i>⌄</i>
+								</button>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb garbage-thumb">♜</span>
+									<span>
+										<b>Garbage not collected</b>
+										<small>7th Cross, BTM Layout · #CB-12482</small>
+									</span>
+								</div>
+								<strong class="match high">87%</strong>
+								<button class="department-chip" data-toast="Assigned to Garbage & Sanitation">
+									Garbage &amp; Sanitation <i>⌄</i>
+								</button>
+							</div>
+
+							<div class="table-row" role="row">
+								<div class="issue-name">
+									<span class="issue-thumb street-thumb">☼</span>
+									<span>
+										<b>Street light not working</b>
+										<small>16th Main, Sector 4 · #CB-12483</small>
+									</span>
+								</div>
+								<strong class="match medium">78%</strong>
+								<button class="department-chip" data-toast="Assigned to Street Lights">
+									Street Lights <i>⌄</i>
+								</button>
+							</div>
+						</div>
+					</article>
+
+					<article class="panel resolution-panel">
+						<div class="panel-header">
+							<h2>Resolution Rate</h2>
+							<button class="icon-ellipsis" aria-label="Resolution menu">•••</button>
+						</div>
+
+						<div class="donut" id="donutVisual" aria-label="Resolution rate donut chart">
+							<div>
+								<strong id="donutRateText">0%</strong>
+								<span>Resolved</span>
+							</div>
+						</div>
+
+						<p class="positive" id="donutTrendText">● <span>Live performance</span></p>
+
+						<div class="rate-summary">
+							<span id="donutResolvedSummary"><i></i> 0 resolved</span>
+							<span id="donutPendingSummary"><i></i> 0 open</span>
+						</div>
+					</article>
+				</section>
+
+				<section class="panel activity-panel">
+					<div class="panel-header">
+						<div>
+							<h2>Recent Activity</h2>
+							<p>Latest updates from your departments</p>
+						</div>
+						<button class="text-button" data-toast="Opening complete activity history">
+							View all
+						</button>
+					</div>
+
+					<div class="activity-list">
+						<article class="activity">
+							<span class="activity-symbol resolved-symbol">✓</span>
+							<div>
+								<b>Issue #CB-12480 resolved</b>
+								<p>By Roads &amp; Potholes Department</p>
+							</div>
+							<time>10m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol report-symbol">▤</span>
+							<div>
+								<b>New issue #CB-12481 reported</b>
+								<p>Water leakage in Sector 9</p>
+							</div>
+							<time>25m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol assignment-symbol">♙</span>
+							<div>
+								<b>Department assigned #CB-12482</b>
+								<p>Garbage &amp; Sanitation → Street Lights</p>
+							</div>
+							<time>35m ago</time>
+						</article>
+
+						<article class="activity">
+							<span class="activity-symbol comment-symbol">◌</span>
+							<div>
+								<b>Public comment on #CB-12479</b>
+								<p>Additional details added</p>
+							</div>
+							<time>1h ago</time>
+						</article>
+					</div>
+				</section>
+
+				<!-- =========================================================
+				     FOOTER (DASHBOARD ONLY)
+				     ========================================================= -->
+				<footer class="site-footer" id="footer">
+					<div class="footer-skyline" aria-hidden="true">
+						<i></i><i></i><i></i><i></i><i></i><i></i>
+					</div>
+
+					<div class="footer-content">
+						<section class="footer-intro">
+							<a class="footer-brand" href="#dashboard" aria-label="CivicBuzz dashboard">
+								<span class="footer-logo">
+									<img src="Assets/Logo.png" alt="CivicBuzz Logo">
+								</span>
+								<strong>CivicBuzz</strong>
+							</a>
+
+							<p class="footer-tagline">
+								Making every civic issue visible,<br>
+								actionable and accountable.
+							</p>
+
+							<p class="footer-copy">
+								Empowering citizens to report problems<br>
+								and build better communities together.
+							</p>
+						</section>
+
+						<section class="footer-links">
+							<div>
+								<h2>Quick Links</h2>
+								<a href="#dashboard">Home</a>
+								<a href="#issue-queue">Report an Issue</a>
+								<a href="#issue-queue">Track Complaint</a>
+								<a href="#budgeting">Community</a>
+								<a href="#footer">About CivicBuzz</a>
+							</div>
+
+							<div>
+								<h2>Civic Services</h2>
+								<a href="#issue-queue">Road &amp; Potholes</a>
+								<a href="#issue-queue">Garbage &amp; Sanitation</a>
+								<a href="#issue-queue">Street Lights</a>
+								<a href="#issue-queue">Water &amp; Drainage</a>
+								<a href="#issue-queue">Public Infrastructure</a>
+							</div>
+
+							<div>
+								<h2>Need Help?</h2>
+								<a href="#footer">FAQs</a>
+								<a href="#footer">How to Report</a>
+								<a href="#footer">How Tracking Works</a>
+								<a href="#footer">Contact Support</a>
+
+								<div class="footer-contact">
+									<span>Have a question?</span>
+									<a href="mailto:civicbuzz@gmail.com">
+										civicbuzz@gmail.com
+									</a>
+								</div>
+							</div>
+						</section>
+					</div>
+
+					<section class="footer-stats" aria-label="CivicBuzz impact statistics">
+						<div>
+							<strong>12K+</strong>
+							<span>Issues Reported</span>
+						</div>
+
+						<div>
+							<strong>8K+</strong>
+							<span>Issues Resolved</span>
+						</div>
+
+						<div>
+							<strong>4K+</strong>
+							<span>Active Citizens</span>
+						</div>
+
+						<div>
+							<strong>50+</strong>
+							<span>Communities</span>
+						</div>
+					</section>
+
+					<div class="footer-bottom">
+						<nav>
+							<a href="#footer">Privacy Policy</a>
+							<a href="#footer">Terms &amp; Conditions</a>
+						</nav>
+
+						<p>
+							© 2026 CivicBuzz. All rights reserved.<br>
+							<span>Built with <b>♥</b> for better communities.</span>
+						</p>
+
+						<nav>
+							<a href="https://github.com/a-k-shyam2309/CivicBuzz" target="_blank" rel="noreferrer">
+								GitHub
+							</a>
+							<a href="#footer">LinkedIn</a>
+						</nav>
+					</div>
+				</footer>
+			</section>
+
+			<!-- =========================================================
+			     SECTION 2: ISSUE QUEUE & TRIAGE (INTEGRATED)
+			     ========================================================= -->
+			<section class="admin-view hidden" id="section-issue-queue">
+				<div class="dashboard-heading">
+					<div>
+						<p class="eyebrow">ADMIN • ISSUE QUEUE</p>
+						<h1>Track &amp; Triage Issues <span>☷</span></h1>
+						<p>View, filter, triage, and manage citizen reported issues in real-time.</p>
+					</div>
+				</div>
+
+				<!-- Summary Cards -->
+				<section class="issue-summary-grid">
+					<div class="summary-card total-card">
+						<div class="summary-icon">📋</div>
+						<div class="summary-content">
+							<span data-i18n="Total Issues">Total Issues</span>
+							<strong id="queueTotalCount">0</strong>
+							<small data-i18n="All reported issues">All reported issues</small>
+						</div>
+					</div>
+
+					<div class="summary-card pending-card">
+						<div class="summary-icon">◷</div>
+						<div class="summary-content">
+							<span data-i18n="Pending">Pending</span>
+							<strong id="queuePendingCount">0</strong>
+							<small data-i18n="Awaiting action">Awaiting action</small>
+						</div>
+					</div>
+
+					<div class="summary-card progress-card">
+						<div class="summary-icon">↻</div>
+						<div class="summary-content">
+							<span data-i18n="In Progress">In Progress</span>
+							<strong id="queueProgressCount">0</strong>
+							<small data-i18n="Under work">Under work</small>
+						</div>
+					</div>
+
+					<div class="summary-card resolved-card">
+						<div class="summary-icon">✓</div>
+						<div class="summary-content">
+							<span data-i18n="Resolved">Resolved</span>
+							<strong id="queueResolvedCount">0</strong>
+							<small data-i18n="Awaiting verification">Awaiting verification</small>
+						</div>
+					</div>
+
+					<div class="summary-card verified-card">
+						<div class="summary-icon">🛡️</div>
+						<div class="summary-content">
+							<span data-i18n="Verified">Verified</span>
+							<strong id="queueVerifiedCount">0</strong>
+							<small data-i18n="Citizen verified & closed">Citizen verified &amp; closed</small>
+						</div>
+					</div>
+
+					<div class="summary-card rejected-card">
+						<div class="summary-icon">✕</div>
+						<div class="summary-content">
+							<span data-i18n="Rejected">Rejected</span>
+							<strong id="queueRejectedCount">0</strong>
+							<small data-i18n="Dismissed / Invalid">Dismissed / Invalid</small>
+						</div>
+					</div>
+
+					<div class="summary-card priority-card">
+						<div class="summary-icon">!</div>
+						<div class="summary-content">
+							<span data-i18n="High Priority">High Priority</span>
+							<strong id="queuePriorityCount">0</strong>
+							<small data-i18n="Requires attention">Requires attention</small>
+						</div>
+					</div>
+				</section>
+
+				<!-- Filters -->
+				<section class="issue-filters-bar">
+					<div class="search-box">
+						<input type="text" id="issueSearch"
+							placeholder="Search by Issue ID, Title, User ID, Location..." autocomplete="off">
+						<button type="button" id="searchButton" aria-label="Search">🔍</button>
+					</div>
+
+					<div class="filter-group">
+						<label for="statusFilter">Status</label>
+						<select id="statusFilter">
+							<option value="all">All Status</option>
+							<option value="pending">Pending</option>
+							<option value="progress">In Progress</option>
+							<option value="resolved">Resolved</option>
+							<option value="verified">Verified</option>
+							<option value="rejected">Rejected</option>
+						</select>
+					</div>
+
+					<div class="filter-group">
+						<label for="priorityFilter">Priority</label>
+						<select id="priorityFilter">
+							<option value="all">All Priority</option>
+							<option value="critical">Critical</option>
+							<option value="high">High</option>
+							<option value="medium">Medium</option>
+							<option value="low">Low</option>
+						</select>
+					</div>
+
+					<div class="filter-group">
+						<label for="categoryFilter">Category</label>
+						<select id="categoryFilter">
+							<option value="all">All Category</option>
+							<option value="road">Road</option>
+							<option value="electricity">Electricity</option>
+							<option value="water">Water</option>
+							<option value="garbage">Garbage</option>
+							<option value="drainage">Drainage</option>
+						</select>
+					</div>
+
+					<div class="filter-group">
+						<label for="dateFilter">Date</label>
+						<select id="dateFilter">
+							<option value="all">All Time</option>
+							<option value="today">Today</option>
+							<option value="week">This Week</option>
+							<option value="month">This Month</option>
+						</select>
+					</div>
+				</section>
+
+				<!-- Issue Table -->
+				<section class="issues-table-panel">
+					<div class="table-wrapper">
+						<table class="issues-table">
+							<thead>
+								<tr>
+									<th>Issue ID</th>
+									<th>Issue</th>
+									<th>User ID</th>
+									<th>Category</th>
+									<th>Priority</th>
+									<th>Date</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody id="issuesTableBody">
+								<tr data-status="pending" data-priority="high" data-category="electricity">
+									<td><strong>#ISS-1024</strong></td>
+									<td>Street Light Not Working</td>
+									<td>USR-2045</td>
+									<td><span class="category-chip">💡 Electricity</span></td>
+									<td><span class="priority-badge high">High</span></td>
+									<td>18 Aug 2026</td>
+									<td><span class="status-badge pending">Pending</span></td>
+									<td><button class="view-issue-btn" type="button" data-issue-id="ISS-1024"
+											title="View Details">👁</button></td>
+								</tr>
+								<tr data-status="progress" data-priority="medium" data-category="garbage">
+									<td><strong>#ISS-1023</strong></td>
+									<td>Garbage Not Collected</td>
+									<td>USR-1821</td>
+									<td><span class="category-chip">🗑️ Garbage</span></td>
+									<td><span class="priority-badge medium">Medium</span></td>
+									<td>17 Aug 2026</td>
+									<td><span class="status-badge progress">In Progress</span></td>
+									<td><button class="view-issue-btn" type="button" data-issue-id="ISS-1023"
+											title="View Details">👁</button></td>
+								</tr>
+								<tr data-status="resolved" data-priority="low" data-category="water">
+									<td><strong>#ISS-1022</strong></td>
+									<td>Water Pipeline Leakage</td>
+									<td>USR-1432</td>
+									<td><span class="category-chip">🚰 Water</span></td>
+									<td><span class="priority-badge low">Low</span></td>
+									<td>16 Aug 2026</td>
+									<td><span class="status-badge resolved">Resolved</span></td>
+									<td><button class="view-issue-btn" type="button" data-issue-id="ISS-1022"
+											title="View Details">👁</button></td>
+								</tr>
+								<tr data-status="pending" data-priority="critical" data-category="road">
+									<td><strong>#ISS-1021</strong></td>
+									<td>Dangerous Pothole on Flyover</td>
+									<td>USR-1109</td>
+									<td><span class="category-chip">🛣️ Road</span></td>
+									<td><span class="priority-badge critical">Critical</span></td>
+									<td>15 Aug 2026</td>
+									<td><span class="status-badge pending">Pending</span></td>
+									<td><button class="view-issue-btn" type="button" data-issue-id="ISS-1021"
+											title="View Details">👁</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</section>
+
+			<!-- =========================================================
+			     SECTION 3: DEPARTMENTS (INTEGRATED)
+			     ========================================================= -->
+			<section class="admin-view hidden" id="section-departments">
+				<div class="dashboard-heading flex-heading">
+					<div>
+						<p class="eyebrow" data-i18n="ADMIN • DEPARTMENTS">ADMIN • DEPARTMENTS</p>
+						<h1><span data-i18n="Department Directory">Department Directory</span> <span style="font-size:20px;">🏛️</span></h1>
+						<p data-i18n="Government departments responsible for resolving reported civic grievances.">Government departments responsible for resolving reported civic grievances.</p>
+					</div>
+					<button class="primary-btn-add" id="openAddDepartment" type="button" data-i18n="+ Add Department">+ Add Department</button>
+				</div>
+
+				<!-- Stats -->
+				<section class="track-section">
+					<div class="stats-track-grid">
+						<div class="stat-box">
+							<span data-i18n="Total Departments">Total Departments</span>
+							<strong id="deptStatTotal">6</strong>
+							<small data-i18n="Registered in system">Registered in system</small>
+						</div>
+						<div class="stat-box">
+							<span data-i18n="Active Departments">Active Departments</span>
+							<strong id="deptStatActive" style="color:var(--green);">5</strong>
+							<small data-i18n="Taking assignments">Taking assignments</small>
+						</div>
+						<div class="stat-box">
+							<span data-i18n="Municipal Field Staff">Municipal Field Staff</span>
+							<strong id="deptStatStaff" style="color:var(--blue);">221</strong>
+							<small data-i18n="Engineers & field workers">Engineers & field crew</small>
+						</div>
+						<div class="stat-box">
+							<span data-i18n="Open Issues Assigned">Open Issues Assigned</span>
+							<strong id="deptStatOpenIssues" style="color:var(--amber-dark);">5</strong>
+							<small data-i18n="Across all wards">Across all wards</small>
+						</div>
+					</div>
+				</section>
+
+				<!-- Directory Search & Cards -->
+				<section class="track-section">
+					<div class="section-toolbar">
+						<div>
+							<h2 data-i18n="Department Workload & Contacts">Department Workload &amp; Contacts</h2>
+							<p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Real-time municipal capacity and grievance assignment status</p>
+						</div>
+						<div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+							<div class="search-box" style="position:relative; min-width:280px;">
+								<input id="departmentSearch" type="search" placeholder="Search by name, head, email..." autocomplete="off" />
+								<div class="dept-search-suggestions" id="deptSearchSuggestions" hidden></div>
+							</div>
+							<select id="deptStatusFilter" class="filter-select" style="height:38px; padding:6px 30px 6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:12.5px; font-weight:600; cursor:pointer;">
+								<option value="ALL">All Statuses</option>
+								<option value="ACTIVE">Active</option>
+								<option value="UNDERSTAFFED">Understaffed</option>
+								<option value="STANDBY">Standby</option>
+							</select>
+							<select id="deptSortFilter" class="filter-select" style="height:38px; padding:6px 30px 6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:12.5px; font-weight:600; cursor:pointer;">
+								<option value="name">Sort by Name</option>
+								<option value="open">Sort by Open Grievances</option>
+								<option value="staff">Sort by Staff Size</option>
+								<option value="rating">Sort by SLA Rating</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="department-grid" id="departmentGrid">
+						<!-- Dynamically populated from DepartmentStore / CivicBuzzAPI -->
+					</div>
+				</section>
+			</section>
+
+			<!-- =========================================================
+			     SECTION 4: BUDGETING & TENDERS (INTEGRATED)
+			     ========================================================= -->
+			<section class="admin-view hidden" id="section-budgeting">
+				<div class="dashboard-heading flex-heading">
+					<div>
+						<p class="eyebrow" data-i18n="ADMIN • PARTICIPATORY BUDGETING">ADMIN • PARTICIPATORY BUDGETING</p>
+						<h1><span data-i18n="Budget & Tenders">Budget &amp; Tenders</span> <span style="font-size:20px;">🏗️</span></h1>
+						<p data-i18n="Create and manage government tenders generated from verified civic grievance clusters.">Create and manage government tenders generated from verified civic grievance clusters.</p>
+					</div>
+					<button class="primary-btn-add" id="openTenderModal" type="button" data-i18n="+ Add Tender">+ Add Tender</button>
+				</div>
+
+				<!-- Stats Grid -->
+				<section class="stats-grid">
+					<div class="stat-card">
+						<span data-i18n="Open tenders">Open tenders</span>
+						<strong id="budgetStatOpen" style="color:var(--blue);">2</strong>
+						<small data-i18n="Currently published">Currently published</small>
+					</div>
+					<div class="stat-card">
+						<span data-i18n="Draft tenders">Draft tenders</span>
+						<strong id="budgetStatDraft" style="color:var(--amber-dark);">1</strong>
+						<small data-i18n="Awaiting publication">Awaiting publication</small>
+					</div>
+					<div class="stat-card">
+						<span data-i18n="Allocated budget">Allocated budget</span>
+						<strong id="budgetStatAllocated" style="color:var(--green);">₹1.80 Cr</strong>
+						<small data-i18n="Across active projects">Across active projects</small>
+					</div>
+					<div class="stat-card">
+						<span data-i18n="In progress">In progress</span>
+						<strong id="budgetStatProgress" style="color:var(--purple, #805ad5);">2</strong>
+						<small data-i18n="Work currently tracked">Work currently tracked</small>
+					</div>
+				</section>
+
+				<!-- Tender Management -->
+				<section class="dashboard-section">
+					<div class="section-heading" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+						<div>
+							<p class="eyebrow" data-i18n="TENDER MANAGEMENT">TENDER MANAGEMENT</p>
+							<h2 data-i18n="Government projects">Government projects</h2>
+							<p data-i18n="Manage tenders created from verified issue clusters.">Manage tenders created from verified issue clusters.</p>
+						</div>
+						<div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+							<div class="search-box" style="min-width:240px;">
+								<input id="tenderSearch" type="search" placeholder="Search project, contractor, ward..." autocomplete="off" />
+							</div>
+							<div class="filter-group-buttons" id="statusFilters">
+								<button class="filter-button active" data-filter="all">All</button>
+								<button class="filter-button" data-filter="DRAFT">Draft</button>
+								<button class="filter-button" data-filter="PUBLISHED">Published</button>
+								<button class="filter-button" data-filter="IN_PROGRESS">In Progress</button>
+								<button class="filter-button" data-filter="COMPLETED">Completed</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="tender-grid" id="tenderTrack">
+						<!-- Dynamically rendered from TenderStore / CivicBuzzAPI -->
+					</div>
+				</section>
+			</section>
+		</main>
+	</div>
+
+	<!-- =========================================================
+	     SLIDE-OUT ISSUE DETAILS PANEL (INTEGRATED FROM ISSUE QUEUE)
+	     ========================================================= -->
+	<div class="details-panel-overlay" id="issuePanelOverlay"></div>
+	<aside class="issue-details-panel" id="issueDetailsPanel">
+		<div class="details-panel-header">
+			<div class="details-panel-title">
+				<span class="panel-badge" id="panelIssueId">#ISS-1024</span>
+				<h2 id="panelIssueTitle">Street Light Not Working</h2>
+			</div>
+			<button class="close-panel-btn" id="closeIssuePanel" type="button" aria-label="Close panel">✕</button>
+		</div>
+
+		<div class="details-panel-body">
+			<div class="panel-info-grid">
+				<div class="info-item">
+					<label>Reported By</label>
+					<span id="panelUserId">USR-2045</span>
+				</div>
+				<div class="info-item">
+					<label>Date</label>
+					<span id="panelDate">18 Aug 2026</span>
+				</div>
+				<div class="info-item">
+					<label>Location</label>
+					<span id="panelLocation">Sector 4, Main Market</span>
+				</div>
+				<div class="info-item">
+					<label>Category</label>
+					<span class="category-chip" id="panelCategory">💡 Electricity</span>
+				</div>
+				<div class="info-item">
+					<label>Priority</label>
+					<span class="priority-badge high" id="panelPriority">High</span>
+				</div>
+				<div class="info-item">
+					<label>Status</label>
+					<span class="status-badge pending" id="panelStatus">Pending</span>
+				</div>
+			</div>
+
+			<div class="panel-section">
+				<label>Assigned Department</label>
+				<p id="panelAssigned" class="dept-assigned-text">Street Lighting &amp; Electricity</p>
+			</div>
+
+			<!-- AI Triage & Civic Intelligence Box -->
+			<div class="panel-section" style="background:rgba(5, 150, 105, 0.06); border:1px solid rgba(5, 150, 105, 0.2); border-radius:12px; padding:12px 14px;">
+				<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+					<label style="color:#059669; font-weight:700; text-transform:uppercase; font-size:11px; margin:0;">
+						⚡ Gemini AI Triage Audit
+					</label>
+					<span class="category-chip" id="panelAiUrgencyChip" style="background:#059669; color:#fff; font-size:10px; font-weight:700;">Urgency: 88/100</span>
+				</div>
+				<p id="panelAiSummary" style="font-size:12px; color:var(--text-primary); font-style:italic; line-height:1.4; margin-bottom:8px;">
+					AI-standardized canonical summary for municipal dispatch.
+				</p>
+				<div style="display:flex; flex-wrap:wrap; gap:8px; font-size:11px;">
+					<span style="color:#2563EB; font-weight:600;" id="panelAiSla">⏱️ SLA: 48h Resolution</span>
+					<span style="color:#7C3AED; font-weight:600;" id="panelAiPbBadge">📊 PB Hotspot Candidate</span>
+				</div>
+			</div>
+
+			<div class="panel-section">
+				<label data-i18n="Description">Description</label>
+				<p id="panelDescription">Street light has been flickering and completely off for the last 3 days causing safety concerns near the junction.</p>
+			</div>
+
+			<!-- Attached Image Evidence Section -->
+			<div class="panel-section">
+				<label data-i18n="Attached Image / Media Evidence">Attached Image / Media Evidence</label>
+				<div class="issue-image-container" id="panelImageContainer">
+					<!-- Dynamically populated via JS -->
+				</div>
+			</div>
+
+			<!-- Citizen Verification Timeline -->
+			<div class="panel-section">
+				<label>Citizen Verification Status</label>
+				<div class="citizen-verification-box">
+					<div class="citizen-row">
+						<span>👤 Original Reporter</span>
+						<span class="ver-badge waiting" id="verRep">Pending</span>
+					</div>
+					<div class="citizen-row">
+						<span>👤 Nearby Citizen 1</span>
+						<span class="ver-badge waiting" id="verCit1">Pending</span>
+					</div>
+					<div class="citizen-row">
+						<span>👤 Nearby Citizen 2</span>
+						<span class="ver-badge waiting" id="verCit2">Pending</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="details-panel-footer">
+			<button type="button" class="panel-action-btn assign" id="assignIssueBtn">👤 Assign</button>
+			<button type="button" class="panel-action-btn reject" id="rejectIssueBtn">✕ Reject</button>
+			<button type="button" class="panel-action-btn resolve" id="resolveIssueBtn">✓ Mark Resolved</button>
+		</div>
+	</aside>
+
+	<!-- =========================================================
+	     MODAL: ADD DEPARTMENT
+	     ========================================================= -->
+	<div class="modal-overlay" id="departmentModal" hidden>
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="deptModalTitle" style="max-width:560px;">
+			<div class="modal-header">
+				<div>
+					<p class="eyebrow" id="deptModalEyebrow" data-i18n="MUNICIPAL DIRECTORY">MUNICIPAL DIRECTORY</p>
+					<h2 id="deptModalTitle" data-i18n="Add Department">Add Department</h2>
+				</div>
+				<button class="close-button" id="closeDeptModal" aria-label="Close">×</button>
+			</div>
+
+			<form id="departmentForm">
+				<input type="hidden" id="deptEditId" value="" />
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="deptName" data-i18n="Department Name">Department Name *</label>
+						<input id="deptName" type="text" placeholder="e.g. Public Health & Sanitation" required />
+					</div>
+					<div class="form-group">
+						<label for="deptCode" data-i18n="Category Code / Key">Category Code *</label>
+						<input id="deptCode" type="text" placeholder="e.g. PUBLIC_HEALTH" required />
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="deptIcon" data-i18n="Icon / Emoji">Icon Emoji *</label>
+						<select id="deptIcon" style="height:42px; width:100%; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:16px; padding:6px 12px;">
+							<option value="🛣️">🛣️ Roads & Infrastructure</option>
+							<option value="💡">💡 Street Lighting & Electrical</option>
+							<option value="🗑️">🗑️ Sanitation & Waste</option>
+							<option value="🚰">🚰 Water Supply & Sewage</option>
+							<option value="🌳">🌳 Parks & Greenery</option>
+							<option value="🌊">🌊 Drainage & Flood</option>
+							<option value="🚦">🚦 Traffic & Mobility</option>
+							<option value="🏥">🏥 Public Health & Medical</option>
+							<option value="🏢">🏢 Town Planning & Buildings</option>
+							<option value="🏛️">🏛️ General Administration</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="deptStatus" data-i18n="Operational Status">Operational Status *</label>
+						<select id="deptStatus" style="height:42px; width:100%; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:13px; font-weight:600; padding:6px 12px;">
+							<option value="ACTIVE">Active (Taking Grievances)</option>
+							<option value="UNDERSTAFFED">Understaffed (Delayed SLA)</option>
+							<option value="STANDBY">Standby (Emergency Reserve)</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="deptHead" data-i18n="Department Head">Department Head *</label>
+						<input id="deptHead" type="text" placeholder="e.g. Er. Rajesh Sharma" required />
+					</div>
+					<div class="form-group">
+						<label for="deptHeadTitle" data-i18n="Designation">Designation / Title</label>
+						<input id="deptHeadTitle" type="text" placeholder="e.g. Chief Municipal Engineer" />
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="deptEmail" data-i18n="Official Email">Official Email *</label>
+						<input id="deptEmail" type="email" placeholder="roads@civicbuzz.gov.in" required />
+					</div>
+					<div class="form-group">
+						<label for="deptPhone" data-i18n="Contact Phone">Contact Phone *</label>
+						<input id="deptPhone" type="text" placeholder="+91 674 253 4401" required />
+					</div>
+				</div>
+
+				<div class="form-row-3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+					<div class="form-group">
+						<label for="deptStaff" data-i18n="Field Staff Count">Staff Count</label>
+						<input id="deptStaff" type="number" min="1" max="500" value="25" required />
+					</div>
+					<div class="form-group">
+						<label for="deptSlaHours" data-i18n="SLA Target (Hours)">SLA (Hours)</label>
+						<input id="deptSlaHours" type="number" min="1" max="168" value="24" required />
+					</div>
+					<div class="form-group">
+						<label for="deptBudget" data-i18n="Allocated Budget">Budget (₹)</label>
+						<input id="deptBudget" type="text" placeholder="₹35.0 L" value="₹30.0 L" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="deptCoverage" data-i18n="Ward Coverage">Ward Coverage Jurisdiction</label>
+					<input id="deptCoverage" type="text" placeholder="e.g. All 67 Wards (Zone 1 - 4)" value="All 67 Wards" />
+				</div>
+
+				<div class="form-group">
+					<label for="deptDesc" data-i18n="Responsibility / Scope">Operational Scope &amp; Responsibilities</label>
+					<textarea id="deptDesc" rows="3" placeholder="Describe the civic issues and operational scope handled by this department..."></textarea>
+				</div>
+
+				<div class="modal-actions" style="margin-top:20px;">
+					<button type="button" class="btn btn-secondary" id="cancelDeptModal" data-i18n="Cancel">Cancel</button>
+					<button type="submit" class="btn btn-primary" id="saveDeptBtn" data-i18n="Save Department">Save Department</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- =========================================================
+	     MODAL: ADD TENDER
+	     ========================================================= -->
+	<div class="modal-overlay" id="tenderModal" hidden>
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="tenderModalTitle" style="max-width:580px;">
+			<div class="modal-header">
+				<div>
+					<p class="eyebrow" id="tenderModalEyebrow" data-i18n="NEW PROJECT">NEW PROJECT</p>
+					<h2 id="tenderModalTitle" data-i18n="Add Tender">Add Tender</h2>
+				</div>
+				<button class="close-button" id="closeTenderModal" aria-label="Close">×</button>
+			</div>
+
+			<form id="tenderForm">
+				<input type="hidden" id="tenderEditId" value="" />
+				<div class="form-group">
+					<label for="tenderTitle" data-i18n="Project Title">Project Title *</label>
+					<input id="tenderTitle" type="text" placeholder="e.g. Priority Road Patching — Ward 15" required />
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="tenderCategory" data-i18n="Category / Sector">Sector Category *</label>
+						<select id="tenderCategory" style="height:42px; width:100%; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:13px; font-weight:600; padding:6px 12px;">
+							<option value="roads_potholes">🛣️ Roads & Infrastructure</option>
+							<option value="streetlights">💡 Street Lighting</option>
+							<option value="garbage_sanitation">🗑️ Sanitation & Waste</option>
+							<option value="water_supply">🚰 Water Supply</option>
+							<option value="drainage">🌊 Drainage & Floods</option>
+							<option value="parks_greenery">🌳 Parks & Greenery</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="tenderStatus" data-i18n="Tender Status">Tender Status *</label>
+						<select id="tenderStatus" style="height:42px; width:100%; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:13px; font-weight:600; padding:6px 12px;">
+							<option value="PUBLISHED">Published (Open Bids)</option>
+							<option value="DRAFT">Draft (Internal Review)</option>
+							<option value="IN_PROGRESS">In Progress (Execution)</option>
+							<option value="COMPLETED">Completed (Verified)</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="tenderWard" data-i18n="Ward Number">Ward Number *</label>
+						<input id="tenderWard" type="number" min="1" max="100" placeholder="15" value="15" required />
+					</div>
+					<div class="form-group">
+						<label for="tenderLocation" data-i18n="Corridor / Location">Specific Location *</label>
+						<input id="tenderLocation" type="text" placeholder="e.g. Saheed Nagar & Janpath Corridor" required />
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="tenderBudget" data-i18n="Estimated Budget">Estimated Budget (₹) *</label>
+						<input id="tenderBudget" type="number" min="1000" placeholder="2500000" value="2500000" required />
+					</div>
+					<div class="form-group">
+						<label for="tenderDeadline" data-i18n="Target Completion">Submission / Target Date *</label>
+						<input id="tenderDeadline" type="date" required />
+					</div>
+				</div>
+
+				<div class="form-row-2">
+					<div class="form-group">
+						<label for="tenderContractor" data-i18n="Awarded Contractor">Assigned Contractor</label>
+						<input id="tenderContractor" type="text" placeholder="e.g. L&T Infrastructure Projects Ltd." />
+					</div>
+					<div class="form-group">
+						<label for="tenderProgress" data-i18n="Work Progress %">Work Progress (%)</label>
+						<input id="tenderProgress" type="number" min="0" max="100" placeholder="25" value="20" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="tenderDesc" data-i18n="Project Scope">Project Scope &amp; Citizen Cluster Details</label>
+					<textarea id="tenderDesc" rows="3" placeholder="Describe the civic works project generated from citizen grievance clusters..."></textarea>
+				</div>
+
+				<div class="modal-actions" style="margin-top:20px;">
+					<button type="button" class="btn btn-secondary" id="cancelTenderModal" data-i18n="Cancel">Cancel</button>
+					<button type="submit" class="btn btn-primary" id="saveTenderBtn" data-i18n="Publish Tender">Save Tender</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- =========================================================
+	     MODAL: ADMIN PROFILE
+	     ========================================================= -->
+	<div class="modal-overlay" id="profileModal" hidden>
+		<div class="modal profile-dialog-modal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+			<div class="modal-header">
+				<div>
+					<p class="eyebrow">ADMINISTRATION</p>
+					<h2 id="profileModalTitle">Administrator Profile</h2>
+				</div>
+				<button class="close-button" id="closeProfileModal" aria-label="Close">×</button>
+			</div>
+
+			<div class="profile-modal-body">
+				<div class="profile-modal-top">
+					<div class="profile-modal-avatar" id="modalAvatarLarge">AK</div>
+					<div class="profile-modal-info">
+						<h3 id="modalProfileFullName">Aditya Kumar Shyam</h3>
+						<p class="badge-role" id="modalProfileRole">Super Administrator</p>
+						<small id="modalProfileEmail">admin@civicbuzz.in</small>
+					</div>
+				</div>
+
+				<div class="profile-modal-grid">
+					<div class="profile-field">
+						<span>Admin ID</span>
+						<strong id="modalProfileUid">ADMIN-001</strong>
+					</div>
+					<div class="profile-field">
+						<span>Account Status</span>
+						<strong class="text-success">Active & Verified ✓</strong>
+					</div>
+					<div class="profile-field">
+						<span>Jurisdiction</span>
+						<strong>Bhubaneswar Central Ward</strong>
+					</div>
+					<div class="profile-field">
+						<span>Access Level</span>
+						<strong>Tier-1 Super Admin (Full Read/Write)</strong>
+					</div>
+				</div>
+
+				<div class="modal-actions" style="margin-top: 20px;">
+					<button type="button" class="btn btn-secondary" id="closeProfileModalBtn">Close</button>
+					<button type="button" class="btn btn-primary" id="modalLogoutBtn"
+						style="background:#e53e3e;border-color:#e53e3e;">Logout</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+	<script>
+		// Inline profile controller for instantaneous click responsiveness
+		window.toggleProfileMenu = function (event) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			const wrapper = document.getElementById("profileWrapper");
+			const dropdown = document.getElementById("profileDropdown");
+			const button = document.getElementById("profileButton");
+			if (!wrapper || !dropdown) return;
+
+			// Close notification dropdown if open
+			const nWrapper = document.getElementById("notificationWrapper");
+			const nDropdown = document.getElementById("notificationDropdown");
+			if (nWrapper && nDropdown) {
+				nWrapper.classList.remove("is-open", "open");
+				nDropdown.classList.remove("is-open", "open");
+				nDropdown.style.display = "none";
+			}
+
+			const isCurrentlyOpen = wrapper.classList.contains("is-open") || wrapper.classList.contains("open") || dropdown.classList.contains("open") || dropdown.style.display === "grid";
+
+			if (isCurrentlyOpen) {
+				wrapper.classList.remove("is-open", "open");
+				dropdown.classList.remove("is-open", "open");
+				dropdown.style.display = "none";
+				if (button) button.setAttribute("aria-expanded", "false");
+			} else {
+				wrapper.classList.add("is-open", "open");
+				dropdown.classList.add("is-open", "open");
+				dropdown.style.display = "grid";
+				if (button) button.setAttribute("aria-expanded", "true");
+			}
+		};
+
+		window.toggleNotificationMenu = function (event) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			const wrapper = document.getElementById("notificationWrapper");
+			const dropdown = document.getElementById("notificationDropdown");
+			const button = document.getElementById("notificationButton");
+			if (!wrapper || !dropdown) return;
+
+			// Close profile dropdown if open
+			const pWrapper = document.getElementById("profileWrapper");
+			const pDropdown = document.getElementById("profileDropdown");
+			if (pWrapper && pDropdown) {
+				pWrapper.classList.remove("is-open", "open");
+				pDropdown.classList.remove("is-open", "open");
+				pDropdown.style.display = "none";
+			}
+
+			const isCurrentlyOpen = wrapper.classList.contains("is-open") || wrapper.classList.contains("open") || dropdown.classList.contains("open") || dropdown.style.display === "block";
+
+			if (isCurrentlyOpen) {
+				wrapper.classList.remove("is-open", "open");
+				dropdown.classList.remove("is-open", "open");
+				dropdown.style.display = "none";
+				if (button) button.setAttribute("aria-expanded", "false");
+			} else {
+				wrapper.classList.add("is-open", "open");
+				dropdown.classList.add("is-open", "open");
+				dropdown.style.display = "block";
+				if (button) button.setAttribute("aria-expanded", "true");
+			}
+		};
+
+		window.markAllNotificationsRead = function (event) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			const items = document.querySelectorAll("#notificationList .notification-item");
+			items.forEach(function (item) {
+				item.classList.remove("unread");
+			});
+			const badge = document.getElementById("notifBadge");
+			if (badge) badge.style.display = "none";
+			const pill = document.getElementById("notifCountPill");
+			if (pill) {
+				pill.textContent = "0 New";
+				pill.style.background = "rgba(16, 185, 129, 0.12)";
+				pill.style.color = "#10b981";
+			}
+			if (typeof showToast === "function") showToast("All notifications marked as read.");
+		};
+
+		window.handleNotifClick = function (event, action, id) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			window.toggleNotificationMenu();
+
+			if (action === "issue") {
+				if (typeof showSection === "function") showSection("issuequeue");
+				const qInput = document.getElementById("issueSearch");
+				if (qInput && id) {
+					qInput.value = id;
+					qInput.dispatchEvent(new Event("input"));
+				}
+				if (typeof showToast === "function") showToast("Opened grievance #" + id);
+			} else if (action === "budgeting") {
+				if (typeof showSection === "function") showSection("budgeting");
+				if (typeof showToast === "function") showToast("Navigated to Municipal Tenders.");
+			} else if (action === "issuequeue") {
+				if (typeof showSection === "function") showSection("issuequeue");
+			}
+		};
+
+		window.copyAdminId = function (event) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			const uid = document.getElementById("userIdText")?.textContent || "ADMIN-001";
+			if (navigator.clipboard?.writeText) {
+				navigator.clipboard.writeText(uid).then(function () {
+					if (typeof showToast === "function") showToast("Admin ID (" + uid + ") copied!");
+				});
+			} else if (typeof showToast === "function") {
+				showToast("Admin ID: " + uid);
+			}
+		};
+
+		window.handleProfileAction = function (event, action) {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			window.toggleProfileMenu();
+
+			if (action === "theme") {
+				if (typeof setTheme === "function") {
+					const isDark = document.body.classList.contains("dark-theme");
+					setTheme(isDark ? "light" : "dark");
+					if (typeof showToast === "function") showToast(!isDark ? "Dark mode enabled." : "Light mode enabled.");
+				}
+			} else if (action === "logout") {
+				if (window.CivicBuzzAPI?.auth?.logout) {
+					try { window.CivicBuzzAPI.auth.logout(); } catch (_) { }
+				}
+				localStorage.removeItem("civicbuzz_token");
+				localStorage.removeItem("civicbuzz_user");
+				if (typeof showToast === "function") showToast("Logged out successfully.");
+				setTimeout(function () { window.location.href = "../index.html"; }, 300);
+			} else if (action === "profile") {
+				const modal = document.getElementById("profileModal");
+				if (modal) modal.hidden = false;
+			}
+		};
+
+		document.addEventListener("click", function (event) {
+			const wrapper = document.getElementById("profileWrapper");
+			const dropdown = document.getElementById("profileDropdown");
+			if (wrapper && dropdown && !wrapper.contains(event.target)) {
+				wrapper.classList.remove("is-open", "open");
+				dropdown.classList.remove("is-open", "open");
+				dropdown.style.display = "none";
+				const button = document.getElementById("profileButton");
+				if (button) button.setAttribute("aria-expanded", "false");
+			}
+
+			const nWrapper = document.getElementById("notificationWrapper");
+			const nDropdown = document.getElementById("notificationDropdown");
+			if (nWrapper && nDropdown && !nWrapper.contains(event.target)) {
+				nWrapper.classList.remove("is-open", "open");
+				nDropdown.classList.remove("is-open", "open");
+				nDropdown.style.display = "none";
+				const nButton = document.getElementById("notificationButton");
+				if (nButton) nButton.setAttribute("aria-expanded", "false");
+			}
+		});
+
+		function applyLoggedInAdminProfile() {
+			try {
+				const savedUser = JSON.parse(localStorage.getItem("civicbuzz_user") || "null");
+				let name = "Aditya Kumar Shyam";
+				let role = "Super Administrator";
+				let email = "admin@civicbuzz.in";
+				let uid = "ADMIN-001";
+				let jurisdiction = "Bhubaneswar Central Ward";
+
+				if (savedUser) {
+					if (savedUser.full_name) {
+						name = savedUser.full_name;
+					} else if (savedUser.email && savedUser.email.includes("@")) {
+						name = savedUser.email.split("@")[0].replace(/[._-]/g, " ").split(" ").filter(Boolean).map(function (w) {
+							return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+						}).join(" ");
+					}
+					if (savedUser.role) role = savedUser.role;
+					if (savedUser.email) email = savedUser.email;
+					if (savedUser.user_uid) uid = savedUser.user_uid;
+					if (savedUser.jurisdiction) jurisdiction = savedUser.jurisdiction;
+				}
+
+				let initials = "AK";
+				if (name) {
+					const parts = name.trim().split(/\s+/).filter(Boolean);
+					if (parts.length === 1) {
+						initials = parts[0].slice(0, 2).toUpperCase();
+					} else {
+						initials = (parts[0][0] + parts[1][0]).toUpperCase();
+					}
+				}
+
+				const pBtn = document.getElementById("profileButton");
+				if (pBtn) pBtn.textContent = initials;
+
+				const tAvatar = document.getElementById("topbarAvatarLarge");
+				if (tAvatar) tAvatar.textContent = initials;
+
+				const hName = document.getElementById("headerProfileName");
+				if (hName) hName.textContent = name;
+
+				const hRole = document.getElementById("headerProfileRole");
+				if (hRole) hRole.textContent = role;
+
+				const uId = document.getElementById("userIdText");
+				if (uId) uId.textContent = uid;
+
+				const hJurisdiction = document.getElementById("headerJurisdiction");
+				if (hJurisdiction) hJurisdiction.textContent = jurisdiction;
+
+				const sStrong = document.querySelector(".admin-mini strong");
+				if (sStrong) sStrong.textContent = name;
+
+				const sSmall = document.querySelector(".admin-mini small");
+				if (sSmall) sSmall.textContent = role;
+
+				const sAvatar = document.querySelector(".admin-mini .avatar-small");
+				if (sAvatar) sAvatar.textContent = initials;
+
+				const mAvatar = document.getElementById("modalAvatarLarge");
+				if (mAvatar) mAvatar.textContent = initials;
+
+				const mName = document.getElementById("modalProfileFullName");
+				if (mName) mName.textContent = name;
+
+				const mRole = document.getElementById("modalProfileRole");
+				if (mRole) mRole.textContent = role;
+
+				const mEmail = document.getElementById("modalProfileEmail");
+				if (mEmail) mEmail.textContent = email;
+
+				const mUid = document.getElementById("modalProfileUid");
+				if (mUid) mUid.textContent = uid;
+			} catch (_) { }
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", applyLoggedInAdminProfile);
+		} else {
+			applyLoggedInAdminProfile();
+		}
+
+		document.getElementById("closeProfileModal")?.addEventListener("click", function () {
+			const m = document.getElementById("profileModal");
+			if (m) m.hidden = true;
+		});
+		document.getElementById("closeProfileModalBtn")?.addEventListener("click", function () {
+			const m = document.getElementById("profileModal");
+			if (m) m.hidden = true;
+		});
+		document.getElementById("modalLogoutBtn")?.addEventListener("click", function () {
+			const m = document.getElementById("profileModal");
+			if (m) m.hidden = true;
+			window.handleProfileAction(null, "logout");
+		});
+	</script>
+
+	<script src="../api-config.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
