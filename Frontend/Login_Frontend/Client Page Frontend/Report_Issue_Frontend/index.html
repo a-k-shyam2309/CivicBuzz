@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CivicBuzz — Report a Civic Grievance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<!-- Leaflet CSS for interactive GIS mini map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="../style.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="scene">
+  <div class="road">
+    <div class="lane-marking"></div>
+    <div class="pothole"></div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="eyebrow">
+    <span class="pulse-dot"></span> Evidence-Grounded Triage &middot; Report &middot; 04
+  </div>
+  <h1>Report a Civic Grievance</h1>
+  <p>Submit with photo evidence, GPS location, and voice note. Gemini AI categorizes, eliminates duplicates, and routes to responsible ward units.</p>
+</header>
+
+<!-- Quick 1-Click Fill Templates for Instant Triage Demonstration -->
+<div class="quick-template-container">
+  <div class="quick-template-header">
+    <span class="quick-template-title">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Quick-Fill Sample Grievances (Multilingual &amp; Real-time AI Triage Demo):
+    </span>
+    <span class="quick-template-hint">Click any sample to auto-fill &amp; test live triage</span>
+  </div>
+  <div class="quick-template-chips">
+    <button type="button" class="sample-chip" data-sample="pothole_en">
+      🛣️ Deep Pothole (Roads)
+    </button>
+    <button type="button" class="sample-chip" data-sample="garbage_en">
+      🗑️ Garbage Overflow (Sanitation)
+    </button>
+    <button type="button" class="sample-chip" data-sample="streetlight_en">
+      💡 Dark Streetlight (Electrical)
+    </button>
+    <button type="button" class="sample-chip" data-sample="water_pipe">
+      🚰 Water Pipe Burst (Water Supply)
+    </button>
+    <button type="button" class="sample-chip" data-sample="regional_hi">
+      🌐 Regional Language (Hindi Demo)
+    </button>
+  </div>
+</div>
+
+<main class="panels">
+
+  <!-- LEFT PANEL: Issue Input & Evidence -->
+  <section class="glass issue-form-panel">
+    <div class="panel-head">
+      <div>
+        <h2>Issue Details &amp; Evidence</h2>
+        <div class="panel-sub">Multilingual text, photo evidence, map coordinates, and voice note</div>
+      </div>
+      <div class="lang-selector-wrapper">
+        <label for="inputLanguageSelect" class="lang-label">Lang:</label>
+        <select id="inputLanguageSelect" class="lang-select">
+          <option value="auto">🌐 Auto-Detect</option>
+          <option value="en">English</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="or">ଓଡ଼ିଆ (Odia)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Issue Description -->
+    <div class="field-group" id="groupDescription">
+      <div class="field-label">
+        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        Describe the Issue <span class="req-star">*</span>
+      </div>
+      <textarea id="issueDescription" placeholder="e.g. Deep 2-foot asphalt pothole on Janpath Road near Ram Mandir square causing severe vehicle damage and traffic hazards. Type in Hindi, Odia or English..."></textarea>
+      <div id="descError" class="inline-field-error" style="display:none;"></div>
+      <div class="typing-status" id="typingStatus">
+        <span class="typing-indicator-dot"></span>
+        <span id="typingStatusText">AI listening to input...</span>
+      </div>
+    </div>
+
+    <!-- Map & GPS Coordinates -->
+    <div class="field-group" id="groupLocation">
+      <div class="field-label">
+        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Geo-Pinpoint Location &amp; Ward <span class="req-star">*</span>
+      </div>
+      <div class="map-box" id="mapBox">
+        <div id="miniMap" class="mini-map-container"></div>
+        <div class="map-interactive-hint">
+          <i class="fa-solid fa-location-crosshairs"></i> Drag pin or click map to relocate
+        </div>
+        <div class="coords mono" id="coordDisplay">
+          <i class="fa-solid fa-location-dot" style="color:var(--rose);"></i>
+          <span id="coordLatLng">Click map or Current GPS</span>
+          <span class="ward-pill" id="coordWardText">Unselected</span>
+        </div>
+        <button type="button" class="gps-refresh-btn" id="refreshGpsBtn" title="Detect Current GPS">
+          <i class="fa-solid fa-crosshairs"></i> <span id="gpsBtnText">Current GPS</span>
+        </button>
+      </div>
+
+      <!-- Real-time Location Confirmation Box -->
+      <div class="location-confirmation-box" id="locationConfirmationBox" style="display:none;">
+        <div class="loc-confirm-header">
+          <i class="fa-solid fa-circle-check"></i> Location selected successfully
+        </div>
+        <div class="loc-confirm-coords mono">
+          <span>Latitude: <strong id="locLatDisplay">20.2961</strong></span>
+          <span>Longitude: <strong id="locLngDisplay">85.8245</strong></span>
+        </div>
+        <div class="loc-confirm-address" id="locAddressDisplay">
+          📍 Ward 12 · Janpath (Janpath Road, Ram Mandir Square, Bhubaneswar)
+        </div>
+      </div>
+
+      <div id="locationError" class="inline-field-error" style="display:none;"></div>
+    </div>
+
+    <!-- Photo Evidence & Voice Note -->
+    <div class="row-2 field-group">
+      <div id="groupPhoto">
+        <div class="field-label">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          Photo Evidence <span class="req-star">*</span>
+        </div>
+        <div class="upload-box" id="uploadBox">
+          <input type="file" id="evidenceFileInput" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none;" />
+          <div id="uploadBoxDefault">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+            <div id="uploadLabel">Drop image or click to browse</div>
+            <small class="upload-subtext">JPG, JPEG, PNG, WEBP · AI Defect Audit</small>
+          </div>
+          <div id="uploadPreviewWrapper" style="display:none;">
+            <img id="uploadPreviewImg" src="" alt="Uploaded Evidence" />
+            <span class="preview-badge" id="previewBadge">✓ Evidence Attached</span>
+            <button type="button" class="remove-img-btn" id="removeImgBtn" title="Remove image">✕</button>
+          </div>
+        </div>
+        <div id="photoError" class="inline-field-error" style="display:none;"></div>
+      </div>
+
+      <div id="groupVoice">
+        <div class="field-label">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          Voice Grievance <span style="font-size:10.5px; font-weight:normal; color:var(--text-muted);">(Optional)</span>
+        </div>
+        <div class="voice-box" id="voiceBox">
+          <div class="voice-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          </div>
+          <div id="voiceLabel">Tap to record voice note</div>
+          <small class="voice-subtext">Multilingual Speech-to-Text</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Identity Protection Row -->
+    <div class="privacy-box">
+      <label class="checkbox-row" for="anonCheckbox">
+        <input type="checkbox" id="anonCheckbox" checked />
+        <span class="checkbox-text">
+          <strong>Protect My Identity (Anonymous Ledger)</strong>
+          <small>Complainant contact info &amp; name will be redacted from the public transparency feed.</small>
+        </span>
+      </label>
+    </div>
+
+    <button type="button" class="submit-btn" id="submitGrievanceBtn">
+      <i class="fa-solid fa-bolt"></i> Run AI Triage &amp; Submit Grievance
+    </button>
+  </section>
+
+  <!-- RIGHT PANEL: Full Project AI Triage Assistant -->
+  <section class="glass ai-panel">
+    <div class="panel-head ai-panel-head">
+      <div>
+        <h2>AI Grievance Triage Assistant</h2>
+        <div class="panel-sub">Real-time Multilingual &amp; Evidence Grounding</div>
+      </div>
+      <div class="ai-status-pill">
+        <span class="ai-live-dot"></span> Gemini 2.5 Active
+      </div>
+    </div>
+
+    <!-- 1. MULTILINGUAL & CANONICAL SUMMARY -->
+    <div class="ai-card ai-summary-card">
+      <div class="ai-card-top">
+        <span class="ai-card-title">
+          <i class="fa-solid fa-language"></i> Language &amp; Canonical Triage Summary
+        </span>
+        <span class="ai-lang-chip" id="aiLangChip">🌐 Language (Auto-Detect)</span>
+      </div>
+      <p class="ai-canonical-text" id="aiCanonicalText">
+        "Enter issue description above or click a template to start live AI triage &amp; grounding."
+      </p>
+      <div class="ai-keywords-row" id="aiKeywordsRow">
+        <span class="keyword-tag">#civic-grievance</span>
+        <span class="keyword-tag">#bhubaneswar</span>
+      </div>
+    </div>
+
+    <!-- 2. DUPLICATE & PROXIMITY DETECTION ALERT -->
+    <div class="ai-card ai-duplicate-card" id="aiDuplicateCard" style="display:none;">
+      <div class="ai-dup-header">
+        <span class="ai-dup-badge">
+          <i class="fa-solid fa-clone"></i> Proximity Radar &middot; Duplicate Check
+        </span>
+        <span class="ai-dup-score" id="aiDupScore">Match Found</span>
+      </div>
+      <div class="ai-dup-body">
+        <div class="dup-icon-box">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="dup-info">
+          <strong id="aiDupTitle">Similar Grievance Found Nearby</strong>
+          <p id="aiDupDesc">Awaiting complaint scan...</p>
+          <div class="dup-actions">
+            <button type="button" class="btn-upvote-merge" id="btnUpvoteMerge">
+              <i class="fa-solid fa-thumbs-up"></i> Upvote Existing Issue (+1 Urgency Boost)
+            </button>
+            <button type="button" class="btn-keep-new" id="btnKeepNew">
+              Keep as Separate Issue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-card" id="aiNoDuplicateCard" style="background:#f0fdf4; border-color:#bbf7d0; padding:10px 14px;">
+      <div style="font-size:12px; color:#166534; display:flex; align-items:center; gap:8px;">
+        <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:14px;"></i>
+        <span id="aiRadarStatusText"><strong>Proximity Radar:</strong> Scanning database for nearby duplicates...</span>
+      </div>
+    </div>
+
+    <!-- 3. MULTI-MODAL EVIDENCE AUTHENTICITY AUDIT -->
+    <div class="ai-card ai-evidence-card">
+      <div class="ai-card-top">
+        <span class="ai-card-title">
+          <i class="fa-solid fa-camera-retro"></i> Evidence Grounding &amp; Authenticity Audit
+        </span>
+        <span class="evidence-status-chip verified" id="aiEvidenceStatusChip">
+          <i class="fa-solid fa-shield-halved"></i> Awaiting Evidence
+        </span>
+      </div>
+      <div class="evidence-elements-list" id="aiDetectedElements">
+        <span class="defect-tag"><i class="fa-solid fa-circle-dot"></i> Awaiting Photo Evidence</span>
+      </div>
+      <div class="confidence-row">
+        <div class="confidence-info">
+          <span class="confidence-label">Visual Verification Confidence</span>
+          <span class="confidence-num" id="aiConfidenceNum">0%</span>
+        </div>
+        <div class="confidence-bar"><div class="confidence-fill" id="aiConfidenceFill" style="width: 0%;"></div></div>
+      </div>
+    </div>
+
+    <!-- 4. ROUTING, WARD JURISDICTION & SLA ESTIMATION -->
+    <div class="ai-card ai-routing-card">
+      <div class="ai-card-top">
+        <span class="ai-card-title">
+          <i class="fa-solid fa-sitemap"></i> Department Routing &amp; Municipal SLA
+        </span>
+      </div>
+      <div class="ai-grid-2">
+        <div class="ai-stat-box">
+          <label>Target Department</label>
+          <strong id="aiDeptName">Municipal Administration</strong>
+          <small id="aiWardJurisdiction">Awaiting Location Selection</small>
+        </div>
+        <div class="ai-stat-box">
+          <label>Calculated Urgency Score</label>
+          <div class="urgency-score-wrap">
+            <strong class="urgency-num medium" id="aiUrgencyNum">70 / 100</strong>
+            <span class="chip chip-severity" id="aiSeverityChip">MEDIUM</span>
+          </div>
+          <small>Multi-factor risk &amp; proximity weighted</small>
+        </div>
+      </div>
+      <div class="sla-banner">
+        <i class="fa-solid fa-clock"></i>
+        <span>Guaranteed Municipal SLA: <strong id="aiSlaHours">48-Hour Resolution Window</strong></span>
+      </div>
+    </div>
+
+    <!-- 5. TRANSPARENT EXPLAINABILITY AUDIT -->
+    <div class="ai-card" id="aiReasoningCard" style="background:#fafafa; border-color:#e2e8f0;">
+      <div class="ai-card-top">
+        <span class="ai-card-title" style="font-size:12px; font-weight:700; color:#334155;">
+          <i class="fa-solid fa-scale-balanced" style="color:#6366f1;"></i> Explainable Prioritization Audit
+        </span>
+      </div>
+      <ul class="reasoning-list" id="aiReasoningList" style="margin:6px 0 0; padding-left:18px; font-size:11.5px; color:#475569; line-height:1.6;">
+        <li>Awaiting problem description and location to generate explainable audit.</li>
+      </ul>
+    </div>
+
+    <!-- 6. PARTICIPATORY BUDGETING (PB) HOTSPOT BRIDGE -->
+    <div class="ai-card ai-pb-card" id="aiPbCard" style="display:none;">
+      <div class="pb-card-header">
+        <span class="pb-badge">
+          <i class="fa-solid fa-chart-line"></i> Participatory Budgeting Hotspot
+        </span>
+        <span class="pb-tag">Cluster Pattern</span>
+      </div>
+      <p class="pb-text" id="aiPbText">
+        <strong>Chronic Infrastructure Failure:</strong> Defect cluster detected in this corridor. Flagged as candidate for Community Participatory Budgeting.
+      </p>
+      <a href="../Tenders/index.html" class="pb-link">
+        <span>View Ward Public Works &amp; Budget Proposals</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- 7. IDENTITY PROTECTION & PRIVACY SHIELD -->
+    <div class="ai-card ai-privacy-card">
+      <div class="privacy-shield-header">
+        <i class="fa-solid fa-user-shield"></i>
+        <div class="privacy-shield-text">
+          <strong>Citizen Identity Shield: Active</strong>
+          <span>PII encrypted and sanitized. Complaint token generated: <code class="mono" id="aiComplainantToken">ANON-W12-9842</code></span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- Multi-Step AI Triage Processing Modal -->
+<div class="modal-overlay" id="triageProgressModal" style="display:none; z-index:99999;">
+  <div class="modal-card" style="max-width:440px; text-align:center; padding:30px 24px;">
+    <div style="width:52px; height:52px; margin:0 auto 16px; border-radius:50%; background:#eff6ff; display:flex; align-items:center; justify-content:center; color:#2563eb; font-size:24px;">
+      <i class="fa-solid fa-brain fa-fade"></i>
+    </div>
+    <h3 style="font-size:18px; font-weight:800; color:#0f172a; margin:0 0 6px;">AI Grievance Triage in Progress</h3>
+    <p style="font-size:12.5px; color:#64748b; margin:0 0 20px;" id="triageProgressSub">Gemini 2.5 Multi-modal Civic Processing</p>
+
+    <div style="display:flex; flex-direction:column; gap:10px; text-align:left; background:#f8fafc; padding:14px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:18px;" id="triageStepsContainer">
+      <div class="triage-step-row" id="tStep1"><i class="fa-solid fa-circle-notch fa-spin text-blue"></i> <span>1. Validating complaint description &amp; GPS...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep2"><i class="fa-regular fa-circle"></i> <span>2. Language detection &amp; canonical summary...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep3"><i class="fa-regular fa-circle"></i> <span>3. Auditing photographic evidence integrity...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep4"><i class="fa-regular fa-circle"></i> <span>4. Scanning database for nearby duplicates...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep5"><i class="fa-regular fa-circle"></i> <span>5. Calculating explainable urgency score...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep6"><i class="fa-regular fa-circle"></i> <span>6. Routing to municipal department &amp; SLA...</span></div>
+      <div class="triage-step-row opacity-50" id="tStep7"><i class="fa-regular fa-circle"></i> <span>7. Saving to database &amp; broadcasting sync...</span></div>
+    </div>
+
+    <div class="redirect-progress-bar">
+      <div class="redirect-progress-fill" id="triageProgressBar" style="width: 15%; transition: width 0.3s ease;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Confirmation Modal -->
+<div class="modal-overlay" id="successModal" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-icon-success">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h3>Grievance Submitted Successfully!</h3>
+      <p style="font-size:12.5px; opacity:0.95; margin-top:4px;">Your complaint has been securely recorded and forwarded for municipal review.</p>
+      <div style="margin-top:8px; font-size:13px; font-weight:700; background:rgba(255,255,255,0.18); display:inline-block; padding:3px 12px; border-radius:6px;" class="mono" id="modalComplaintId">#CB-0145</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-summary-grid">
+        <div>
+          <label>Category</label>
+          <strong id="modalCategory">Roads &amp; Potholes</strong>
+        </div>
+        <div>
+          <label>Priority / SLA</label>
+          <strong class="text-rose" id="modalSla">CRITICAL &middot; 48h</strong>
+        </div>
+        <div>
+          <label>Assigned Department</label>
+          <strong id="modalDept">Roads &amp; Potholes Dept.</strong>
+        </div>
+        <div>
+          <label>Ward Jurisdiction</label>
+          <strong id="modalWard">Ward 12 (Janpath)</strong>
+        </div>
+      </div>
+      <div class="modal-notice">
+        <i class="fa-solid fa-circle-check"></i>
+        <span><strong>Your complaint is now visible in Track Issues.</strong> Real-time municipal GPS status and verification timeline are active.</span>
+      </div>
+      <div class="redirect-progress-bar">
+        <div class="redirect-progress-fill" id="redirectProgressFill"></div>
+      </div>
+      <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:4px; margin-bottom:10px;" id="redirectCountdownText">
+        Redirecting to Track Issues in 2s...
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-track-go" id="modalTrackBtn">
+          <i class="fa-solid fa-location-crosshairs"></i> Track My Complaint
+        </button>
+        <button type="button" class="btn-modal-close" id="modalCloseBtn">Submit Another Issue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../api-config.js"></script>
+<script>
+  if (typeof window.CivicBuzzAPI === "undefined") {
+    document.write('<script src="../../../api-config.js"><\/script>');
+  }
+</script>
+<script src="js/script.js"></script>
+<script src="../navbar-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CivicBuzz — Track complaints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="../style.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="scene">
+  <div class="road">
+    <div class="lane-marking"></div>
+    <div class="pothole"></div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="eyebrow">Your submissions &middot; Live Synchronized</div>
+  <h1>Track your complaints</h1>
+  <p>See where each report stands, ranked by AI urgency and synchronized directly with the Municipal database.</p>
+  <div class="section-tabs" aria-label="Track complaint sections">
+    <a href="#complaints">Complaints (<span id="tabCountTotal">0</span>)</a>
+    <a href="#priority-overview">Priority overview</a>
+    <a href="#map-overview">Live Map overview</a>
+    <a href="../Report_Issue_Frontend/index.html" style="background:var(--blue-soft); color:var(--blue); border-color:#93c5fd;">+ Report New Issue</a>
+  </div>
+</header>
+
+<main class="panels">
+
+  <section class="glass complaints-panel" id="complaints">
+    <div class="panel-head" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h2>Complaints</h2>
+        <div class="panel-sub" id="complaintSummarySub">Loading live grievances from database&hellip;</div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <div class="search-wrap" style="position:relative;">
+          <input type="text" id="searchInput" placeholder="Search by title, #ID, ward..." style="padding:6px 12px 6px 30px; font-size:12px; border:1px solid var(--border); border-radius:8px; background:var(--card); color:var(--text); width:200px;" />
+          <i class="fa fa-search" style="position:absolute; left:10px; top:9px; font-size:11px; color:var(--muted);"></i>
+        </div>
+        <button id="refreshBtn" onclick="loadLiveComplaints()" title="Refresh from Database" style="background:var(--card); border:1px solid var(--border); padding:6px 10px; border-radius:8px; cursor:pointer; color:var(--secondary); font-size:12px;">
+          <i class="fa fa-rotate"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">All Priorities</button>
+      <button class="filter-chip" data-filter="critical">Critical</button>
+      <button class="filter-chip" data-filter="high">High</button>
+      <button class="filter-chip" data-filter="medium">Medium</button>
+      <button class="filter-chip" data-filter="low">Low</button>
+      <span style="border-left:1px solid var(--border); margin:0 4px; height:18px; display:inline-block; vertical-align:middle;"></span>
+      <button class="filter-chip filter-status active" data-status="ALL">All Statuses</button>
+      <button class="filter-chip filter-status" data-status="SUBMITTED">Reported</button>
+      <button class="filter-chip filter-status" data-status="ASSIGNED">Assigned</button>
+      <button class="filter-chip filter-status" data-status="IN_PROGRESS">In Progress</button>
+      <button class="filter-chip filter-status" data-status="RESOLVED">Resolved</button>
+    </div>
+
+    <div class="complaint-list" id="complaintList" tabindex="0" aria-label="Scrollable complaint cards">
+      <!-- Dynamically populated from backend database / ComplaintStore -->
+      <div style="padding: 40px; text-align: center; color: var(--muted); font-size: 14px;">
+        <i class="fa fa-spinner fa-spin" style="font-size:24px; margin-bottom:12px; display:block; color:var(--blue);"></i>
+        Connecting to CivicBuzz database and loading real grievances...
+      </div>
+    </div>
+  </section>
+
+  <section class="glass ai-panel" id="priority-overview">
+    <div class="panel-head">
+      <div>
+        <h2>Priority overview</h2>
+        <div class="panel-sub">Live breakdown of active database issues</div>
+      </div>
+      <span class="ai-badge">AI-Ranked</span>
+    </div>
+
+    <div class="ai-analysis">
+      <div class="ai-row">
+        <span class="ai-row-label"><i class="fa fa-triangle-exclamation" style="color:#ef4444; margin-right:6px;"></i> Critical priority</span>
+        <span class="chip" id="critPriorityCount" style="background:#fee2e2; color:#991b1b; font-weight:700;">0 open</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label"><i class="fa fa-circle-exclamation" style="color:#d97706; margin-right:6px;"></i> High priority</span>
+        <span class="chip chip-priority-high" id="highPriorityCount">0 open</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label"><i class="fa fa-circle-info" style="color:#2563eb; margin-right:6px;"></i> Medium priority</span>
+        <span class="chip chip-priority-medium" id="medPriorityCount">0 open</span>
+      </div>
+      <div class="ai-row">
+        <span class="ai-row-label"><i class="fa fa-circle-check" style="color:#15803d; margin-right:6px;"></i> Low priority</span>
+        <span class="chip chip-priority-low" id="lowPriorityCount">0 open</span>
+      </div>
+      <div class="ai-row" style="border-bottom: none; flex-direction: column; align-items: stretch;">
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span class="ai-row-label">Resolved grievances</span>
+          <span class="mono" id="resolvedCountText" style="font-weight:700; font-size:12px; color:#15803d;">0 / 0 (0%)</span>
+        </div>
+        <div class="confidence-bar"><div class="confidence-fill" id="resolvedProgressFill" style="width: 0%;"></div></div>
+      </div>
+    </div>
+
+    <div class="ai-note">
+      Priority score combines image verification, severity, duplicate citizen upvotes, days open, and public safety impact.
+    </div>
+  </section>
+
+  <section class="glass map-panel" id="map-overview">
+    <div class="panel-head" style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2>Map overview</h2>
+        <div class="panel-sub">Real-time GPS locations &amp; complaint hotspots</div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span class="map-status"><span class="status-dot"></span>Live GPS</span>
+        <a href="../Map_Frontend/index.html" style="font-size:11.5px; color:var(--blue); text-decoration:none; font-weight:600; background:var(--blue-soft); padding:4px 8px; border-radius:6px;" title="Open full GIS map">
+          Full Map <i class="fa fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Interactive Leaflet Map Container -->
+    <div id="trackLiveMap" class="map-card" style="height: 330px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);"></div>
+
+    <div class="map-legend">
+      <div><span class="legend-pin" style="background:#dc2626;"></span> Critical / Urgent</div>
+      <div><span class="legend-pin" style="background:#d97706;"></span> High</div>
+      <div><span class="legend-pin" style="background:#2563eb;"></span> Medium / Low</div>
+      <div><span class="legend-pin" style="background:#15803d;"></span> Resolved</div>
+      <div><span class="legend-hotspot"></span> Hotspot Cluster</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Safe relative API config inclusion with fallbacks -->
+<script src="../../api-config.js"></script>
+<script>
+  if (typeof window.CivicBuzzAPI === "undefined") {
+    document.write('<script src="../../../api-config.js"><\/script>');
+  }
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/script.js"></script>
+<script src="../navbar-loader.js"></script>
+</body>
+</html>

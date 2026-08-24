@@ -1,0 +1,2041 @@
+:root {
+	--ink: #15223b;
+	--muted: #71809a;
+	--blue: #315bea;
+	--surface: #ffffff;
+	--bg: #f7f9ff;
+	--line: #e7ebf4;
+	--soft: #edf2ff;
+	--navy: #13213f;
+	--green: #15856b;
+	--amber: #b96d13;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+
+body {
+	font-family: "DM Sans", "Noto Sans Devanagari", sans-serif;
+	color: var(--ink);
+	background: var(--bg);
+
+	transition:
+		background 0.3s ease,
+		color 0.3s ease;
+}
+
+body.dark {
+	--ink: #eef3ff;
+	--muted: #a5b1c8;
+	--surface: #1c2a47;
+	--bg: #111c32;
+	--line: #30425f;
+	--soft: #253b63;
+	--navy: #0b1428;
+
+	color-scheme: dark;
+}
+
+.hidden {
+	display: none !important;
+}
+
+button,
+input {
+	font: inherit;
+}
+
+/* =========================================================
+   LANGUAGE SCREEN
+   ========================================================= */
+
+.language-screen {
+	min-height: 100vh;
+
+	display: grid;
+	place-items: center;
+
+	overflow: hidden;
+
+	background: #13213f;
+
+	position: relative;
+
+	color: #fff;
+}
+
+.language-card {
+	width: min(530px, calc(100% - 32px));
+
+	position: relative;
+
+	text-align: center;
+
+	padding: 48px 28px;
+
+	border: 1px solid #ffffff24;
+
+	border-radius: 28px;
+
+	background: #ffffff0e;
+
+	backdrop-filter: blur(20px);
+
+	box-shadow: 0 24px 70px #02071755;
+}
+
+.brand-mark {
+	width: 54px;
+	height: 54px;
+
+	display: grid;
+	place-items: center;
+
+	margin: auto auto 22px;
+
+	border-radius: 17px;
+
+	background: #5a83ff;
+
+	font-weight: 700;
+
+	box-shadow: 0 9px 24px #527aff80;
+}
+
+.eyebrow {
+	font-size: 11px;
+
+	letter-spacing: 0.16em;
+
+	font-weight: 700;
+
+	color: #6d88df;
+
+	margin: 0 0 11px;
+}
+
+.language-screen .eyebrow {
+	color: #aebdff;
+}
+
+.language-card h1 {
+	font-size: 34px;
+
+	letter-spacing: -1.4px;
+
+	margin: 0;
+}
+
+.subtext {
+	color: #c9d6f5;
+
+	margin: 12px 0 30px;
+}
+
+.language-options {
+	display: grid;
+
+	grid-template-columns: 1fr 1fr;
+
+	gap: 13px;
+}
+
+.language-choice {
+	border: 1px solid #ffffff2e;
+
+	background: #ffffff0d;
+
+	color: #fff;
+
+	border-radius: 18px;
+
+	padding: 20px 10px;
+
+	cursor: pointer;
+
+	transition: 0.2s;
+}
+
+.language-choice:hover {
+	transform: translateY(-3px);
+
+	background: #ffffff1b;
+
+	border-color: #90a8ff;
+}
+
+.language-choice span {
+	display: grid;
+
+	place-items: center;
+
+	width: 40px;
+	height: 40px;
+
+	border-radius: 12px;
+
+	background: #ffffff18;
+
+	margin: auto auto 12px;
+
+	font-size: 17px;
+}
+
+.language-choice strong,
+.language-choice small {
+	display: block;
+}
+
+.language-choice small {
+	color: #bdc9e4;
+
+	margin-top: 5px;
+}
+
+.language-note {
+	font-size: 13px;
+
+	color: #aebbd7;
+
+	margin: 24px 0 0;
+}
+
+.language-orb {
+	position: absolute;
+
+	border-radius: 50%;
+
+	filter: blur(3px);
+}
+
+.orb-one {
+	width: 340px;
+	height: 340px;
+
+	background: #496eda;
+
+	left: -100px;
+	top: -80px;
+
+	opacity: 0.34;
+}
+
+.orb-two {
+	width: 300px;
+	height: 300px;
+
+	background: #00af9b;
+
+	right: -100px;
+	bottom: -100px;
+
+	opacity: 0.21;
+}
+
+/* =========================================================
+   FULL SCREEN LOGIN BACKGROUND
+   ========================================================= */
+
+.auth-screen {
+	min-height: 100vh;
+
+	width: 100%;
+
+	position: relative;
+
+	display: flex;
+
+	align-items: center;
+
+	overflow: hidden;
+
+	/*
+    FULL SCREEN CIVIC BACKGROUND IMAGE
+  */
+
+	background:
+		linear-gradient(90deg,
+			rgba(5, 20, 42, 0.62),
+			rgba(5, 20, 42, 0.34)),
+		url("assets/Image1.png") center center / cover no-repeat;
+}
+
+/*
+  DARK MODE OVERLAY
+
+  IMPORTANT:
+  The image is NOT replaced here.
+  This keeps the same background image in dark mode.
+*/
+
+.auth-screen::before {
+	content: "";
+
+	position: absolute;
+
+	inset: 0;
+
+	background: transparent;
+
+	z-index: 0;
+
+	pointer-events: none;
+
+	transition: background 0.3s ease;
+}
+
+body.dark .auth-screen::before {
+	background: rgba(2, 10, 25, 0.40);
+}
+
+/* =========================================================
+   HERO / LEFT CONTENT
+   ========================================================= */
+
+.auth-copy {
+	width: 100%;
+
+	min-height: 100vh;
+
+	padding: 36px clamp(35px, 7vw, 110px);
+
+	background: transparent;
+
+	color: #fff;
+
+	display: flex;
+
+	flex-direction: column;
+
+	position: absolute;
+
+	inset: 0;
+
+	z-index: 1;
+
+	pointer-events: none;
+}
+
+.auth-copy .simple-nav,
+.auth-copy .hero-copy,
+.auth-copy .trust-line {
+	position: relative;
+
+	z-index: 2;
+
+	pointer-events: auto;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.simple-nav,
+.auth-top {
+	display: flex;
+
+	align-items: center;
+
+	justify-content: space-between;
+}
+
+.logo {
+	font-size: 21px;
+
+	font-weight: 700;
+
+	text-decoration: none;
+
+	color: inherit;
+
+	letter-spacing: -0.8px;
+}
+
+.logo span {
+	color: #6690ff;
+}
+
+.nav-language,
+.icon-button {
+	border: 1px solid var(--line);
+
+	background: transparent;
+
+	color: inherit;
+
+	border-radius: 9px;
+
+	padding: 8px 12px;
+
+	cursor: pointer;
+}
+
+.auth-copy .nav-language {
+	border-color: #ffffff38;
+
+	color: #fff;
+}
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.hero-copy {
+	margin: auto 0;
+
+	max-width: 700px;
+
+	padding: 30px;
+
+	border: 1px solid rgba(255, 255, 255, 0.12);
+
+	border-radius: 22px;
+
+	background:
+		linear-gradient(115deg,
+			rgba(8, 27, 58, 0.72),
+			rgba(8, 27, 58, 0.16));
+
+	box-shadow:
+		18px 22px 46px rgba(0, 8, 29, 0.25);
+
+	backdrop-filter: blur(3px);
+}
+
+.hero-copy h1 {
+	font-size: clamp(40px, 5vw, 67px);
+
+	line-height: 1.05;
+
+	letter-spacing: -3px;
+
+	margin: 0;
+
+	max-width: 650px;
+}
+
+.hero-copy p:not(.eyebrow) {
+	color: #dbe6fa;
+
+	font-size: 17px;
+
+	line-height: 1.6;
+
+	max-width: 510px;
+}
+
+.hero-copy::after {
+	content: "";
+
+	display: block;
+
+	width: 102px;
+
+	height: 3px;
+
+	margin-top: 25px;
+
+	border-radius: 4px;
+
+	background:
+		linear-gradient(90deg,
+			#6bb7ff,
+			#a1ffd8);
+
+	box-shadow:
+		0 0 18px rgba(85, 173, 255, 0.8);
+}
+
+.trust-line {
+	display: flex;
+
+	align-items: center;
+
+	gap: 12px;
+
+	color: #d8e4fa;
+
+	font-size: 13px;
+}
+
+.avatars {
+	display: flex;
+}
+
+.avatars i {
+	width: 28px;
+	height: 28px;
+
+	border-radius: 50%;
+
+	background:
+		linear-gradient(135deg,
+			#ffd6a5,
+			#965d40);
+
+	border: 2px solid #243d69;
+
+	margin-left: -7px;
+}
+
+.avatars i:nth-child(2) {
+	background:
+		linear-gradient(135deg,
+			#b7e5fd,
+			#496d99);
+}
+
+.avatars i:nth-child(3) {
+	background:
+		linear-gradient(135deg,
+			#f5b8bd,
+			#754a67);
+}
+
+/* =========================================================
+   LOGIN PANEL
+   ========================================================= */
+
+.auth-panel {
+	position: relative;
+
+	z-index: 3;
+
+	width: min(480px, calc(100% - 40px));
+
+	margin-left: auto;
+
+	margin-right: clamp(30px, 7vw, 100px);
+
+	padding: 28px 34px;
+
+	/*
+    LIGHT MODE
+  */
+
+	background: rgba(255, 255, 255, 0.88);
+
+	backdrop-filter: blur(18px);
+
+	-webkit-backdrop-filter: blur(18px);
+
+	border: 1px solid rgba(255, 255, 255, 0.55);
+
+	border-radius: 24px;
+
+	box-shadow:
+		0 25px 70px rgba(0, 10, 35, 0.35),
+		0 8px 25px rgba(0, 0, 0, 0.15);
+
+	display: flex;
+
+	flex-direction: column;
+
+	transition:
+		background 0.3s ease,
+		border-color 0.3s ease,
+		box-shadow 0.3s ease;
+}
+
+/* =========================================================
+   DARK MODE LOGIN PANEL
+   ========================================================= */
+
+body.dark .auth-panel {
+	background: rgba(15, 25, 45, 0.90);
+
+	border-color: rgba(255, 255, 255, 0.12);
+
+	box-shadow:
+		0 25px 70px rgba(0, 0, 0, 0.55),
+		0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.auth-panel .auth-top {
+	justify-content: flex-end;
+
+	gap: 9px;
+
+	width: 100%;
+}
+
+.auth-panel .nav-language,
+.auth-panel .icon-button {
+	color: var(--ink);
+
+	border-color: var(--line);
+}
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.login-card {
+	width: min(440px, 100%);
+
+	margin: auto;
+}
+
+.login-card h2,
+.modal h2 {
+	font-size: 29px;
+
+	letter-spacing: -1px;
+
+	margin: 0;
+}
+
+.card-subtitle,
+.modal p {
+	color: var(--muted);
+
+	line-height: 1.5;
+
+	margin: 9px 0 25px;
+}
+
+/* =========================================================
+   ROLE SWITCH
+   ========================================================= */
+
+.role-switch {
+	background: var(--bg);
+
+	padding: 4px;
+
+	border-radius: 11px;
+
+	display: flex;
+
+	margin-bottom: 22px;
+
+	border: 1px solid transparent;
+}
+
+body.dark .role-switch {
+	background: #111c32;
+
+	border-color: #30425f;
+}
+
+.role {
+	flex: 1;
+
+	border: 0;
+
+	border-radius: 8px;
+
+	padding: 10px 5px;
+
+	background: transparent;
+
+	color: var(--muted);
+
+	font-weight: 600;
+
+	cursor: pointer;
+}
+
+.role.active {
+	background: var(--surface);
+
+	color: var(--blue);
+
+	box-shadow:
+		0 2px 7px #17365d14;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+form label>span {
+	display: block;
+
+	font-size: 13px;
+
+	font-weight: 600;
+
+	margin-bottom: 7px;
+}
+
+input {
+	width: 100%;
+
+	border: 1px solid var(--line);
+
+	border-radius: 9px;
+
+	background: transparent;
+
+	color: var(--ink);
+
+	padding: 12px 13px;
+
+	margin-bottom: 16px;
+
+	outline-color: var(--blue);
+
+	transition:
+		background 0.3s ease,
+		border-color 0.3s ease,
+		color 0.3s ease;
+}
+
+body.dark input {
+	background: rgba(255, 255, 255, 0.035);
+
+	border-color: #30425f;
+
+	color: #eef3ff;
+}
+
+body.dark input::placeholder {
+	color: #71809a;
+}
+
+.password-field {
+	position: relative;
+}
+
+.password-field input {
+	padding-right: 44px;
+}
+
+.password-field button {
+	position: absolute;
+
+	right: 7px;
+
+	top: 8px;
+
+	border: 0;
+
+	background: transparent;
+
+	color: var(--muted);
+
+	cursor: pointer;
+}
+
+.form-row {
+	display: flex;
+
+	justify-content: space-between;
+
+	align-items: center;
+
+	margin: -2px 0 22px;
+
+	font-size: 13px;
+}
+
+.form-row a,
+.new-user button,
+.text-button {
+	color: var(--blue);
+
+	font-weight: 600;
+
+	text-decoration: none;
+
+	background: transparent;
+
+	border: 0;
+
+	cursor: pointer;
+}
+
+.checkbox {
+	display: flex;
+
+	align-items: center;
+
+	gap: 7px;
+}
+
+.checkbox input {
+	width: auto;
+
+	margin: 0;
+}
+
+/* =========================================================
+   FORGOT PASSWORD BUTTON
+   ========================================================= */
+
+.forgot-password-button {
+	border: 0;
+
+	background: transparent;
+
+	color: var(--blue);
+
+	font-size: 13px;
+
+	cursor: pointer;
+
+	padding: 0;
+}
+
+.forgot-password-button:hover {
+	text-decoration: underline;
+}
+
+/* =========================================================
+   PRIMARY BUTTON
+   ========================================================= */
+
+.primary-button {
+	display: flex;
+
+	align-items: center;
+
+	justify-content: center;
+
+	gap: 10px;
+
+	width: 100%;
+
+	border: 0;
+
+	background: var(--blue);
+
+	border-radius: 9px;
+
+	color: #fff;
+
+	padding: 13px 16px;
+
+	font-weight: 700;
+
+	cursor: pointer;
+
+	box-shadow:
+		0 9px 20px #315bea33;
+
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
+}
+
+.primary-button:hover {
+	filter: brightness(1.1);
+
+	transform: translateY(-1px);
+}
+
+.new-user {
+	text-align: center;
+
+	font-size: 13px;
+
+	color: var(--muted);
+
+	margin: 22px 0 0;
+}
+
+.secure-note {
+	text-align: center;
+
+	font-size: 12px;
+
+	color: var(--muted);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard {
+	min-height: 100vh;
+
+	display: grid;
+
+	grid-template-columns: 245px 1fr;
+
+	background: var(--bg);
+
+	transition:
+		background 0.3s ease,
+		color 0.3s ease;
+}
+
+.sidebar {
+	background: var(--surface);
+
+	border-right: 1px solid var(--line);
+
+	padding: 30px 20px;
+
+	display: flex;
+
+	flex-direction: column;
+
+	transition:
+		background 0.3s ease,
+		border-color 0.3s ease;
+}
+
+.sidebar-label {
+	font-size: 10px;
+
+	color: var(--muted);
+
+	letter-spacing: 0.14em;
+
+	font-weight: 700;
+
+	margin: 39px 11px 12px;
+}
+
+.sidebar nav {
+	display: grid;
+
+	gap: 5px;
+}
+
+.sidebar nav button,
+.sidebar-bottom button {
+	border: 0;
+
+	background: transparent;
+
+	color: var(--muted);
+
+	padding: 11px;
+
+	border-radius: 8px;
+
+	text-align: left;
+
+	cursor: pointer;
+
+	font-size: 14px;
+}
+
+.sidebar nav button.active,
+.sidebar nav button:hover {
+	background: var(--soft);
+
+	color: var(--blue);
+
+	font-weight: 700;
+}
+
+.sidebar-bottom {
+	margin-top: auto;
+
+	border-top: 1px solid var(--line);
+
+	padding-top: 14px;
+
+	display: grid;
+
+	gap: 4px;
+}
+
+.dashboard-main {
+	padding: 35px clamp(22px, 4vw, 66px);
+
+	max-width: 1440px;
+
+	width: 100%;
+
+	margin: auto;
+}
+
+.dashboard header {
+	display: flex;
+
+	justify-content: space-between;
+
+	align-items: end;
+}
+
+.dashboard h1 {
+	margin: 0;
+
+	font-size: 29px;
+
+	letter-spacing: -1.1px;
+}
+
+.report-button {
+	width: auto;
+}
+
+.notice {
+	margin: 29px 0 24px;
+
+	background: var(--soft);
+
+	padding: 13px 16px;
+
+	border-radius: 10px;
+
+	color: var(--blue);
+
+	font-size: 14px;
+}
+
+.notice button {
+	float: right;
+
+	border: 0;
+
+	background: transparent;
+
+	color: inherit;
+
+	font-size: 17px;
+
+	cursor: pointer;
+}
+
+/* =========================================================
+   DASHBOARD STATS
+   ========================================================= */
+
+.stats {
+	display: grid;
+
+	grid-template-columns: repeat(3, 1fr);
+
+	gap: 16px;
+}
+
+.stats article,
+.report-card,
+.priority-card {
+	background: var(--surface);
+
+	border: 1px solid var(--line);
+
+	border-radius: 13px;
+
+	padding: 21px;
+
+	transition:
+		background 0.3s ease,
+		border-color 0.3s ease;
+}
+
+.stats article {
+	display: flex;
+
+	gap: 14px;
+}
+
+.stat-icon {
+	width: 38px;
+	height: 38px;
+
+	display: grid;
+
+	place-items: center;
+
+	border-radius: 10px;
+
+	font-size: 20px;
+}
+
+.blue {
+	color: var(--blue);
+
+	background: var(--soft);
+}
+
+.amber {
+	color: var(--amber);
+
+	background: #fff4df;
+}
+
+.green {
+	color: var(--green);
+
+	background: #e7f7f1;
+}
+
+.stats small,
+.stats em {
+	display: block;
+
+	color: var(--muted);
+
+	font-size: 12px;
+
+	font-style: normal;
+}
+
+.stats strong {
+	font-size: 28px;
+
+	display: block;
+
+	margin: 3px 0;
+}
+
+.stats em {
+	color: var(--green);
+}
+
+.stats em span {
+	color: var(--muted);
+}
+
+/* =========================================================
+   CONTENT GRID
+   ========================================================= */
+
+.content-grid {
+	display: grid;
+
+	grid-template-columns: 1.15fr 0.85fr;
+
+	gap: 16px;
+
+	margin-top: 16px;
+}
+
+.section-heading {
+	display: flex;
+
+	justify-content: space-between;
+
+	align-items: start;
+}
+
+.section-heading h2 {
+	font-size: 16px;
+
+	margin: 0;
+}
+
+.section-heading p {
+	font-size: 12px;
+
+	color: var(--muted);
+
+	margin: 5px 0;
+}
+
+.text-button {
+	font-size: 12px;
+}
+
+.issue-row {
+	display: flex;
+
+	gap: 15px;
+
+	margin-top: 19px;
+
+	padding-top: 17px;
+
+	border-top: 1px solid var(--line);
+}
+
+.issue-icon {
+	height: 43px;
+
+	width: 43px;
+
+	border-radius: 11px;
+
+	background: #fff3e5;
+
+	color: var(--amber);
+
+	display: grid;
+
+	place-items: center;
+
+	font-size: 21px;
+}
+
+.issue-info h3 {
+	font-size: 15px;
+
+	margin: 9px 0 5px;
+}
+
+.issue-info p,
+.issue-info small {
+	font-size: 12px;
+
+	color: var(--muted);
+
+	margin: 0;
+}
+
+.status {
+	font-size: 11px;
+
+	padding: 4px 8px;
+
+	border-radius: 20px;
+
+	font-weight: 700;
+}
+
+.status.amber {
+	background: #fff4df;
+
+	color: var(--amber);
+}
+
+.issue-id {
+	font-size: 11px;
+
+	color: var(--muted);
+
+	margin-left: 7px;
+}
+
+.progress {
+	background: var(--line);
+
+	height: 5px;
+
+	border-radius: 8px;
+
+	margin: 14px 0 5px;
+
+	overflow: hidden;
+}
+
+.progress i {
+	display: block;
+
+	width: 40%;
+
+	background: var(--blue);
+
+	height: 100%;
+
+	border-radius: inherit;
+}
+
+.live {
+	color: var(--green);
+
+	font-size: 11px;
+}
+
+.priority {
+	display: flex;
+
+	gap: 13px;
+
+	align-items: center;
+
+	margin-top: 17px;
+}
+
+.priority>b {
+	width: 25px;
+
+	height: 25px;
+
+	border-radius: 50%;
+
+	background: var(--soft);
+
+	color: var(--blue);
+
+	display: grid;
+
+	place-items: center;
+
+	font-size: 12px;
+}
+
+.priority div {
+	flex: 1;
+}
+
+.priority strong {
+	display: block;
+
+	font-size: 13px;
+
+	margin-bottom: 6px;
+}
+
+.priority span {
+	display: inline-block;
+
+	vertical-align: middle;
+
+	height: 6px;
+
+	background: var(--line);
+
+	width: 70%;
+
+	border-radius: 8px;
+
+	overflow: hidden;
+}
+
+.priority i {
+	display: block;
+
+	height: 100%;
+
+	background: var(--blue);
+
+	border-radius: inherit;
+}
+
+.priority small {
+	font-size: 11px;
+
+	color: var(--muted);
+
+	margin-left: 7px;
+}
+
+/* =========================================================
+   GENERAL MODAL
+   ========================================================= */
+
+.modal {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(6, 16, 38, 0.72);
+	display: grid !important;
+	place-items: center;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	z-index: 9999;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.modal.hidden {
+	display: none !important;
+}
+
+.modal>div,
+.forgot-password-card {
+	position: relative;
+	width: min(440px, 92vw);
+	max-height: 92vh;
+	overflow-y: auto;
+	margin: auto !important;
+	background: var(--surface);
+	padding: 36px 32px;
+	border-radius: 20px;
+	box-shadow: 0 25px 60px rgba(0, 15, 45, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12);
+	transition: background 0.3s ease, color 0.3s ease;
+	animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+	0% {
+		opacity: 0;
+		transform: scale(0.94) translateY(8px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+.close-modal {
+	position: absolute;
+
+	right: 16px;
+
+	top: 13px;
+
+	border: 0;
+
+	background: transparent;
+
+	color: var(--muted);
+
+	font-size: 24px;
+
+	cursor: pointer;
+
+	z-index: 2;
+}
+
+.close-modal:hover {
+	color: var(--ink);
+}
+
+.modal .primary-button {
+	margin-top: 3px;
+}
+
+/* =========================================================
+   REGISTER MODAL
+   ========================================================= */
+
+.register-password-label {
+	display: block;
+
+	margin: 1px 0 7px;
+
+	font-size: 13px;
+
+	font-weight: 600;
+}
+
+.modal .password-field {
+	margin-bottom: 0;
+}
+
+.modal .password-field input {
+	padding-right: 43px;
+}
+
+.password-message {
+	min-height: 18px;
+
+	margin: -7px 0 11px;
+
+	color: #ff9ca8 !important;
+
+	font-size: 12px;
+}
+
+.password-visibility {
+	color: var(--muted);
+}
+
+.password-rules {
+	display: grid;
+
+	grid-template-columns: 1fr 1fr;
+
+	gap: 5px 12px;
+
+	margin: 8px 0 15px;
+
+	padding: 0;
+
+	list-style: none;
+
+	color: var(--muted);
+
+	font-size: 11px;
+}
+
+.password-rules li::before {
+	content: "○";
+
+	margin-right: 5px;
+
+	color: #8292ae;
+}
+
+.password-rules li.met {
+	color: #32ad8e;
+}
+
+.password-rules li.met::before {
+	content: "✓";
+
+	color: #32ad8e;
+}
+
+/* =========================================================
+   FORGOT PASSWORD
+   ========================================================= */
+
+.forgot-password-card {
+	position: relative;
+
+	width: min(440px, 100%);
+
+	max-height: 90vh;
+
+	overflow-y: auto;
+
+	background: var(--surface);
+
+	padding: 38px;
+
+	border-radius: 22px;
+
+	border: 1px solid var(--line);
+
+	box-shadow:
+		0 30px 80px rgba(0, 10, 35, 0.35);
+
+	animation:
+		forgot-card-enter 0.25s ease;
+}
+
+body.dark .forgot-password-card {
+	background: #1c2a47;
+
+	border-color: #30425f;
+
+	box-shadow:
+		0 30px 80px rgba(0, 0, 0, 0.55);
+}
+
+@keyframes forgot-card-enter {
+
+	from {
+		opacity: 0;
+
+		transform:
+			translateY(12px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+
+		transform:
+			translateY(0) scale(1);
+	}
+}
+
+/* =========================================================
+   FORGOT PASSWORD ICON
+   ========================================================= */
+
+.forgot-icon,
+.success-icon {
+	width: 58px;
+
+	height: 58px;
+
+	display: grid;
+
+	place-items: center;
+
+	margin: 0 auto 20px;
+
+	border-radius: 17px;
+
+	background: var(--soft);
+
+	color: var(--blue);
+
+	font-size: 25px;
+}
+
+.success-icon {
+	background: #e7f7f1;
+
+	color: #15856b;
+
+	font-size: 28px;
+
+	font-weight: 700;
+}
+
+body.dark .success-icon {
+	background: rgba(21, 133, 107, 0.18);
+}
+
+/* =========================================================
+   FORGOT PASSWORD CONTENT
+   ========================================================= */
+
+.forgot-step {
+	width: 100%;
+}
+
+.forgot-step .eyebrow {
+	text-align: center;
+}
+
+.forgot-step h2 {
+	text-align: center;
+
+	margin: 0;
+
+	font-size: 27px;
+
+	letter-spacing: -1px;
+
+	color: var(--ink);
+}
+
+.forgot-description {
+	text-align: center;
+
+	color: var(--muted);
+
+	font-size: 13px;
+
+	line-height: 1.6;
+
+	margin: 10px auto 25px;
+
+	max-width: 350px;
+}
+
+.forgot-step form {
+	margin-top: 10px;
+}
+
+.forgot-message {
+	min-height: 18px;
+
+	margin: -5px 0 12px;
+
+	font-size: 12px;
+
+	color: #d94c5f;
+
+	text-align: left;
+}
+
+.forgot-message.success {
+	color: #15856b;
+}
+
+.forgot-secondary-button {
+	width: 100%;
+
+	border: 0;
+
+	background: transparent;
+
+	color: var(--blue);
+
+	font-size: 13px;
+
+	font-weight: 600;
+
+	cursor: pointer;
+
+	margin-top: 15px;
+
+	padding: 8px;
+}
+
+.forgot-secondary-button:hover {
+	text-decoration: underline;
+}
+
+/* =========================================================
+   OTP INPUT
+   ========================================================= */
+
+#otp-input {
+	text-align: center;
+
+	font-size: 24px;
+
+	font-weight: 700;
+
+	letter-spacing: 8px;
+
+	padding-left: 20px;
+}
+
+body.dark #otp-input {
+	color: #eef3ff;
+}
+
+/* =========================================================
+   DARK MODE MODAL / REGISTER
+   ========================================================= */
+
+body.dark .modal>div {
+	background: #1c2a47;
+
+	border-color: #30425f;
+}
+
+body.dark .modal input {
+	background: rgba(255, 255, 255, 0.035);
+
+	border-color: #30425f;
+
+	color: #eef3ff;
+}
+
+body.dark .modal input::placeholder {
+	color: #71809a;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+	.auth-panel {
+		margin-right: 35px;
+	}
+
+	.hero-copy {
+		max-width: 620px;
+	}
+}
+
+@media (max-width: 850px) {
+
+	.auth-screen {
+		min-height: 100vh;
+
+		display: flex;
+
+		align-items: center;
+
+		justify-content: center;
+
+		background-position: center center;
+	}
+
+	.auth-copy {
+		min-height: 100vh;
+
+		padding: 25px;
+
+		display: flex;
+	}
+
+	/*
+    Keep the background image.
+    Hide only the large hero content.
+  */
+
+	.auth-copy .hero-copy,
+	.auth-copy .trust-line {
+		display: none;
+	}
+
+	.auth-panel {
+		width: min(460px, calc(100% - 30px));
+
+		margin: auto;
+
+		padding: 25px;
+
+		background: rgba(255, 255, 255, 0.92);
+	}
+
+	body.dark .auth-panel {
+		background: rgba(15, 25, 45, 0.92);
+	}
+
+	.dashboard {
+		grid-template-columns: 1fr;
+	}
+
+	.sidebar {
+		display: none;
+	}
+
+	.stats,
+	.content-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.dashboard header {
+		align-items: start;
+
+		gap: 16px;
+	}
+
+	.report-button {
+		font-size: 12px;
+	}
+
+	.language-card h1 {
+		font-size: 29px;
+	}
+}
+
+@media (max-width: 500px) {
+
+	.forgot-password-card {
+		width: calc(100% - 20px);
+
+		padding: 28px 20px;
+
+		border-radius: 18px;
+	}
+
+	.forgot-step h2 {
+		font-size: 24px;
+	}
+
+	#otp-input {
+		font-size: 21px;
+
+		letter-spacing: 6px;
+	}
+}
+
+@media (max-width: 460px) {
+
+	.language-options {
+		grid-template-columns: 1fr;
+	}
+
+	.login-card h2 {
+		font-size: 25px;
+	}
+
+	.dashboard-main {
+		padding: 25px 17px;
+	}
+
+	.stats article {
+		padding: 16px;
+	}
+
+	.dashboard h1 {
+		font-size: 25px;
+	}
+
+	.report-button {
+		padding: 11px;
+	}
+
+	.report-button span {
+		display: none;
+	}
+
+	.auth-panel {
+		width: calc(100% - 20px);
+
+		padding: 22px 18px;
+
+		border-radius: 20px;
+	}
+
+	body.dark .auth-panel {
+		background: rgba(15, 25, 45, 0.94);
+	}
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+
+		animation-iteration-count: 1 !important;
+
+		transition-duration: 0.01ms !important;
+
+		scroll-behavior: auto !important;
+	}
+}
+
+/* =========================================================
+   LOGIN INPUT BORDERS
+   ========================================================= */
+
+#login-form input {
+	border: 1.5px solid #1f2937;
+}
+
+#login-form input:focus {
+	border-color: #1f2937;
+	outline: 2px solid rgba(49, 91, 234, 0.15);
+}
+
+/* Password field button should stay clean */
+#login-form .password-field button {
+	border: 0;
+}
+
+/* Dark mode */
+body.dark #login-form input {
+	border: 1.5px solid #8b98ad;
+}
+
+body.dark #login-form input:focus {
+	border-color: #b8c4d8;
+	outline: 2px solid rgba(130, 160, 255, 0.2);
+}
+
+/* =========================================================
+   NAGRIKSETU LOGO + NAME
+   ========================================================= */
+
+.logo {
+	display: inline-flex;
+	align-items: center;
+	gap: -2px;
+
+	color: inherit;
+	text-decoration: none;
+
+	font-size: 21px;
+	font-weight: 700;
+	letter-spacing: -0.8px;
+}
+
+.logo img {
+	width: 88px;
+	height: 88px;
+	object-fit: contain;
+	display: block;
+}
+
+.logo-name {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.logo-name>span {
+	color: #6690ff;
+}
+
+/* Dashboard sidebar logo */
+
+.sidebar .logo {
+	margin-bottom: 5px;
+}
+
+.sidebar .logo img {
+	width: 36px;
+	height: 36px;
+}
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+	.auth-copy .logo img {
+		width: 34px;
+		height: 34px;
+	}
+
+	.auth-copy .logo {
+		font-size: 19px;
+	}
+
+}
+
+/* =========================================================
+   SMALL SCREEN - PREVENT LOGO / LOGIN OVERLAP
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+	.auth-screen {
+		min-height: 100vh;
+
+		display: flex;
+		flex-direction: column;
+
+		align-items: center;
+		justify-content: flex-start;
+
+		padding: 20px 0 30px;
+
+		overflow-y: auto;
+	}
+
+	/* Make the left content part of the normal layout */
+	.auth-copy {
+		position: relative;
+		inset: auto;
+
+		width: 100%;
+		min-height: auto;
+
+		height: auto;
+
+		padding: 10px 25px 0;
+
+		display: block;
+
+		z-index: 1;
+
+		pointer-events: none;
+	}
+
+	/* Keep only the logo on small screens */
+	.auth-copy .simple-nav {
+		width: 100%;
+
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+
+		pointer-events: auto;
+	}
+
+	/* Hide large hero content */
+	.auth-copy .hero-copy,
+	.auth-copy .trust-line {
+		display: none;
+	}
+
+	/* Login panel goes below the logo */
+	.auth-panel {
+		position: relative;
+
+		width: min(460px, calc(100% - 30px));
+
+		margin: 35px auto 0;
+
+		z-index: 3;
+
+		flex-shrink: 0;
+	}
+}
+
+@media (max-width: 500px) {
+
+	.auth-screen {
+		padding-top: 15px;
+	}
+
+	.auth-copy {
+		padding: 5px 20px 0;
+	}
+
+	.auth-copy .simple-nav {
+		padding-left: 5px;
+	}
+
+	.logo img {
+		width: 36px;
+		height: 36px;
+	}
+
+	.logo-name h2 {
+		font-size: 19px;
+	}
+
+	.auth-panel {
+		width: calc(100% - 24px);
+
+		margin-top: 28px;
+
+		padding: 22px 18px;
+
+		border-radius: 20px;
+	}
+}

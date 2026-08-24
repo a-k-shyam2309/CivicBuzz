@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivicBuzz | Tender Details</title>
+
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
+  <!-- Leaflet GIS Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .detail-hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 900px) {
+      .detail-hero-grid { grid-template-columns: 1fr; }
+    }
+    .detail-img-container {
+      width: 100%;
+      height: 320px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      background: #0f172a;
+      border: 1px solid var(--border);
+    }
+    .detail-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .detail-card {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .detail-section-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+    .info-kv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .info-kv-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .info-kv-item span {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .info-kv-item strong {
+      font-size: 14px;
+      color: var(--text);
+    }
+    .lifecycle-flow {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 28px 0 16px;
+    }
+    .lifecycle-flow::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: var(--border);
+      z-index: 1;
+    }
+    .lifecycle-flow-progress {
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      height: 3px;
+      background: var(--blue);
+      z-index: 2;
+      transition: width 0.4s ease;
+    }
+    .lifecycle-step {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+    }
+    .step-node {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--panel);
+      border: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+    .lifecycle-step.active .step-node {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(36, 107, 253, 0.2);
+    }
+    .lifecycle-step.completed .step-node {
+      border-color: var(--green);
+      background: var(--green);
+      color: #ffffff;
+    }
+    .step-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-top: 8px;
+      color: var(--text);
+    }
+    .step-desc {
+      font-size: 10px;
+      color: var(--secondary);
+      max-width: 110px;
+    }
+    .complaint-link-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    .complaint-link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+    .complaint-link-card img {
+      width: 70px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .tender-map-box {
+      width: 100%;
+      height: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      transition: color 0.2s;
+    }
+    .btn-back:hover { color: var(--blue); }
+  </style>
+</head>
+
+<body>
+  <main class="page-container">
+    
+    <!-- Top breadcrumb & back button -->
+    <a href="index.html" class="btn-back">
+      <i class="fa-solid fa-arrow-left"></i> Back to Government Tenders
+    </a>
+
+    <!-- Main Hero Section -->
+    <div class="detail-hero-grid">
+      <div class="detail-img-container">
+        <img id="tenderMainImg" src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80" alt="Tender Evidence" />
+        <span id="tenderCatBadge" class="tender-card-cat-badge" style="top:16px; right:16px; font-size:12px; padding:6px 12px;">
+          🛣️ Roads
+        </span>
+      </div>
+
+      <div class="detail-card" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span id="tenderStatusBadge" class="status status-open" style="font-size:11px; padding:5px 12px;">Open for Bidding</span>
+            <span id="tenderIdLabel" style="font-family:IBM Plex Mono, monospace; font-size:12px; font-weight:700; color:var(--blue);">#CB-T-0015</span>
+          </div>
+
+          <h1 id="tenderTitle" style="font-size:24px; line-height:1.25; margin-bottom:10px;">Priority Road Patching — Ward 15</h1>
+          <p id="tenderDescription" style="font-size:13.5px; color:var(--secondary); line-height:1.5; margin-bottom:16px;">
+            Repair the most-reported pothole locations, asphalt resurfacing, and road maintenance across Ward 15.
+          </p>
+
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+            <span id="tenderWardTag" style="padding:5px 10px; background:var(--panel); border:1px solid var(--border); border-radius:8px; font-size:11.5px; color:var(--secondary);">
+              📍 Ward 15
+            </span>
+            <span id="tenderVerifiedLocsTag" style="padding:5px 10px; background:var(--panel); border:1px solid var(--border); border-radius:8px; font-size:11.5px; color:var(--secondary);">
+              ✓ 3 verified locations
+            </span>
+            <span id="tenderDeptTag" style="padding:5px 10px; background:var(--panel); border:1px solid var(--border); border-radius:8px; font-size:11.5px; color:var(--secondary);">
+              🏛️ Roads & Works Department
+            </span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:center; border-top:1px solid var(--border); padding-top:16px;">
+          <button id="tenderVoteBtn" class="primary-button" style="flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+            <i class="fa-solid fa-thumbs-up"></i> Vote for this Project (<span id="tenderVoteCount">21</span>)
+          </button>
+          <button id="tenderShareBtn" class="secondary-button" style="padding:10px 14px;" title="Share Tender">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Transparent CivicBuzz Lifecycle Timeline -->
+    <div class="detail-card">
+      <h3 class="detail-section-title">
+        <i class="fa-solid fa-bars-progress" style="color:var(--blue);"></i> Transparent Project Lifecycle
+      </h3>
+      <p style="font-size:12.5px; color:var(--secondary); margin-bottom:12px;">
+        Track every milestone from citizen grievance verification to contractor execution and final public audit.
+      </p>
+
+      <div class="lifecycle-flow">
+        <div class="lifecycle-flow-progress" id="lifecycleProgressLine" style="width: 45%;"></div>
+        
+        <div class="lifecycle-step completed" id="step-1">
+          <div class="step-node"><i class="fa-solid fa-check"></i></div>
+          <span class="step-title">1. Verified Issue</span>
+          <span class="step-desc">Citizen complaints geo-validated</span>
+        </div>
+
+        <div class="lifecycle-step completed" id="step-2">
+          <div class="step-node"><i class="fa-solid fa-check"></i></div>
+          <span class="step-title">2. Prioritization</span>
+          <span class="step-desc">Community votes & budget ranking</span>
+        </div>
+
+        <div class="lifecycle-step active" id="step-3">
+          <div class="step-node">3</div>
+          <span class="step-title">3. Tender Created</span>
+          <span class="step-desc">Public tender specification published</span>
+        </div>
+
+        <div class="lifecycle-step" id="step-4">
+          <div class="step-node">4</div>
+          <span class="step-title">4. Contractor Bid</span>
+          <span class="step-desc">Vendor selection & evaluation</span>
+        </div>
+
+        <div class="lifecycle-step" id="step-5">
+          <div class="step-node">5</div>
+          <span class="step-title">5. Work Started</span>
+          <span class="step-desc">On-site crew mobilized</span>
+        </div>
+
+        <div class="lifecycle-step" id="step-6">
+          <div class="step-node">6</div>
+          <span class="step-title">6. In Progress</span>
+          <span class="step-desc">Remediation & QA inspection</span>
+        </div>
+
+        <div class="lifecycle-step" id="step-7">
+          <div class="step-node">7</div>
+          <span class="step-title">7. Public Verified</span>
+          <span class="step-desc">Citizen sign-off & QR audit</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Financial & Procurement Transparency -->
+    <div class="detail-card">
+      <h3 class="detail-section-title">
+        <i class="fa-solid fa-coins" style="color:var(--amber);"></i> Financial & Procurement Transparency
+      </h3>
+      <div class="info-kv-grid">
+        <div class="info-kv-item">
+          <span>Estimated Project Value</span>
+          <strong id="tVal" style="color:var(--blue); font-size:16px;">₹2,50,000</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Approved Municipal Budget</span>
+          <strong id="tBudget">₹2,50,000</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Utilized / Awarded Amount</span>
+          <strong id="tUtilized">₹1,45,000</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Target Duration</span>
+          <strong id="tDuration">30 days</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Application Deadline</span>
+          <strong id="tDeadline">27 Aug 2026</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Contractor / Company</span>
+          <strong id="tContractor">L&T Infrastructure Projects Ltd.</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Procurement Ref ID</span>
+          <strong id="tRefId" style="font-family:IBM Plex Mono, monospace;">BMC-PROC-2026-0015</strong>
+        </div>
+        <div class="info-kv-item">
+          <span>Public Audit Status</span>
+          <strong style="color:var(--green);">Active & Verified ✓</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Connected Citizen Grievances & Problem Map -->
+    <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:24px;">
+      
+      <!-- Linked Citizen Complaints -->
+      <div class="detail-card" style="margin-bottom:0;">
+        <h3 class="detail-section-title">
+          <i class="fa-solid fa-link" style="color:var(--blue);"></i> Linked Citizen Complaints (<span id="linkedCount">3</span>)
+        </h3>
+        <p style="font-size:12px; color:var(--secondary); margin-bottom:14px;">
+          These verified citizen grievances directly contributed to the creation and prioritization of this public tender.
+        </p>
+
+        <div id="linkedComplaintsList" style="display:flex; flex-direction:column; gap:12px;">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Project GIS Map -->
+      <div class="detail-card" style="margin-bottom:0;">
+        <h3 class="detail-section-title">
+          <i class="fa-solid fa-map-location-dot" style="color:var(--red);"></i> Problem Location & Coverage
+        </h3>
+        <p id="mapLocationLabel" style="font-size:12px; color:var(--secondary); margin-bottom:12px;">
+          📍 Ward 15, Saheed Nagar & Janpath Corridor, Bhubaneswar
+        </p>
+        <div id="tenderMap" class="tender-map-box"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../api-config.js"></script>
+  <script>
+    if (typeof window.CivicBuzzAPI === "undefined") {
+      document.write("<script src=\"../../../api-config.js\"><\\/script>");
+    }
+  </script>
+  <script src="../navbar-loader.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Parse tender ID from URL parameter
+      const params = new URLSearchParams(window.location.search);
+      const requestedId = params.get("id") || "CB-T-0015";
+
+      if (window.TenderStore) {
+        window.TenderStore.init();
+      }
+      if (window.ComplaintStore) {
+        window.ComplaintStore.init();
+      }
+
+      const tender = window.TenderStore ? window.TenderStore.getById(requestedId) : null;
+      if (!tender) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // 2. Populate Basic Info
+      const tid = tender.tender_id || tender.id || "CB-T-0015";
+      document.getElementById("tenderIdLabel").textContent = "#" + tid;
+      document.getElementById("tenderTitle").textContent = tender.title || "Civic Infrastructure Project";
+      document.getElementById("tenderDescription").textContent = tender.description || "";
+      
+      const cat = String(tender.category || "roads").toLowerCase();
+      const catBadgeText = cat.includes("road") ? "🛣️ Roads" : cat.includes("drain") ? "💧 Drainage" : cat.includes("light") ? "💡 Lighting" : cat.includes("water") ? "🚰 Water" : cat.includes("park") ? "🌳 Parks" : "🧹 Sanitation";
+      document.getElementById("tenderCatBadge").textContent = catBadgeText;
+
+      const ward = tender.ward || tender.location || ("Ward " + (tender.ward_id || 15));
+      document.getElementById("tenderWardTag").textContent = "📍 " + ward;
+      document.getElementById("tenderVerifiedLocsTag").textContent = "✓ " + (tender.verified_locations_count || tender.verifiedLocations || 3) + " verified locations";
+      document.getElementById("tenderDeptTag").textContent = "🏛️ " + (tender.department_name || "Roads & Works Department");
+
+      // 3. Image
+      const fallbackImg = window.TenderStore && window.TenderStore.getCategoryFallback ? window.TenderStore.getCategoryFallback(cat) : "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80";
+      const mainImg = document.getElementById("tenderMainImg");
+      mainImg.src = tender.imageUrl || tender.image_url || fallbackImg;
+      mainImg.onerror = () => { mainImg.src = fallbackImg; };
+
+      // 4. Financial info
+      const val = tender.estimated_value || tender.estimated_budget || 250000;
+      const fmtVal = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(val);
+      document.getElementById("tVal").textContent = "₹" + fmtVal;
+      document.getElementById("tBudget").textContent = "₹" + fmtVal;
+      document.getElementById("tUtilized").textContent = "₹" + new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(tender.utilized_budget || Math.round(val * 0.58));
+      document.getElementById("tDuration").textContent = tender.duration || ((tender.duration_days || 30) + " days");
+      document.getElementById("tDeadline").textContent = tender.submission_deadline || "27 Aug 2026";
+      document.getElementById("tContractor").textContent = tender.contractor_name || "L&T Infrastructure Projects Ltd.";
+      document.getElementById("tRefId").textContent = "BMC-PROC-2026-" + (String(tid).replace(/[^0-9]/g, "") || "0015");
+
+      // 5. Voting
+      const voteCountEl = document.getElementById("tenderVoteCount");
+      let currentVotes = tender.community_votes || tender.communityVotes || 21;
+      voteCountEl.textContent = currentVotes;
+
+      const voteBtn = document.getElementById("tenderVoteBtn");
+      const votedTenders = JSON.parse(localStorage.getItem("civicbuzz_voted_tenders") || "[]");
+      if (votedTenders.includes(tid)) {
+        voteBtn.classList.add("voted");
+        voteBtn.innerHTML = "<i class=\"fa-solid fa-check\"></i> Voted for this Project (" + currentVotes + ")";
+      }
+
+      voteBtn.addEventListener("click", () => {
+        if (votedTenders.includes(tid)) {
+          showToast("You have already voted for this tender proposal.");
+          return;
+        }
+        currentVotes++;
+        voteCountEl.textContent = currentVotes;
+        votedTenders.push(tid);
+        localStorage.setItem("civicbuzz_voted_tenders", JSON.stringify(votedTenders));
+        tender.community_votes = currentVotes;
+        tender.communityVotes = currentVotes;
+        if (window.TenderStore && window.TenderStore.update) {
+          window.TenderStore.update(tid, { community_votes: currentVotes, communityVotes: currentVotes });
+        }
+        voteBtn.classList.add("voted");
+        voteBtn.innerHTML = "<i class=\"fa-solid fa-check\"></i> Voted for this Project (" + currentVotes + ")";
+        showToast("Your community priority vote has been recorded!");
+      });
+
+      // 6. Share button
+      const shareBtn = document.getElementById("tenderShareBtn");
+      if (shareBtn) {
+        shareBtn.addEventListener("click", () => {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href);
+            showToast("Tender link copied to clipboard!");
+          } else {
+            showToast("Tender ID: " + tid);
+          }
+        });
+      }
+
+      // 7. Render Linked Complaints
+      const linkedListEl = document.getElementById("linkedComplaintsList");
+      const linkedIds = tender.linked_complaint_ids && tender.linked_complaint_ids.length
+        ? tender.linked_complaint_ids
+        : ["CB-12484", "CB-12480"];
+      document.getElementById("linkedCount").textContent = linkedIds.length;
+
+      const complaintItems = linkedIds.map((cid) => {
+        const c = window.ComplaintStore ? window.ComplaintStore.getById(cid) : null;
+        if (!c) {
+          return {
+            id: cid,
+            title: "Reported issue in " + ward,
+            img: fallbackImg,
+            ward: ward,
+            upvotes: 14
+          };
+        }
+        return {
+          id: c.complaint_id || cid,
+          title: c.title || "Civic Defect",
+          img: c.image_url || (window.ComplaintStore && window.ComplaintStore.getCategoryFallback ? window.ComplaintStore.getCategoryFallback(c.category) : fallbackImg),
+          ward: c.location?.ward_name || c.ward || ward,
+          upvotes: c.upvotes || 21
+        };
+      });
+
+      linkedListEl.innerHTML = complaintItems.map(item => `
+        <a href="../Track_complaints_Frontend/details.html?id=${encodeURIComponent(item.id)}" class="complaint-link-card" title="Click to view transparent complaint record">
+          <img src="${item.img}" alt="${item.title}" onerror="this.src=" />
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-family:IBM Plex Mono, monospace; font-size:11px; font-weight:700; color:var(--blue);">#${item.id}</span>
+              <span style="font-size:11px; color:var(--amber); font-weight:600;"><i class="fa-solid fa-thumbs-up"></i> ${item.upvotes}</span>
+            </div>
+            <strong style="font-size:13px; color:var(--text); display:block; margin-bottom:2px;">${item.title}</strong>
+            <span style="font-size:11px; color:var(--muted);">📍 ${item.ward} · Verified Citizen Evidence</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:12px;"></i>
+        </a>
+      `).join("");
+
+      // 8. Initialize GIS Map
+      let lat = 20.2961;
+      let lng = 85.8245;
+      if (ward.includes("15")) { lat = 20.2961; lng = 85.8245; }
+      else if (ward.includes("12")) { lat = 20.3012; lng = 85.8234; }
+      else if (ward.includes("8")) { lat = 20.2741; lng = 85.8362; }
+      else if (ward.includes("9")) { lat = 20.2905; lng = 85.8450; }
+      else if (ward.includes("4")) { lat = 20.3548; lng = 85.8184; }
+
+      const map = L.map("tenderMap").setView([lat, lng], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(map);
+
+      // Add main project marker
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup("<strong>" + tender.title + "</strong><br>📍 " + ward + "<br>Status: Open")
+        .openPopup();
+
+      // Add circle for ward coverage
+      L.circle([lat, lng], {
+        color: "#246bfd",
+        fillColor: "#246bfd",
+        fillOpacity: 0.12,
+        radius: 600
+      }).addTo(map);
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      if (toast) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+    }
+  </script>
+</body>
+</html>
